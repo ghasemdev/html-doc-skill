@@ -1,6 +1,12 @@
 # `doc-html` — Modern Interactive HTML Documentation Skill
 
-A production-grade, publishable AI coding assistant skill for generating **gorgeous, single-file, interactive HTML technical documentation and architecture whitepapers**.
+[![GitHub Release](https://img.shields.io/github/v/release/ghasemdev/html-doc-skill?color=38bdf8&label=Release)](https://github.com/ghasemdev/html-doc-skill/releases)
+[![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-34d399?logo=github)](https://ghasemdev.github.io/html-doc-skill/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+A production-grade, publishable AI coding assistant skill for generating **gorgeous, single-file, interactive HTML technical documentation, architecture whitepapers, and dynamic research reports**.
+
+🌐 **Live Interactive Demo:** [https://ghasemdev.github.io/html-doc-skill/](https://ghasemdev.github.io/html-doc-skill/)
 
 ---
 
@@ -53,9 +59,13 @@ A production-grade, publishable AI coding assistant skill for generating **gorge
 ## 📂 Directory Structure
 
 ```
-doc-html/
+html-doc-skill/
 ├── SKILL.md                          # Authoritative skill instructions for AI agents
 ├── README.md                         # Publication & user documentation
+├── index.html                        # GitHub Pages root entrypoint (Live Interactive Demo)
+├── .nojekyll                         # GitHub Pages static asset bypass
+├── examples/
+│   └── remote-compose-architecture-and-usecases.html # Interactive bilingual showcase
 └── resources/
     └── starter-template.html         # Boilerplate clean starter HTML template
 ```
