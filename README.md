@@ -1,12 +1,12 @@
 # `doc-html` — Modern Interactive HTML Documentation Skill
 
 [![GitHub Release](https://img.shields.io/github/v/release/ghasemdev/html-doc-skill?color=38bdf8&label=Release)](https://github.com/ghasemdev/html-doc-skill/releases)
-[![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-34d399?logo=github)](https://ghasemdev.github.io/html-doc-skill/)
+[![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-34d399?logo=github)](https://ghasemdev.github.io/html-doc-skill/examples/remote-compose-architecture-and-usecases.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A production-grade, publishable AI coding assistant skill for generating **gorgeous, single-file, interactive HTML technical documentation, architecture whitepapers, and dynamic research reports**.
 
-🌐 **Live Interactive Demo:** [https://ghasemdev.github.io/html-doc-skill/](https://ghasemdev.github.io/html-doc-skill/)
+🌐 **Live Interactive Demo:** [https://ghasemdev.github.io/html-doc-skill/examples/remote-compose-architecture-and-usecases.html](https://ghasemdev.github.io/html-doc-skill/examples/remote-compose-architecture-and-usecases.html)
 
 ---
 
