@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>One Piece: Canonical Lore, Hidden Trivia & World Architecture</title>
+  <title>One Piece: Canonical Lore, Visual Charts & World Architecture</title>
   
   <!-- Fonts: Vazirmatn for Persian, Inter & Fira Code for English/Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +17,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
 
+  <!-- Chart.js for Data Visualizations & Bounty Progression -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
   <style>
     /* CSS Custom Properties for Dual Theme */
     :root, [data-theme="dark"] {
@@ -29,7 +32,7 @@
       --text-main: #f3f4f6;
       --text-muted: #9ca3af;
       --text-dim: #6b7280;
-      --primary: #f59e0b; /* Golden One Piece Straw Hat vibe */
+      --primary: #f59e0b; /* Golden Straw Hat */
       --primary-glow: rgba(245, 158, 11, 0.2);
       --primary-dark: #d97706;
       --accent: #38bdf8;
@@ -43,7 +46,7 @@
       --link-color: #38bdf8;
       --link-hover: #7dd3fc;
       --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
-      --radius: 12px;
+      --radius: 14px;
       --sidebar-width: 290px;
     }
 
@@ -458,6 +461,98 @@
       color: var(--text-muted);
     }
 
+    /* Charts & Visual Containers */
+    .chart-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+
+    /* World Architecture Diagram Box */
+    .diagram-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .world-diagram-svg {
+      width: 100%;
+      height: auto;
+      max-height: 380px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Figures & Lightbox */
+    .doc-figure {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .figure-image-wrapper {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-subtle);
+      cursor: zoom-in;
+    }
+
+    .figure-image-wrapper img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .figure-image-wrapper:hover img {
+      transform: scale(1.02);
+    }
+
+    .figure-caption {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Global Lightbox Modal */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+      padding: 20px;
+    }
+
+    .lightbox-modal.active {
+      display: flex;
+    }
+
+    .lightbox-modal img {
+      max-width: 90vw;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
     /* Distinct Inline Hyperlink Styling */
     a.doc-link {
       color: var(--link-color);
@@ -480,7 +575,7 @@
       border-radius: var(--radius);
       margin: 18px 0;
       overflow: hidden;
-      direction: ltr; /* Code is always LTR */
+      direction: ltr;
       text-align: left;
     }
 
@@ -754,41 +849,46 @@
     <nav class="sidebar-nav">
       <a href="#guinness" class="sidebar-link active" onclick="closeSidebarOnMobile()">
         <span class="sidebar-num">01</span>
-        <span data-lang="en">Guinness World Record</span>
-        <span data-lang="fa">رکورد جهانی گینس</span>
+        <span data-lang="en">Guinness & Sales Chart</span>
+        <span data-lang="fa">رکورد گینس و نمودار فروش</span>
+      </a>
+      <a href="#bounty-chart-sec" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">02</span>
+        <span data-lang="en">Luffy Bounty Progression Chart</span>
+        <span data-lang="fa">نمودار جهش بونتی‌های Luffy</span>
       </a>
       <a href="#oda-regimen" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">02</span>
+        <span class="sidebar-num">03</span>
         <span data-lang="en">Oda's Work & Foreshadowing</span>
         <span data-lang="fa">پشتکار و آینده‌نگری Oda</span>
       </a>
       <a href="#real-pirates" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">03</span>
+        <span class="sidebar-num">04</span>
         <span data-lang="en">Real Historical Pirates</span>
         <span data-lang="fa">الهام از دزدان دریایی واقعی</span>
       </a>
       <a href="#geography" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">04</span>
-        <span data-lang="en">World Geography Matrix</span>
-        <span data-lang="fa">جغرافیای Grand Line و جهان</span>
+        <span class="sidebar-num">05</span>
+        <span data-lang="en">World Architecture Diagram</span>
+        <span data-lang="fa">دیاگرام معماری جهان و Grand Line</span>
       </a>
       <a href="#timeskip-diff" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">05</span>
+        <span class="sidebar-num">06</span>
         <span data-lang="en">Pre vs. Post Timeskip (Diff)</span>
         <span data-lang="fa">مقایسه دو ستونه جهش زمانی</span>
       </a>
       <a href="#secrets" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">06</span>
+        <span class="sidebar-num">07</span>
         <span data-lang="en">Secret Trivia & SBS Facts</span>
         <span data-lang="fa">نکات محرمانه و ستون‌های SBS</span>
       </a>
       <a href="#lore-lab" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">07</span>
+        <span class="sidebar-num">08</span>
         <span data-lang="en">Interactive Lore Quiz</span>
         <span data-lang="fa">آزمایشگاه تعاملی دانستنی‌ها</span>
       </a>
       <a href="#references" class="sidebar-link" onclick="closeSidebarOnMobile()">
-        <span class="sidebar-num">08</span>
+        <span class="sidebar-num">09</span>
         <span data-lang="en">Canonical Sources</span>
         <span data-lang="fa">مراجع و اسناد رسمی تاییدشده</span>
       </a>
@@ -816,8 +916,8 @@
       <div class="nav-actions">
         <!-- Reading Section Indicator -->
         <div class="progress-pill">
-          <span data-lang="en">Section <strong id="progressIndexEn">1</strong> of 8</span>
-          <span data-lang="fa">بخش <strong id="progressIndexFa">۱</strong> از ۸</span>
+          <span data-lang="en">Section <strong id="progressIndexEn">1</strong> of 9</span>
+          <span data-lang="fa">بخش <strong id="progressIndexFa">۱</strong> از ۹</span>
         </div>
 
         <!-- Language Switcher -->
@@ -840,8 +940,8 @@
     <div class="hero-section">
       <div class="hero-badge">
         <span>⚓</span>
-        <span data-lang="en">MASTERPIECE ARCHITECTURE & TRIVIA</span>
-        <span data-lang="fa">معماری روایی و دانستنی‌های شگفت‌انگیز</span>
+        <span data-lang="en">MASTERPIECE ARCHITECTURE & DATA CHARTS</span>
+        <span data-lang="fa">معماری روایی، نمودارهای داده و دانستنی‌های شگفت‌انگیز</span>
       </div>
       <h1 class="hero-title">
         <span data-lang="en">The Epic Mythology of One Piece</span>
@@ -850,32 +950,46 @@
       <p class="hero-desc">
         <span data-lang="en">
           An authoritative, bilingual technical dossier exploring Eiichiro Oda's record-shattering manga:
-          unprecedented world-building, historical pirate parallels, meticulous multi-decade foreshadowing, and interactive lore data.
+          interactive metrics charts, world geography diagrams, historical pirate parallels, and meticulous multi-decade foreshadowing.
         </span>
         <span data-lang="fa">
           بررسی جامع، دوزبانه و مستند دنیای داستانی One Piece اثر Eiichiro Oda:
-          معماری بی‌نظیر جهان‌سازی، ریشه‌های تاریخی دزدان دریایی، رکورد جهانی Guinness و پیش‌آگاهی‌های نبوغ‌آمیز چنددهه‌ای.
+          نمودارهای تعاملی جهش بونتی و فروش جهانی، دیاگرام معماری جهان، ریشه‌های تاریخی دزدان دریایی و پیش‌آگاهی‌های نبوغ‌آمیز چنددهه‌ای.
         </span>
       </p>
     </div>
 
-    <!-- Section 01: Guinness World Record -->
+    <!-- Section 01: Guinness World Record & Sales Comparison Chart -->
     <section id="guinness">
       <div class="section-header">
         <span class="section-tag">01</span>
         <div>
           <h2 class="section-title">
-            <span data-lang="en">The Guinness World Record & Unmatched Scale</span>
-            <span data-lang="fa">رکورد جهانی Guinness و مقیاس دست‌نیافتنی فروش</span>
+            <span data-lang="en">The Guinness World Record & Global Sales Comparison</span>
+            <span data-lang="fa">رکورد جهانی Guinness و نمودار مقایسه فروش جهانی</span>
           </h2>
           <p class="section-desc">
-            <span data-lang="en">The commercial and cultural titan of modern sequential literature.</span>
-            <span data-lang="fa">جایگاه بی‌رقیب One Piece در تاریخ ادبیات مصور جهان.</span>
+            <span data-lang="en">Visual comparison of all-time comic sales: One Piece vs. Batman and Superman.</span>
+            <span data-lang="fa">مقایسه بصری تیراژ فروش جهانی: One Piece در برابر Batman و Superman.</span>
           </p>
         </div>
       </div>
 
-      <div class="grid-3">
+      <!-- Chart 1: Global Comic Circulation Comparison -->
+      <div class="chart-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);">
+            📊 <span data-lang="en">All-Time Comic Series Circulation (Millions of Copies)</span>
+            <span data-lang="fa">تیراژ جهانی کمیک و مانگا در تاریخ (میلیون نسخه)</span>
+          </h3>
+          <span class="sidebar-num" style="background: var(--badge-bg); color: var(--primary);">Chart.js Interactive</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 20px;">
         <div class="card">
           <div class="card-header">
             <span class="card-icon">🏆</span>
@@ -932,10 +1046,41 @@
       </div>
     </section>
 
-    <!-- Section 02: Oda's Work & Foreshadowing -->
-    <section id="oda-regimen">
+    <!-- Section 02: Luffy Bounty Progression Chart -->
+    <section id="bounty-chart-sec">
       <div class="section-header">
         <span class="section-tag">02</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Monkey D. Luffy's Bounty Progression (1997–2024)</span>
+            <span data-lang="fa">نمودار جهش تصاعدی بونتی (انعام سر) Monkey D. Luffy</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">From a 30M rookie to a 3B Yonko: tracing 27 years of narrative escalations.</span>
+            <span data-lang="fa">مسیر رشد از یک تازه‌کار ۳۰ میلیونی تا امپراتور ۳ میلیاردی جهان دریاها.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Chart 2: Luffy Bounty Line Chart -->
+      <div class="chart-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);">
+            📈 <span data-lang="en">Bounty Trajectory in Berries (Millions)</span>
+            <span data-lang="fa">نمودار رشد بونتی Luffy بر حسب میلیون بری (Berries)</span>
+          </h3>
+          <span class="sidebar-num" style="background: var(--badge-bg); color: var(--primary);">Exponential Curve</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="bountyChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: Oda's Work & Foreshadowing -->
+    <section id="oda-regimen">
+      <div class="section-header">
+        <span class="section-tag">03</span>
         <div>
           <h2 class="section-title">
             <span data-lang="en">Eiichiro Oda's Legendary Regimen & Foreshadowing</span>
@@ -1024,10 +1169,10 @@
       </div>
     </section>
 
-    <!-- Section 03: Real Historical Pirates -->
+    <!-- Section 04: Real Historical Pirates -->
     <section id="real-pirates">
       <div class="section-header">
-        <span class="section-tag">03</span>
+        <span class="section-tag">04</span>
         <div>
           <h2 class="section-title">
             <span data-lang="en">Real-World Historical Pirate Inspirations</span>
@@ -1053,7 +1198,7 @@
             </span>
             <span data-lang="fa">
               الهام‌گرفته مستقیم از <strong>Edward Teach</strong> مشهور به ریش‌سیاه (Blackbeard)، مخوف‌ترین دزد دریایی تاریخ.
-              Eiichiro Oda نام او را میان دو شخصیت بزرگ تقسیم کرد: <em>Edward Newgate (ریش‌سفید)</em> و <em>Marshall D. Teach (ریش‌سیاه)</em>.
+              Eiichiro Oda نام او را میان دو شخصیت بزرگ تقسیم کرد: <em>Edward Newgate (Whitebeard)</em> و <em>Marshall D. Teach (Blackbeard)</em>.
             </span>
           </div>
         </div>
@@ -1091,42 +1236,86 @@
       </div>
     </section>
 
-    <!-- Section 04: Geography & World-Building Architecture -->
+    <!-- Section 05: Geography & World-Building Diagram -->
     <section id="geography">
       <div class="section-header">
-        <span class="section-tag">04</span>
+        <span class="section-tag">05</span>
         <div>
           <h2 class="section-title">
-            <span data-lang="en">Geography & Global Architecture Matrix</span>
-            <span data-lang="fa">معماری جغرافیایی و مرزهای طبیعی جهان One Piece</span>
+            <span data-lang="en">Geography & Global Architecture Diagram</span>
+            <span data-lang="fa">دیاگرام معماری جهان و ساختار طبیعی Grand Line</span>
           </h2>
           <p class="section-desc">
-            <span data-lang="en">The structural mechanics of the Grand Line, Red Line, and magnetic currents.</span>
-            <span data-lang="fa">مکانیک ساختاری اقیانوس‌ها، جریان‌های مغناطیسی و کمربند آرامش.</span>
+            <span data-lang="en">Visual representation of the perpendicular intersection of Red Line and Grand Line.</span>
+            <span data-lang="fa">نقشه شماتیک و بصری تقاطع عمود بر هم Red Line و Grand Line در سیاره.</span>
           </p>
         </div>
       </div>
 
-      <div class="card" style="margin-bottom: 24px;">
-        <div class="card-header">
-          <span class="card-icon">🗺️</span>
-          <h3 class="card-title">
-            <span data-lang="en">Planetary Cross-Section</span>
-            <span data-lang="fa">کالبدشکافی جغرافیایی سیاره</span>
+      <!-- Responsive Architectural SVG Diagram of One Piece Planet -->
+      <div class="diagram-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main);">
+            🧭 <span data-lang="en">Planetary Cross-Section & Navigational Flow</span>
+            <span data-lang="fa">ساختار هندسی و جریان دریانوردی سیاره</span>
           </h3>
+          <span class="sidebar-num" style="background: var(--badge-bg); color: var(--primary);">Vector Topology</span>
         </div>
-        <div class="card-body">
+
+        <svg class="world-diagram-svg" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background Seas -->
+          <rect x="0" y="0" width="450" height="210" fill="#0284c7" opacity="0.12" rx="8"/>
+          <text x="225" y="115" font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#38bdf8" text-anchor="middle">NORTH BLUE</text>
+          
+          <rect x="450" y="0" width="450" height="210" fill="#0284c7" opacity="0.08" rx="8"/>
+          <text x="675" y="115" font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#38bdf8" text-anchor="middle">WEST BLUE</text>
+          
+          <rect x="0" y="210" width="450" height="210" fill="#0284c7" opacity="0.08" rx="8"/>
+          <text x="225" y="325" font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#38bdf8" text-anchor="middle">EAST BLUE</text>
+          
+          <rect x="450" y="210" width="450" height="210" fill="#0284c7" opacity="0.12" rx="8"/>
+          <text x="675" y="325" font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#38bdf8" text-anchor="middle">SOUTH BLUE</text>
+
+          <!-- Grand Line Horizontal Strip -->
+          <rect x="0" y="170" width="900" height="80" fill="#f59e0b" opacity="0.18"/>
+          <line x1="0" y1="170" x2="900" y2="170" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+          <line x1="0" y1="250" x2="900" y2="250" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+          
+          <!-- Calm Belt annotations -->
+          <text x="50" y="162" font-family="'Inter', sans-serif" font-size="11" fill="#f59e0b" font-weight="600">▲ Calm Belt (Sea Kings)</text>
+          <text x="50" y="266" font-family="'Inter', sans-serif" font-size="11" fill="#f59e0b" font-weight="600">▼ Calm Belt (Sea Kings)</text>
+
+          <!-- Red Line Vertical Strip -->
+          <rect x="410" y="0" width="80" height="420" fill="#ef4444" opacity="0.25"/>
+          <line x1="410" y1="0" x2="410" y2="420" stroke="#ef4444" stroke-width="2.5"/>
+          <line x1="490" y1="0" x2="490" y2="420" stroke="#ef4444" stroke-width="2.5"/>
+          <text x="450" y="45" font-family="'Inter', sans-serif" font-size="13" font-weight="800" fill="#ef4444" text-anchor="middle">RED LINE</text>
+          <text x="450" y="395" font-family="'Inter', sans-serif" font-size="13" font-weight="800" fill="#ef4444" text-anchor="middle">RED LINE</text>
+
+          <!-- Intersection 1: Reverse Mountain -->
+          <circle cx="450" cy="210" r="28" fill="#111827" stroke="#38bdf8" stroke-width="2.5"/>
+          <text x="450" y="206" font-family="'Inter', sans-serif" font-size="10" font-weight="800" fill="#38bdf8" text-anchor="middle">REVERSE</text>
+          <text x="450" y="220" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#ffffff" text-anchor="middle">MOUNTAIN</text>
+
+          <!-- Paradise Section -->
+          <text x="225" y="215" font-family="'Inter', sans-serif" font-size="14" font-weight="800" fill="#f59e0b" text-anchor="middle">PARADISE (First Half)</text>
+
+          <!-- New World Section -->
+          <text x="675" y="215" font-family="'Inter', sans-serif" font-size="14" font-weight="800" fill="#34d399" text-anchor="middle">NEW WORLD (Shinsekai)</text>
+
+          <!-- Laugh Tale Destination -->
+          <circle cx="850" cy="210" r="16" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+          <text x="850" y="240" font-family="'Inter', sans-serif" font-size="10" font-weight="800" fill="#f59e0b" text-anchor="middle">LAUGH TALE</text>
+        </svg>
+
+        <p style="margin-top: 14px; font-size: 0.9rem; color: var(--text-muted); text-align: center;">
           <span data-lang="en">
-            The world of One Piece is divided perpendicularly by two gigantic barriers:
-            the continuous continental ring <strong>Red Line</strong> and the equatorial ocean current <strong>Grand Line</strong>.
-            Flanked on both sides by the <strong>Calm Belt</strong> (windless breeding grounds for colossal Sea Kings), navigation is impossible without specialized magnetic <em>Log Poses</em>.
+            The world is quartered by the continuous vertical continental ring (<strong>Red Line</strong>) and horizontal equatorial stream (<strong>Grand Line</strong>). Ships enter via the currents of <strong>Reverse Mountain</strong> into Paradise, passing through Fishman Island at the center, into the brutal New World.
           </span>
           <span data-lang="fa">
-            دنیای One Piece به وسیله دو مرز عمود بر هم به چهار اقیانوس (North, South, East, West Blue) تقسیم شده است:
-            قاره نواری صخره‌ای <strong>Red Line</strong> و اقیانوس استوایی <strong>Grand Line</strong>.
-            کناره‌های Grand Line را <strong>Calm Belt</strong> احاطه کرده است؛ مناطقی بدون وزش باد و محل زیست هیولاهای دریایی غول‌پیکر (Sea Kings) که عبور کشتی‌های بادبانی معمولی را غیرممکن می‌سازد. دریانوردی در این اقیانوس تنها با قطب‌نماهای مغناطیسی ویژه موسوم به <em>Log Pose</em> امکان‌پذیر است.
+            جهان One Piece توسط قاره نواری عمودی (<strong>Red Line</strong>) و اقیانوس افقی استوایی (<strong>Grand Line</strong>) به چهار دریا بخش شده است. کشتی‌ها از طریق کانال‌های آبی <strong>Reverse Mountain</strong> وارد نیمه اول (Paradise) شده و پس از عبور از Fishman Island، به قلمرو امپراتوران در New World و مقصد غایی <strong>Laugh Tale</strong> می‌رسند.
           </span>
-        </div>
+        </p>
       </div>
 
       <div class="grid-2">
@@ -1164,10 +1353,10 @@
       </div>
     </section>
 
-    <!-- Section 05: Two-Pane Diff: Pre-Timeskip vs. Post-Timeskip -->
+    <!-- Section 06: Two-Pane Diff: Pre-Timeskip vs. Post-Timeskip -->
     <section id="timeskip-diff">
       <div class="section-header">
-        <span class="section-tag">05</span>
+        <span class="section-tag">06</span>
         <div>
           <h2 class="section-title">
             <span data-lang="en">Pre-Timeskip vs. Post-Timeskip Evolution</span>
@@ -1218,10 +1407,10 @@
       </div>
     </section>
 
-    <!-- Section 06: Secret Trivia & Character Lore -->
+    <!-- Section 07: Secret Trivia & Character Lore -->
     <section id="secrets">
       <div class="section-header">
-        <span class="section-tag">06</span>
+        <span class="section-tag">07</span>
         <div>
           <h2 class="section-title">
             <span data-lang="en">Secret Trivia & Canonical SBS Column Revelations</span>
@@ -1286,10 +1475,10 @@
       </div>
     </section>
 
-    <!-- Section 07: Interactive Lore Lab -->
+    <!-- Section 08: Interactive Lore Lab -->
     <section id="lore-lab">
       <div class="section-header">
-        <span class="section-tag">07</span>
+        <span class="section-tag">08</span>
         <div>
           <h2 class="section-title">
             <span data-lang="en">Interactive One Piece Lore & Trivia Lab</span>
@@ -1336,10 +1525,10 @@
       </div>
     </section>
 
-    <!-- Section 08: References & Sources -->
+    <!-- Section 09: References & Sources -->
     <section id="references">
       <div class="section-header">
-        <span class="section-tag">08</span>
+        <span class="section-tag">09</span>
         <div>
           <h2 class="section-title">
             <span data-lang="en">Authoritative References & Standards</span>
@@ -1400,13 +1589,26 @@
     </div>
   </footer>
 
+  <!-- Lightbox Modal for Visual Figures -->
+  <div id="imageLightbox" class="lightbox-modal" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Enlarged Visual">
+  </div>
+
   <!-- Interactive JavaScript Engine -->
   <script>
-    // Initialize Highlight.js on DOM ready
+    let salesChartInstance = null;
+    let bountyChartInstance = null;
+
+    // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', () => {
       hljs.highlightAll();
       initScrollProgress();
+      initCharts(getCurrentTheme());
     });
+
+    function getCurrentTheme() {
+      return document.documentElement.getAttribute('data-theme') || 'dark';
+    }
 
     // Language Toggle (English / Persian)
     function toggleLanguage() {
@@ -1441,6 +1643,137 @@
       // Toggle Highlight.js Theme
       document.getElementById('hljsDarkTheme').disabled = (newTheme === 'light');
       document.getElementById('hljsLightTheme').disabled = (newTheme === 'dark');
+
+      // Update Chart Colors for the active theme
+      updateChartsTheme(newTheme);
+    }
+
+    // Initialize Chart.js Data Visualizations
+    function initCharts(theme) {
+      const isDark = theme === 'dark';
+      const textColor = isDark ? '#9ca3af' : '#475569';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+
+      // 1. Sales Comparison Bar Chart
+      const salesCtx = document.getElementById('salesChart').getContext('2d');
+      salesChartInstance = new Chart(salesCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Superman (DC)', 'One Piece (Oda)', 'Batman (DC)', 'Spider-Man (Marvel)', 'Dragon Ball (Toriyama)'],
+          datasets: [{
+            label: 'Circulation (Million Copies)',
+            data: [600, 516, 484, 398, 300],
+            backgroundColor: [
+              'rgba(56, 189, 248, 0.5)',
+              'rgba(245, 158, 11, 0.85)', // One Piece Highlight
+              'rgba(148, 163, 184, 0.5)',
+              'rgba(239, 68, 68, 0.5)',
+              'rgba(249, 115, 22, 0.5)'
+            ],
+            borderColor: [
+              '#38bdf8',
+              '#f59e0b',
+              '#94a3b8',
+              '#ef4444',
+              '#f97316'
+            ],
+            borderWidth: 2,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                afterLabel: function(context) {
+                  if (context.dataIndex === 1) {
+                    return '★ Single author Guinness World Record holder!';
+                  }
+                  return 'Multiple creators & rotating creative teams.';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: textColor, font: { family: 'Inter', weight: 600 } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: textColor, font: { family: 'Fira Code' } },
+              grid: { color: gridColor }
+            }
+          }
+        }
+      });
+
+      // 2. Luffy Bounty Progression Line Chart
+      const bountyCtx = document.getElementById('bountyChart').getContext('2d');
+      bountyChartInstance = new Chart(bountyCtx, {
+        type: 'line',
+        data: {
+          labels: ['East Blue', 'Alabasta', 'Enies Lobby', 'Marineford', 'Dressrosa', 'Whole Cake', 'Wano (Yonko)'],
+          datasets: [{
+            label: 'Bounty (Million Berries)',
+            data: [30, 100, 300, 400, 500, 1500, 3000],
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            borderWidth: 3,
+            pointBackgroundColor: '#f59e0b',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 9,
+            fill: true,
+            tension: 0.35
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` Bounty: ${context.parsed.y.toLocaleString()} Million Berries`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: textColor, font: { family: 'Inter', weight: 600 } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: {
+                color: textColor,
+                font: { family: 'Fira Code' },
+                callback: function(value) { return value + 'M'; }
+              },
+              grid: { color: gridColor }
+            }
+          }
+        }
+      });
+    }
+
+    function updateChartsTheme(theme) {
+      const isDark = theme === 'dark';
+      const textColor = isDark ? '#9ca3af' : '#475569';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+
+      [salesChartInstance, bountyChartInstance].forEach(chart => {
+        if (!chart) return;
+        chart.options.scales.x.ticks.color = textColor;
+        chart.options.scales.y.ticks.color = textColor;
+        chart.options.scales.y.grid.color = gridColor;
+        chart.update();
+      });
     }
 
     // Sidebar Drawer Controller
@@ -1467,8 +1800,8 @@
 
     // Scroll Progress & Active Section Tracker (Scrollspy)
     const sections = [
-      'guinness', 'oda-regimen', 'real-pirates', 'geography',
-      'timeskip-diff', 'secrets', 'lore-lab', 'references'
+      'guinness', 'bounty-chart-sec', 'oda-regimen', 'real-pirates',
+      'geography', 'timeskip-diff', 'secrets', 'lore-lab', 'references'
     ];
 
     function initScrollProgress() {
@@ -1513,6 +1846,21 @@
         }
       });
     }
+
+    // Lightbox modal functions
+    function openLightbox(src) {
+      const lb = document.getElementById('imageLightbox');
+      document.getElementById('lightboxImg').src = src;
+      lb.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('imageLightbox').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
 
     // 1-Click Code Copy
     function copyCode(button) {

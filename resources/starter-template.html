@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" id="hljs-theme-light" disabled>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
+  <!-- Chart.js for Data Visualizations & Benchmarks -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
   <style>
     :root, [data-theme="dark"] {
       --bg-base: #0a0f1d;
@@ -196,7 +199,20 @@
     .diff-grid { display: grid; grid-template-columns: 1fr 1fr; font-family: 'Fira Code', monospace; font-size: 12.5px; direction: ltr !important; text-align: left !important; }
     .diff-pane { padding: 14px; overflow-x: auto; }
     .diff-line.del { background: rgba(248, 113, 113, 0.15); color: #fca5a5; padding: 3px 6px; border-left: 3px solid var(--danger); }
-    .diff-line.add { background: rgba(52, 211, 153, 0.15); color: #86efac; padding: 3px 6px; border-left: 3px solid var(--success); }
+    /* Charts & Visual Media */
+    .chart-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px; margin: 18px 0; }
+    .chart-container { position: relative; height: 300px; width: 100%; }
+
+    /* Responsive Figures & Lightbox */
+    .doc-figure { margin: 18px 0; text-align: center; }
+    .doc-figure img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border-subtle); cursor: zoom-in; transition: transform 0.2s ease; }
+    .doc-figure img:hover { transform: scale(1.01); border-color: var(--primary); }
+    [data-theme="dark"] .doc-figure img { filter: brightness(0.92) contrast(1.05); }
+    .doc-figure figcaption { margin-top: 8px; font-size: 13px; color: var(--text-muted); }
+
+    .lightbox-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }
+    .lightbox-modal.active { display: flex; }
+    .lightbox-modal img { max-width: 90vw; max-height: 90vh; border-radius: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
 
     /* Responsive */
     @media (max-width: 768px) {
@@ -431,6 +447,26 @@
       const b = document.getElementById('diffViewerBox');
       b.style.display = b.style.display === 'none' ? 'block' : 'none';
     }
+
+    // Lightbox modal helpers
+    function openLightbox(src) {
+      const lb = document.getElementById('imageLightbox');
+      const img = document.getElementById('lightboxImg');
+      if (lb && img) {
+        img.src = src;
+        lb.classList.add('active');
+      }
+    }
+    function closeLightbox() {
+      const lb = document.getElementById('imageLightbox');
+      if (lb) lb.classList.remove('active');
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
   </script>
+
+  <!-- Global Lightbox Modal -->
+  <div id="imageLightbox" class="lightbox-modal" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Enlarged visual representation">
+  </div>
 </body>
 </html>

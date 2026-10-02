@@ -319,16 +319,72 @@ Every code snippet must include:
 
 ---
 
-## 9. Generation Checklist
+---
+
+## 9. Visual Media: Images, Diagrams & Interactive Charts
+
+### 9.1 Interactive Charts (Chart.js CDN)
+When presenting metrics, benchmarks, timelines, or progression data:
+- Load Chart.js CDN (`https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js`).
+- Wrap canvas in a responsive container with fixed height (e.g. `height: 320px; position: relative;`).
+- **Theme Synchronization:** When the user toggles Dark/Light theme, update the chart's colors (`ticks.color`, `grid.color`, `tooltip`) dynamically and call `chart.update()`.
+
+```html
+<div class="chart-container" style="position: relative; height: 320px; width: 100%;">
+  <canvas id="metricChart"></canvas>
+</div>
+<script>
+  let myChart;
+  function initChart(theme) {
+    const isDark = theme === 'dark';
+    const textColor = isDark ? '#94a3b8' : '#475569';
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+    // create or update Chart instance...
+  }
+</script>
+```
+
+### 9.2 Diagrams: Mermaid.js & Architecture Grids
+- **Mermaid.js CDN:** Load `https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js` for sequence diagrams, state machines, and flowcharts. Initialize with `mermaid.initialize({ startOnLoad: true, theme: currentTheme === 'dark' ? 'dark' : 'neutral' });`.
+- **CSS Architecture Grids:** For bilingual (LTR/RTL) architecture comparisons, prefer responsive HTML/CSS Grid cards over raw SVG text, as SVG text coordinate inversion under `dir="rtl"` causes layout truncation.
+
+### 9.3 Responsive Figures, Images & Pure JS Lightbox
+- Wrap images in semantic `<figure class="doc-figure">` with `<figcaption>` containing bilingual captions.
+- Images must have `max-width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border-subtle);`.
+- In dark mode, apply `filter: brightness(0.9) contrast(1.05);` to reduce eye strain.
+- **Lightbox Preview:** Include a simple, zero-dependency click-to-zoom modal:
+```html
+<!-- Lightbox Modal -->
+<div id="imageLightbox" class="lightbox-modal" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="Enlarged view">
+</div>
+<script>
+  function openLightbox(src) {
+    const lb = document.getElementById('imageLightbox');
+    document.getElementById('lightboxImg').src = src;
+    lb.classList.add('active');
+  }
+  function closeLightbox() {
+    document.getElementById('imageLightbox').classList.remove('active');
+  }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+```
+
+---
+
+## 10. Generation Checklist
 
 Before delivering an HTML documentation file using `doc-html`:
 
-- [ ] **Anti-Hallucination:** Every API parameter and hardware claim is backed by real specs or marked as "Not Supported / Nothing Found".
+- [ ] **Anti-Hallucination:** Every API parameter, hardware claim, and factual statement is backed by real specs or marked as "Not Supported / Nothing Found".
+- [ ] **No "Fingilish" Transliteration:** Proper nouns, brands, browsers, OS, and APIs are written in standard English (`Safari`, `Chrome`, `Android`, `iOS`, `Secure Enclave`, `KeyStore`, `WebAuthn`).
 - [ ] **Catalog Sidebar:** Persistent on desktop, off-canvas drawer on mobile, with active section highlighting on scroll.
 - [ ] **Reading Progress:** Top horizontal progress bar + dynamic `Section X of Y` badge working properly.
-- [ ] **Bilingual & RTL:** Dual `data-lang` spans with zero-reload switcher; Vazirmatn font with line-height 1.85 and ZWNJ.
-- [ ] **Terminology Cleanliness:** Hardware terms (`Secure Enclave`, `KeyStore`, `WebAuthn`) remain in English.
+- [ ] **Bilingual & RTL:** Dual `data-lang` spans with zero-reload switcher; Vazirmatn font with line-height 1.85, ZWNJ, and no bureaucratic verbs.
 - [ ] **Distinct Links:** All inline hyperlinks have distinct colors and underlines.
-- [ ] **Copiable Code:** Highlight.js colorful highlighting with 1-click copy buttons.
+- [ ] **Visual Media & Charts:** Responsive charts (Chart.js / SVG), diagrams (Mermaid / CSS Grid), and zoomable figures included where relevant.
+- [ ] **Copiable Code:** Highlight.js colorful highlighting with 1-click copy buttons and animated feedback.
 - [ ] **References & Diff:** Reference section with copy buttons + Version History / Diff viewer included.
 - [ ] **100% Responsive:** Verified on mobile (360px), tablet (768px), and desktop (1280px).
+

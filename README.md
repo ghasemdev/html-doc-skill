@@ -34,9 +34,15 @@ A production-grade, publishable AI coding assistant skill for generating **gorge
   - Side-by-side semantic diff pane comparing baseline vs. audited releases with green/red line changes.
 - 🛡️ **Anti-Hallucination Ground-Truth Enforcement**:
   - Mandate to state "Nothing found / Not supported" when a feature or API does not exist; zero hallucinated parameters.
-- 📐 **Diagrams**:
+- 📊 **Interactive Charts & Data Visualizations (Chart.js CDN)**:
+  - Responsive line, bar, and doughnut charts with tooltips.
+  - Automatic color palette re-theming on Dark/Light toggle.
+- 🖼️ **Responsive Figures & Pure JS Lightbox**:
+  - Semantic `<figure>` with bilingual `<figcaption>` and badges.
+  - Zero-dependency click-to-zoom lightbox modal with blur backdrop and Escape key listener.
+- 📐 **Diagrams & Architecture Visuals**:
   - Responsive **HTML/CSS architecture comparison cards** (eliminating SVG coordinate flipping bugs in RTL mode).
-  - Optional **Mermaid.js** CDN support for sequence diagrams and state machines.
+  - Optional **Mermaid.js** CDN support for sequence diagrams, state machines, and workflows.
 - ⚡ **Interactive Live Labs & Test Suites**:
   - Embedded live testing sandboxes directly inside the HTML page.
 - 📱 **100% Mobile & Touch Responsive**:
