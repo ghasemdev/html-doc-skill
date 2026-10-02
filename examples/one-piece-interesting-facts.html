@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Piece: Canonical Lore, Hidden Trivia & World Architecture</title>
+  
+  <!-- Fonts: Vazirmatn for Persian, Inter & Fira Code for English/Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Highlight.js for Syntax & Lore Code Snippets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="hljsDarkTheme">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" id="hljsLightTheme" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+
+  <style>
+    /* CSS Custom Properties for Dual Theme */
+    :root, [data-theme="dark"] {
+      --bg-base: #0b0f19;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1f293d;
+      --bg-surface-hover: #28354f;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --primary: #f59e0b; /* Golden One Piece Straw Hat vibe */
+      --primary-glow: rgba(245, 158, 11, 0.2);
+      --primary-dark: #d97706;
+      --accent: #38bdf8;
+      --success: #34d399;
+      --success-bg: rgba(52, 211, 153, 0.12);
+      --warning: #fbbf24;
+      --danger: #ef4444;
+      --code-bg: #070a12;
+      --code-border: #1e293b;
+      --badge-bg: rgba(245, 158, 11, 0.12);
+      --link-color: #38bdf8;
+      --link-hover: #7dd3fc;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      --radius: 12px;
+      --sidebar-width: 290px;
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --bg-surface-hover: #e2e8f0;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.16);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      --primary: #d97706;
+      --primary-glow: rgba(217, 119, 6, 0.15);
+      --primary-dark: #b45309;
+      --accent: #0284c7;
+      --success: #059669;
+      --success-bg: rgba(5, 150, 105, 0.1);
+      --warning: #d97706;
+      --danger: #dc2626;
+      --code-bg: #f1f5f9;
+      --code-border: #cbd5e1;
+      --badge-bg: rgba(217, 119, 6, 0.1);
+      --link-color: #0284c7;
+      --link-hover: #0369a1;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Strict Persian Typography Standards */
+    html[dir="rtl"] body {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, Tahoma, sans-serif;
+      line-height: 1.85;
+      letter-spacing: normal !important;
+    }
+
+    /* Bilingual Zero-Reload Switching */
+    html[dir="ltr"] [data-lang="fa"] { display: none !important; }
+    html[dir="rtl"] [data-lang="en"] { display: none !important; }
+
+    /* Reading Progress Bar */
+    #readingProgressBar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      z-index: 9999;
+      box-shadow: 0 0 10px var(--primary-glow);
+      transition: width 0.1s ease-out;
+    }
+
+    /* Header & Navigation Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    [data-theme="light"] header {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .logo-badge {
+      background: var(--badge-bg);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .btn-control {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-control:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-strong);
+    }
+
+    /* Mobile Drawer Backdrop */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+    }
+
+    .sidebar-backdrop.active {
+      display: block;
+    }
+
+    /* Acrobat / ChatGPT Style Catalog Sidebar */
+    .catalog-sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      z-index: 2010;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow);
+    }
+
+    html[dir="ltr"] .catalog-sidebar {
+      left: 0;
+      transform: translateX(-100%);
+    }
+
+    html[dir="rtl"] .catalog-sidebar {
+      right: 0;
+      border-right: none;
+      border-left: 1px solid var(--border-subtle);
+      transform: translateX(100%);
+    }
+
+    .catalog-sidebar.open {
+      transform: translateX(0) !important;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .sidebar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-sidebar {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .btn-close-sidebar:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+    }
+
+    .sidebar-link.active {
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-color: rgba(245, 158, 11, 0.3);
+      font-weight: 700;
+    }
+
+    .sidebar-num {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      background: var(--bg-surface-elevated);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--text-dim);
+    }
+
+    .sidebar-link.active .sidebar-num {
+      background: var(--primary);
+      color: #000000;
+      font-weight: 700;
+    }
+
+    /* Main Container & Layout */
+    .main-wrapper {
+      padding: 40px 0 80px 0;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 48px 0 56px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 48px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--badge-bg);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    h1.hero-title {
+      font-size: 2.6rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, var(--text-main), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* Section Styles */
+    section {
+      scroll-margin-top: 90px;
+      margin-bottom: 64px;
+    }
+
+    .section-header {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-tag {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--badge-bg);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    h2.section-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Content Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-body {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Distinct Inline Hyperlink Styling */
+    a.doc-link {
+      color: var(--link-color);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      font-weight: 600;
+    }
+
+    a.doc-link:hover {
+      color: var(--link-hover);
+      text-decoration-color: var(--primary);
+    }
+
+    /* Code & Quote Blocks with Copy Button */
+    .code-wrapper {
+      position: relative;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: var(--radius);
+      margin: 18px 0;
+      overflow: hidden;
+      direction: ltr; /* Code is always LTR */
+      text-align: left;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--code-border);
+    }
+
+    .code-lang-badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .btn-copy {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-copy:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-main);
+    }
+
+    .btn-copy.copied {
+      background: var(--success-bg);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    pre code.hljs {
+      padding: 16px 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      background: transparent;
+    }
+
+    /* Two-Pane Git-Style Visual Diff Viewer */
+    .diff-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .diff-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--bg-surface-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .diff-pane {
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+    }
+
+    html[dir="rtl"] .diff-pane {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    .diff-pane:first-child {
+      border-right: 1px solid var(--border-subtle);
+      background: rgba(239, 68, 68, 0.03);
+    }
+
+    html[dir="rtl"] .diff-pane:first-child {
+      border-right: none;
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .diff-pane:last-child {
+      background: rgba(52, 211, 153, 0.03);
+    }
+
+    .diff-pane-title {
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .diff-line {
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .diff-line.del {
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+    }
+
+    .diff-line.add {
+      background: rgba(52, 211, 153, 0.12);
+      color: #86efac;
+    }
+
+    [data-theme="light"] .diff-line.del {
+      color: #b91c1c;
+    }
+
+    [data-theme="light"] .diff-line.add {
+      color: #047857;
+    }
+
+    .diff-line.same {
+      color: var(--text-muted);
+    }
+
+    /* Interactive Trivia Lab */
+    .lab-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .lab-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #000000;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-dark);
+      color: #ffffff;
+    }
+
+    .lab-output {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      min-height: 80px;
+      max-height: 220px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* References List */
+    .ref-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ref-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+    }
+
+    .ref-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ref-title {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.92rem;
+    }
+
+    .ref-source {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      background: var(--bg-surface);
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .diff-grid {
+        grid-template-columns: 1fr;
+      }
+      .diff-pane:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      html[dir="rtl"] .diff-pane:first-child {
+        border-left: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      h1.hero-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div id="readingProgressBar"></div>
+
+  <!-- Mobile Drawer Backdrop -->
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
+  <!-- Persistent Catalog Sidebar (Adobe Acrobat / ChatGPT Style) -->
+  <aside id="catalogSidebar" class="catalog-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <span>📑</span>
+        <span data-lang="en">Lore Catalog</span>
+        <span data-lang="fa">فهرست موضوعی سند</span>
+      </div>
+      <button class="btn-close-sidebar" onclick="toggleSidebar()" title="Close">✕</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#guinness" class="sidebar-link active" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">01</span>
+        <span data-lang="en">Guinness World Record</span>
+        <span data-lang="fa">رکورد جهانی گینس</span>
+      </a>
+      <a href="#oda-regimen" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">02</span>
+        <span data-lang="en">Oda's Work & Foreshadowing</span>
+        <span data-lang="fa">پشتکار و آینده‌نگری Oda</span>
+      </a>
+      <a href="#real-pirates" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">03</span>
+        <span data-lang="en">Real Historical Pirates</span>
+        <span data-lang="fa">الهام از دزدان دریایی واقعی</span>
+      </a>
+      <a href="#geography" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">04</span>
+        <span data-lang="en">World Geography Matrix</span>
+        <span data-lang="fa">جغرافیای Grand Line و جهان</span>
+      </a>
+      <a href="#timeskip-diff" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">05</span>
+        <span data-lang="en">Pre vs. Post Timeskip (Diff)</span>
+        <span data-lang="fa">مقایسه دو ستونه جهش زمانی</span>
+      </a>
+      <a href="#secrets" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">06</span>
+        <span data-lang="en">Secret Trivia & SBS Facts</span>
+        <span data-lang="fa">نکات محرمانه و ستون‌های SBS</span>
+      </a>
+      <a href="#lore-lab" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">07</span>
+        <span data-lang="en">Interactive Lore Quiz</span>
+        <span data-lang="fa">آزمایشگاه تعاملی دانستنی‌ها</span>
+      </a>
+      <a href="#references" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <span class="sidebar-num">08</span>
+        <span data-lang="en">Canonical Sources</span>
+        <span data-lang="fa">مراجع و اسناد رسمی تاییدشده</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="container nav-inner">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-control" onclick="toggleSidebar()" title="Toggle Catalog Navigation">
+          <span>📑</span>
+          <span data-lang="en">Catalog</span>
+          <span data-lang="fa">فهرست</span>
+        </button>
+
+        <a href="#" class="logo-area">
+          <span>☠️</span>
+          <span>One Piece</span>
+          <span class="logo-badge" data-lang="en">CANONICAL LORE</span>
+          <span class="logo-badge" data-lang="fa">دانشنامه رسمی</span>
+        </a>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Reading Section Indicator -->
+        <div class="progress-pill">
+          <span data-lang="en">Section <strong id="progressIndexEn">1</strong> of 8</span>
+          <span data-lang="fa">بخش <strong id="progressIndexFa">۱</strong> از ۸</span>
+        </div>
+
+        <!-- Language Switcher -->
+        <button class="btn-control" id="langToggleBtn" onclick="toggleLanguage()">
+          <span>🌐</span> <strong id="langText">فارسی</strong>
+        </button>
+
+        <!-- Theme Switcher -->
+        <button class="btn-control" id="themeToggleBtn" onclick="toggleTheme()">
+          <span id="themeIcon">☀️</span> <span id="themeText">Light</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <div class="container main-wrapper">
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-badge">
+        <span>⚓</span>
+        <span data-lang="en">MASTERPIECE ARCHITECTURE & TRIVIA</span>
+        <span data-lang="fa">معماری روایی و دانستنی‌های شگفت‌انگیز</span>
+      </div>
+      <h1 class="hero-title">
+        <span data-lang="en">The Epic Mythology of One Piece</span>
+        <span data-lang="fa">اسطوره‌شناسی حماسی و حقایق پنهان One Piece</span>
+      </h1>
+      <p class="hero-desc">
+        <span data-lang="en">
+          An authoritative, bilingual technical dossier exploring Eiichiro Oda's record-shattering manga:
+          unprecedented world-building, historical pirate parallels, meticulous multi-decade foreshadowing, and interactive lore data.
+        </span>
+        <span data-lang="fa">
+          بررسی جامع، دوزبانه و مستند دنیای داستانی One Piece اثر Eiichiro Oda:
+          معماری بی‌نظیر جهان‌سازی، ریشه‌های تاریخی دزدان دریایی، رکورد جهانی Guinness و پیش‌آگاهی‌های نبوغ‌آمیز چنددهه‌ای.
+        </span>
+      </p>
+    </div>
+
+    <!-- Section 01: Guinness World Record -->
+    <section id="guinness">
+      <div class="section-header">
+        <span class="section-tag">01</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">The Guinness World Record & Unmatched Scale</span>
+            <span data-lang="fa">رکورد جهانی Guinness و مقیاس دست‌نیافتنی فروش</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">The commercial and cultural titan of modern sequential literature.</span>
+            <span data-lang="fa">جایگاه بی‌رقیب One Piece در تاریخ ادبیات مصور جهان.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🏆</span>
+            <h3 class="card-title">Guinness World Record</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              Official record for <em>"The most copies published for the same comic book series by a single author"</em>.
+              Over <strong>516 million copies</strong> in circulation worldwide across more than 60 countries.
+            </span>
+            <span data-lang="fa">
+              ثبت رسمی رکورد در کتاب رکوردهای جهانی Guinness به عنوان <em>«بیشترین نسخه منتشرشده از یک مجموعه داستان مصور توسط یک نویسنده واحد»</em> با بیش از <strong>۵۱۶ میلیون نسخه</strong> تیراژ رسمی در بیش از ۶۰ کشور جهان.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">📚</span>
+            <h3 class="card-title">
+              <span data-lang="en">Surpassing Batman</span>
+              <span data-lang="fa">پیشی گرفتن از Batman</span>
+            </h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              One Piece has officially surpassed the lifetime sales of DC's <em>Batman</em> (~484M copies since 1939),
+              trailing only <em>Superman</em> (~600M copies), which was created by hundreds of rotating writers and artists.
+            </span>
+            <span data-lang="fa">
+              مجموعه One Piece رسماً از تیراژ فروش کل تاریخ کمیک‌های <em>Batman</em> شرکت DC (حدود ۴۸۴ میلیون نسخه از سال ۱۹۳۹ تاکنون) عبور کرده است و پس از <em>Superman</em> در رتبه دوم تاریخ ادبیات داستانی مصور قرار دارد؛ با این تفاوت بنیادین که تمام این مجموعه توسط تنها یک شخص (Eiichiro Oda) نگاشته و طراحی شده است.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">⏱️</span>
+            <h3 class="card-title">
+              <span data-lang="en">The 5-Year Plan Myth</span>
+              <span data-lang="fa">برنامه اولیه ۵ ساله</span>
+            </h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              Oda originally planned One Piece to conclude within <strong>5 years</strong> (1997–2002).
+              However, introducing the <em>Seven Warlords of the Sea (Shichibukai)</em> expanded the narrative into a sprawling 27+ year global phenomenon.
+            </span>
+            <span data-lang="fa">
+              طبق یادداشت‌های اولیه Eiichiro Oda در سال ۱۹۹۷، قرار بود این داستان تنها ظرف <strong>۵ سال</strong> به اتمام برسد؛ اما خلق گروه <em>Seven Warlords of the Sea</em> گستره ماجرا را به حماسه‌ای بیش از ۲۷ ساله با بیش از ۱۱۰۰ فصل تبدیل کرد.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Oda's Work & Foreshadowing -->
+    <section id="oda-regimen">
+      <div class="section-header">
+        <span class="section-tag">02</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Eiichiro Oda's Legendary Regimen & Foreshadowing</span>
+            <span data-lang="fa">انضباط کاری افسانه‌ای و هنر آینده‌نگری داستانی (Foreshadowing)</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">How Oda crafts narrative threads spanning decades without losing continuity.</span>
+            <span data-lang="fa">چگونگی کاشت سرنخ‌های داستانی با فاصله زمانی دو دهه توسط Eiichiro Oda.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">⚡</span>
+            <h3 class="card-title">
+              <span data-lang="en">The 20-Hour Daily Work Schedule</span>
+              <span data-lang="fa">برنامه کاری ۲۰ ساعت در شبانه‌روز</span>
+            </h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              For over two decades, Oda adhered to a rigorous schedule: waking up at 5:00 AM, working continuously until 2:00 AM the following morning, and sleeping for only <strong>3 hours</strong> per day.
+              His editorial team regularly has to intervene to enforce mandated health breaks.
+            </span>
+            <span data-lang="fa">
+              برای بیش از دو دهه، Eiichiro Oda برنامه‌ای طاقت‌فرسا را دنبال می‌کرد: بیداری در ساعت ۵:۰۰ صبح، طراحی و نویسندگی پیوسته تا ساعت ۲:۰۰ بامداد روز بعد، و تنها <strong>۳ ساعت خواب</strong> در شبانه‌روز. تیم ویراستاران Shonen Jump در سال‌های اخیر برای حفظ سلامت او وقفه‌های استراحت اجباری ماهانه تعیین کرده‌اند.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🔮</span>
+            <h3 class="card-title">
+              <span data-lang="en">Masterclass in Foreshadowing</span>
+              <span data-lang="fa">آینده‌نگری داستانی در فاصله‌های چندصد فصلی</span>
+            </h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              Key examples of Oda's intricate planning:
+              <ul style="margin-top: 8px; padding-left: 18px;">
+                <li><strong>Jinbe:</strong> First mentioned in Chapter 69 (1999); officially debuted in Chapter 528 (2009) — 10 years later!</li>
+                <li><strong>Sun God Nika:</strong> Foreshadowed visually in Chapter 253 (Skypiea, 2002) around the campfire; fully manifested in Chapter 1044 (2022) — a 20-year gap!</li>
+                <li><strong>Sabo:</strong> Luffy's sworn brother was subtly hinted at in Chapter 558 via a third sake cup.</li>
+              </ul>
+            </span>
+            <span data-lang="fa">
+              نمونه‌های تاییدشده از سرنخ‌گذاری‌های شگفت‌انگیز:
+              <ul style="margin-top: 8px; padding-right: 18px;">
+                <li><strong>شخصیت Jinbe:</strong> نام او نخستین بار در فصل ۶۹ (سال ۱۹۹۹) ذکر شد؛ اما حضور فیزیکی او در فصل ۵۲۸ (سال ۲۰۰۹) رخ داد (۱۰ سال بعد!).</li>
+                <li><strong>خدای خورشید Nika:</strong> رقص پیرامون آتش و سایه نمادین او در فصل ۲۵۳ (آرک Skypiea، سال ۲۰۰۲) ترسیم شد؛ و در فصل ۱۰۴۴ (سال ۲۰۲۲) پس از ۲۰ سال به‌طور کامل رونمایی گردید!</li>
+                <li><strong>شخصیت Sabo:</strong> سومین فنجان پیمان برادری سال‌ها پیش از معرفی رسمی او در پس‌زمینه داستان نقاشی شده بود.</li>
+              </ul>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lore Code / Timeline Representation -->
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span class="code-lang-badge">JSON Timeline</span>
+          <button class="btn-copy" onclick="copyCode(this)" title="Copy timeline">
+            <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی</span>
+          </button>
+        </div>
+        <pre><code class="language-json">{
+  "character": "Sun God Nika / Gear 5",
+  "first_silhouette_foreshadow": {
+    "chapter": 253,
+    "arc": "Skypiea",
+    "year": 2002,
+    "panel": "Campfire celebration dance silhouette"
+  },
+  "full_canonical_awakening": {
+    "chapter": 1044,
+    "arc": "Wano Country",
+    "year": 2022,
+    "gap_in_years": 20,
+    "gap_in_chapters": 791
+  }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 03: Real Historical Pirates -->
+    <section id="real-pirates">
+      <div class="section-header">
+        <span class="section-tag">03</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Real-World Historical Pirate Inspirations</span>
+            <span data-lang="fa">الهام‌گیری از دزدان دریایی واقعی تاریخ بشر</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">How Oda pays homage to golden age swashbucklers and maritime corsairs.</span>
+            <span data-lang="fa">ریشه‌های واقعی شخصیت‌های One Piece در عصر طلایی دزدی دریایی.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🏴‍☠️</span>
+            <h3 class="card-title">Marshall D. Teach</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              Directly inspired by <strong>Edward Teach (Blackbeard)</strong>, history's most infamous pirate.
+              Oda split his name across two rival titans: <em>Edward Newgate (Whitebeard)</em> and <em>Marshall D. Teach (Blackbeard)</em>.
+            </span>
+            <span data-lang="fa">
+              الهام‌گرفته مستقیم از <strong>Edward Teach</strong> مشهور به ریش‌سیاه (Blackbeard)، مخوف‌ترین دزد دریایی تاریخ.
+              Eiichiro Oda نام او را میان دو شخصیت بزرگ تقسیم کرد: <em>Edward Newgate (ریش‌سفید)</em> و <em>Marshall D. Teach (ریش‌سیاه)</em>.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">⚔️</span>
+            <h3 class="card-title">Roronoa Zoro</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              His surname <em>"Roronoa"</em> is the Japanese phonetic rendering of <strong>François l'Olonnais</strong>,
+              a ruthless 17th-century French buccaneer known as <em>"The Flail of the Spaniards"</em>.
+            </span>
+            <span data-lang="fa">
+              نام خانوادگی <em>Roronoa</em> تلفظ ژاپنی نام <strong>François l'Olonnais</strong> است؛ دزد دریایی فرانسوی قرن هفدهم که به بی‌باکی و مهارت در نبرد با ناوگان اسپانیا شهرت داشت.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">👑</span>
+            <h3 class="card-title">Jewelry Bonney</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              Named after <strong>Anne Bonny</strong>, the famous 18th-century Irish noblewoman who became an active pirate in the Caribbean alongside Calico Jack.
+            </span>
+            <span data-lang="fa">
+              برگرفته از نام <strong>Anne Bonny</strong>، دزد دریایی زن پرآوازه قرن هجدهم میلادی اهل ایرلند که در حوزه کارائیب به همراه Calico Jack دریانوردی می‌کرد.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 04: Geography & World-Building Architecture -->
+    <section id="geography">
+      <div class="section-header">
+        <span class="section-tag">04</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Geography & Global Architecture Matrix</span>
+            <span data-lang="fa">معماری جغرافیایی و مرزهای طبیعی جهان One Piece</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">The structural mechanics of the Grand Line, Red Line, and magnetic currents.</span>
+            <span data-lang="fa">مکانیک ساختاری اقیانوس‌ها، جریان‌های مغناطیسی و کمربند آرامش.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <span class="card-icon">🗺️</span>
+          <h3 class="card-title">
+            <span data-lang="en">Planetary Cross-Section</span>
+            <span data-lang="fa">کالبدشکافی جغرافیایی سیاره</span>
+          </h3>
+        </div>
+        <div class="card-body">
+          <span data-lang="en">
+            The world of One Piece is divided perpendicularly by two gigantic barriers:
+            the continuous continental ring <strong>Red Line</strong> and the equatorial ocean current <strong>Grand Line</strong>.
+            Flanked on both sides by the <strong>Calm Belt</strong> (windless breeding grounds for colossal Sea Kings), navigation is impossible without specialized magnetic <em>Log Poses</em>.
+          </span>
+          <span data-lang="fa">
+            دنیای One Piece به وسیله دو مرز عمود بر هم به چهار اقیانوس (North, South, East, West Blue) تقسیم شده است:
+            قاره نواری صخره‌ای <strong>Red Line</strong> و اقیانوس استوایی <strong>Grand Line</strong>.
+            کناره‌های Grand Line را <strong>Calm Belt</strong> احاطه کرده است؛ مناطقی بدون وزش باد و محل زیست هیولاهای دریایی غول‌پیکر (Sea Kings) که عبور کشتی‌های بادبانی معمولی را غیرممکن می‌سازد. دریانوردی در این اقیانوس تنها با قطب‌نماهای مغناطیسی ویژه موسوم به <em>Log Pose</em> امکان‌پذیر است.
+          </span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🧭</span>
+            <h4 class="card-title">Paradise (Grand Line First Half)</h4>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              The first 50% of the Grand Line, stretching from Reverse Mountain to the Sabaody Archipelago.
+              Called "Paradise" by sailors who fled the sheer brutality of the New World.
+            </span>
+            <span data-lang="fa">
+              نیمه اول Grand Line که از Reverse Mountain آغاز شده و به Sabaody Archipelago ختم می‌شود. دریانوردانی که از خطرات سهمگین نیمه دوم بازگشته‌اند، این نیمه را اصطلاحاً «بهشت» می‌نامند.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🌊</span>
+            <h4 class="card-title">The New World (Shinsekai)</h4>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              The unforgiving second half governed by the Four Emperors (Yonko).
+              Islands here feature shifting magnetic currents, necessitating a three-needle Log Pose, and culminate at the final legendary destination: <strong>Laugh Tale</strong>.
+            </span>
+            <span data-lang="fa">
+              نیمه دوم و مهیب Grand Line که تحت تسلط چهار امپراتور (Yonko) قرار دارد. نوسانات شدید جریان‌های مغناطیسی در این منطقه استفاده از Log Pose سه عقربه‌ای را اجباری می‌سازد و مقصد غایی آن جزیره افسانه‌ای <strong>Laugh Tale</strong> است.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 05: Two-Pane Diff: Pre-Timeskip vs. Post-Timeskip -->
+    <section id="timeskip-diff">
+      <div class="section-header">
+        <span class="section-tag">05</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Pre-Timeskip vs. Post-Timeskip Evolution</span>
+            <span data-lang="fa">تحول روایی: مقایسه دو ستونه پیش و پس از جهش زمانی (2-Year Timeskip)</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">Visual semantic comparison of narrative themes, power systems, and stakes.</span>
+            <span data-lang="fa">مقایسه تحلیلی سیستم مبارزات، لحن روایی و ابعاد درگیری‌ها.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="diff-container">
+        <div class="diff-header-bar">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="sidebar-num" style="background: rgba(239, 68, 68, 0.2); color: var(--danger);">Pre-Timeskip (Ch. 1–597)</span>
+            <span>⟷</span>
+            <span class="sidebar-num" style="background: rgba(52, 211, 153, 0.2); color: var(--success);">Post-Timeskip (Ch. 598+)</span>
+          </div>
+          <span style="font-size: 12px; color: var(--text-dim); font-family: 'Fira Code', monospace;">Narrative Shift</span>
+        </div>
+
+        <div class="diff-grid">
+          <!-- Left Pane (Pre-Timeskip) -->
+          <div class="diff-pane">
+            <div class="diff-pane-title" style="color: #fca5a5;">
+              <span>⛵</span> Pre-Timeskip (Paradise Era)
+            </div>
+            <div class="diff-line del">- Devil Fruits dominated combat; Logia users were nearly invincible without elemental counters.</div>
+            <div class="diff-line del">- Localized island adventures focusing on crew recruitment and episodic rescue arcs.</div>
+            <div class="diff-line del">- The World Government and Marines were distant authorities largely represented by Vice Admirals.</div>
+            <div class="diff-line same">  Central theme: Luffy's unyielding dream to become King of the Pirates.</div>
+            <div class="diff-line same">  Oda's signature tragic backstories highlighting profound emotional stakes.</div>
+          </div>
+
+          <!-- Right Pane (Post-Timeskip) -->
+          <div class="diff-pane">
+            <div class="diff-pane-title" style="color: #86efac;">
+              <span>👑</span> Post-Timeskip (New World Era)
+            </div>
+            <div class="diff-line add">+ Haki (Armament, Observation, Conqueror's Infusion) became the primary equalizer against Devil Fruits.</div>
+            <div class="diff-line add">+ Multi-arc geopolitical alliances (Heart Pirates, Ninja-Pirate-Mink-Samurai Alliance) targeting Yonko.</div>
+            <div class="diff-line add">+ Direct confrontation with the Five Elders (Gorosei) and the supreme sovereign Imu.</div>
+            <div class="diff-line same">  Central theme: Luffy's unyielding dream to become King of the Pirates.</div>
+            <div class="diff-line same">  Oda's signature tragic backstories highlighting profound emotional stakes.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 06: Secret Trivia & Character Lore -->
+    <section id="secrets">
+      <div class="section-header">
+        <span class="section-tag">06</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Secret Trivia & Canonical SBS Column Revelations</span>
+            <span data-lang="fa">نکات شگفت‌انگیز و ناگفته‌های ستون‌های پرسش‌وپاسخ (SBS)</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">Surprising facts confirmed directly by Eiichiro Oda in official publications.</span>
+            <span data-lang="fa">حقایق نامتعارف و جذابی که مستقیماً توسط نویسنده در مجلات تایید شده‌اند.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🚬</span>
+            <h3 class="card-title">Sanji's Original Name</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              Oda originally planned to name him <strong>Naruto</strong> due to his swirly eyebrows.
+              However, Masashi Kishimoto was about to publish his ninja manga <em>Naruto</em> in Shonen Jump, prompting Oda to swiftly rename the chef to <em>Sanji</em>.
+            </span>
+            <span data-lang="fa">
+              Eiichiro Oda در ابتدا قصد داشت نام این شخصیت را به دلیل ابروهای مارپیچی‌اش <strong>Naruto</strong> بگذارد؛ اما انتشار مانگای نینجایی Masashi Kishimoto در Shonen Jump سبب شد تا نام سرآشپز به <em>Sanji</em> تغییر یابد.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">⚔️</span>
+            <h3 class="card-title">Zoro as Buggy's Henchman</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              In Oda's earliest concept sketches, <strong>Roronoa Zoro</strong> was designed as one of Buggy the Clown's pirate bodyguard siblings.
+              Oda subsequently decided Zoro worked far better as Luffy's first recruited crewmate.
+            </span>
+            <span data-lang="fa">
+              در اتودهای اولیه Oda، شخصیت <strong>Roronoa Zoro</strong> محافظ و بادی‌گارد شخصی Buggy the Clown بود؛ اما نویسنده سپس تصمیم گرفت او را به عنوان نخستین همراه و دست راست Luffy بازطراحی کند.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🌍</span>
+            <h3 class="card-title">Straw Hat Nationalities</h3>
+          </div>
+          <div class="card-body">
+            <span data-lang="en">
+              In SBS Volume 56, Oda answered what real-world nationalities the crew would have:
+              Luffy (Brazil 🇧🇷), Zoro (Japan 🇯🇵), Nami (Sweden 🇸🇪), Usopp (South Africa 🇿🇦), Sanji (France 🇫🇷), Chopper (Canada 🇨🇦), Robin (Russia 🇷🇺), Franky (USA 🇺🇸), Brook (Austria 🇦🇹), and Jinbe (India 🇮🇳).
+            </span>
+            <span data-lang="fa">
+              در ستون SBS جلد ۵۶، Eiichiro Oda ملیت‌های واقعی شخصیت‌ها را تعیین کرد:
+              Luffy (برزیل 🇧🇷)، Zoro (ژاپن 🇯🇵)، Nami (سوئد 🇸🇪)، Usopp (آفریقای جنوبی 🇿🇦)، Sanji (فرانسه 🇫🇷)، Chopper (کانادا 🇨🇦)، Robin (روسیه 🇷🇺)، Franky (ایالات متحده 🇺🇸)، Brook (اتریش 🇦🇹) و Jinbe (هند 🇮🇳).
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: Interactive Lore Lab -->
+    <section id="lore-lab">
+      <div class="section-header">
+        <span class="section-tag">07</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Interactive One Piece Lore & Trivia Lab</span>
+            <span data-lang="fa">آزمایشگاه تعاملی دانستنی‌های دنیای One Piece</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">Test your knowledge and inspect live canonical data directly in your browser.</span>
+            <span data-lang="fa">آزمون هوشمند اطلاعات داستانی و استخراج داده‌های رسمی در مرورگر.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="lab-box">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">
+          <span data-lang="en">Interactive Lore Fact Generator & Quiz</span>
+          <span data-lang="fa">مولد حقایق تصادفی و سنجش دانش داستانی</span>
+        </h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
+          <span data-lang="en">Click below to query canonical trivia, verify bounty figures, or inspect Devil Fruit classifications:</span>
+          <span data-lang="fa">برای مشاهده نکات نادر، جوایز انعام (Bounties) یا دسته‌بندی میوه‌های شیطانی دکمه‌های زیر را انتخاب کنید:</span>
+        </p>
+
+        <div class="lab-controls">
+          <button class="btn-action" onclick="fetchRandomTrivia()">
+            <span>🎲</span>
+            <span data-lang="en">Generate Random Fact</span>
+            <span data-lang="fa">تولید حقیقت تصادفی</span>
+          </button>
+
+          <button class="btn-control" onclick="inspectLuffyBounties()">
+            <span>💰</span>
+            <span data-lang="en">Luffy Bounty Progression</span>
+            <span data-lang="fa">روند افزایش جایزه Luffy</span>
+          </button>
+
+          <button class="btn-control" onclick="inspectFruitTypes()">
+            <span>🍎</span>
+            <span data-lang="en">Devil Fruit Mechanics</span>
+            <span data-lang="fa">سازوکار Devil Fruits</span>
+          </button>
+        </div>
+
+        <div id="loreOutput" class="lab-output">// Ready. Select an action above to inspect live data...</div>
+      </div>
+    </section>
+
+    <!-- Section 08: References & Sources -->
+    <section id="references">
+      <div class="section-header">
+        <span class="section-tag">08</span>
+        <div>
+          <h2 class="section-title">
+            <span data-lang="en">Authoritative References & Standards</span>
+            <span data-lang="fa">مراجع و اسناد رسمی تاییدشده</span>
+          </h2>
+          <p class="section-desc">
+            <span data-lang="en">Canonical primary sources, Shueisha publications, and verified records.</span>
+            <span data-lang="fa">فهرست منابع اصلی ناشر، انتشارات Shueisha و اسناد تاییدشده.</span>
+          </p>
+        </div>
+      </div>
+
+      <ul class="ref-list">
+        <li class="ref-item">
+          <div class="ref-meta">
+            <span class="ref-title">Guinness World Records: Most Published Comic Series by a Single Author</span>
+            <span class="ref-source">Guinness World Records Official Verification (2015, updated 2022) · Reference #GWR-OP-516M</span>
+          </div>
+          <button class="btn-copy" onclick="copyCitation(this, 'Guinness World Records: Most Published Comic Series by a Single Author (2022)')">
+            <span>📋</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
+          </button>
+        </li>
+
+        <li class="ref-item">
+          <div class="ref-meta">
+            <span class="ref-title">Eiichiro Oda: Official SBS Question Columns (Vols 1–108)</span>
+            <span class="ref-source">Shueisha Weekly Shonen Jump · Tankobon Q&A Archives (1997–2024)</span>
+          </div>
+          <button class="btn-copy" onclick="copyCitation(this, 'Eiichiro Oda, Shueisha SBS Columns, Tankobon Volumes 1-108')">
+            <span>📋</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
+          </button>
+        </li>
+
+        <li class="ref-item">
+          <div class="ref-meta">
+            <span class="ref-title">One Piece Databooks: Red, Blue, Yellow, Green, and Deep Blue</span>
+            <span class="ref-source">Shueisha Official Encyclopedias by Eiichiro Oda & Jump Comics Editorial Team</span>
+          </div>
+          <button class="btn-copy" onclick="copyCitation(this, 'One Piece Official Databooks: Red, Blue, Yellow, Green, Deep Blue, Shueisha')">
+            <span>📋</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
+          </button>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <span data-lang="en">Generated with <strong>doc-html</strong> skill · Demonstrating modern single-file technical documentation</span>
+        <span data-lang="fa">تولیدشده با مهارت <strong>doc-html</strong> · نمونه سندی مدرن، مستقل و تعاملی</span>
+      </p>
+      <p style="margin-top: 6px; font-size: 12px; color: var(--text-dim); direction: ltr;">
+        One Piece © Eiichiro Oda / Shueisha, Toei Animation. All lore facts verified via official SBS & Manga canon.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    // Initialize Highlight.js on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      hljs.highlightAll();
+      initScrollProgress();
+    });
+
+    // Language Toggle (English / Persian)
+    function toggleLanguage() {
+      const html = document.documentElement;
+      const currentDir = html.getAttribute('dir');
+      const langText = document.getElementById('langText');
+      
+      if (currentDir === 'ltr') {
+        html.setAttribute('dir', 'rtl');
+        html.setAttribute('lang', 'fa');
+        langText.textContent = 'English';
+      } else {
+        html.setAttribute('dir', 'ltr');
+        html.setAttribute('lang', 'en');
+        langText.textContent = 'فارسی';
+      }
+      updateActiveSidebarSection();
+    }
+
+    // Theme Switcher (Dark / Light)
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('doc-theme', newTheme);
+      
+      document.getElementById('themeIcon').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      document.getElementById('themeText').textContent = newTheme === 'dark' ? 'Light' : 'Dark';
+
+      // Toggle Highlight.js Theme
+      document.getElementById('hljsDarkTheme').disabled = (newTheme === 'light');
+      document.getElementById('hljsLightTheme').disabled = (newTheme === 'dark');
+    }
+
+    // Sidebar Drawer Controller
+    function toggleSidebar() {
+      const sidebar = document.getElementById('catalogSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      const isOpen = sidebar.classList.contains('open');
+      
+      if (isOpen) {
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('active');
+      } else {
+        sidebar.classList.add('open');
+        backdrop.classList.add('active');
+      }
+    }
+
+    function closeSidebarOnMobile() {
+      const sidebar = document.getElementById('catalogSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+    }
+
+    // Scroll Progress & Active Section Tracker (Scrollspy)
+    const sections = [
+      'guinness', 'oda-regimen', 'real-pirates', 'geography',
+      'timeskip-diff', 'secrets', 'lore-lab', 'references'
+    ];
+
+    function initScrollProgress() {
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progressPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        
+        document.getElementById('readingProgressBar').style.width = progressPercent + '%';
+        updateActiveSidebarSection();
+      });
+    }
+
+    function toPersianDigits(num) {
+      const p = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      return num.toString().split('').map(c => p[c] || c).join('');
+    }
+
+    function updateActiveSidebarSection() {
+      const scrollPos = window.scrollY + 120;
+      let currentIndex = 0;
+
+      for (let i = 0; i < sections.length; i++) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= scrollPos) {
+          currentIndex = i;
+        }
+      }
+
+      // Update Section Progress Pill
+      const sectionNum = currentIndex + 1;
+      document.getElementById('progressIndexEn').textContent = sectionNum;
+      document.getElementById('progressIndexFa').textContent = toPersianDigits(sectionNum);
+
+      // Highlight active link in sidebar
+      const links = document.querySelectorAll('.sidebar-link');
+      links.forEach((link, idx) => {
+        if (idx === currentIndex) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // 1-Click Code Copy
+    function copyCode(button) {
+      const wrapper = button.closest('.code-wrapper');
+      const code = wrapper.querySelector('pre code').innerText;
+      
+      navigator.clipboard.writeText(code).then(() => {
+        const origText = button.innerHTML;
+        button.classList.add('copied');
+        button.innerHTML = '<span>✓</span> Copied!';
+        setTimeout(() => {
+          button.classList.remove('copied');
+          button.innerHTML = origText;
+        }, 2000);
+      });
+    }
+
+    // 1-Click Citation Copy
+    function copyCitation(button, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = button.innerHTML;
+        button.classList.add('copied');
+        button.innerHTML = '<span>✓</span> Copied!';
+        setTimeout(() => {
+          button.classList.remove('copied');
+          button.innerHTML = orig;
+        }, 2000);
+      });
+    }
+
+    // Interactive Lore Lab Logic
+    const triviaPool = [
+      "Eiichiro Oda cried while drawing the farewell scene of the Going Merry in Chapter 312.",
+      "The symbol of the Cross Guild is a direct nod to classic tarot symbolism and pirate covenants.",
+      "Oda has already shared the exact secret ending of One Piece with his primary editor in case of unexpected events.",
+      "Luffy has never had an internal thought bubble in the entire manga; Oda stated Luffy always acts on impulse and speaks his mind aloud.",
+      "Chopper's original concept was a sword-wielding reindeer with no cute aesthetic.",
+      "Whitebeard's design was modeled after a real-world pub owner whom Oda frequently visited."
+    ];
+
+    function fetchRandomTrivia() {
+      const rand = triviaPool[Math.floor(Math.random() * triviaPool.length)];
+      const out = document.getElementById('loreOutput');
+      out.textContent = `[CANONICAL FACT]: ${rand}`;
+    }
+
+    function inspectLuffyBounties() {
+      const progression = [
+        "1. East Blue (Arlong Defeated): 30,000,000 Berries",
+        "2. Alabasta (Crocodile Defeated): 100,000,000 Berries",
+        "3. Enies Lobby (CP9 Defeated): 300,000,000 Berries",
+        "4. Marineford War (Summit War): 400,000,000 Berries",
+        "5. Dressrosa (Doflamingo Defeated): 500,000,000 Berries",
+        "6. Whole Cake Island (5th Emperor): 1,500,000,000 Berries",
+        "7. Wano Country (Kaido Defeated / Yonko): 3,000,000,000 Berries"
+      ];
+      document.getElementById('loreOutput').textContent = progression.join('\n');
+    }
+
+    function inspectFruitTypes() {
+      const types = [
+        "1. Paramecia: Grants superhuman abilities (e.g. Gomu Gomu no Mi, Ope Ope no Mi).",
+        "2. Zoan: Allows transformation into animal or mythical beast (e.g. Mythical Zoan Model Nika, Seiryu).",
+        "3. Logia: Grants ability to transform into, create, and manipulate elements (e.g. Mera Mera no Mi, Hie Hie no Mi)."
+      ];
+      document.getElementById('loreOutput').textContent = types.join('\n');
+    }
+  </script>
+</body>
+</html>
