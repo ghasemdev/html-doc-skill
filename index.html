@@ -253,7 +253,7 @@
 
     /* Catalog Sidebar */
     .catalog-sidebar {
-      width: 290px;
+      width: min(85vw, 300px);
       flex-shrink: 0;
       background: var(--bg-surface);
       border-inline-end: 1px solid var(--border-subtle);
@@ -505,6 +505,19 @@
       color: var(--text-main);
     }
 
+
+    /* STRICTLY LEFT-TO-RIGHT (LTR) CODE BLOCKS IN ALL MODES */
+    .code-container,
+    pre,
+    code,
+    .code-header,
+    .endpoint-url,
+    .json-preview {
+      direction: ltr !important;
+      text-align: left !important;
+      unicode-bidi: isolate;
+    }
+
     /* Code Blocks & Badges */
     .code-container {
       background: var(--code-bg);
@@ -710,62 +723,260 @@
       border-bottom: none;
     }
 
-    /* Visual Diff Viewer */
-    .diff-viewer-container {
-      background: var(--code-bg);
-      border: 1px solid var(--code-border);
-      border-radius: var(--radius);
-      margin: 1.5rem 0;
-      overflow: hidden;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.84rem;
-    }
-
-    .diff-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* Standardized API Documentation Styles */
+    .api-endpoint-card {
       background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin: 1.75rem 0;
+      box-shadow: var(--shadow);
     }
-
-    .diff-pane-title {
-      padding: 0.6rem 1rem;
-      font-weight: 700;
-      font-size: 0.82rem;
+    .api-meta { margin-bottom: 1rem; }
+    .api-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--text-main); }
+    .api-description { color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; }
+    .api-url-bar {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.75rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
     }
-    .diff-pane-title.old-ver { color: var(--danger); border-inline-end: 1px solid var(--border-subtle); }
-    .diff-pane-title.new-ver { color: var(--success); }
-
-    .diff-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .http-badge {
+      font-family: 'Fira Code', monospace;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .http-badge.post { background: rgba(56, 189, 248, 0.18); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .http-badge.get { background: rgba(52, 211, 153, 0.18); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.3); }
+    .endpoint-url {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      font-weight: 600;
+      flex: 1;
+    }
+    .api-subheading {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin: 1.25rem 0 0.6rem;
+    }
+    .table-responsive {
+      width: 100%;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0.75rem 0 1.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
     }
+    .api-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: inherit;
+    }
+    .api-table th {
+      background: var(--bg-surface-elevated);
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .api-table td {
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: top;
+    }
+    .api-table tr:last-child td { border-bottom: none; }
+    .type-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 4px; background: var(--bg-surface-hover); color: var(--accent); }
+    .req-tag { font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; }
+    .req-tag.required { background: var(--danger-bg); color: var(--danger); }
+    .req-tag.optional { background: var(--bg-surface-hover); color: var(--text-dim); }
+    .status-badge { font-family: 'Fira Code', monospace; font-size: 0.78rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .status-badge.s200 { background: var(--success-bg); color: var(--success); }
+    .status-badge.s400 { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.s401 { background: var(--warning-bg); color: var(--warning); }
+    .status-badge.s404 { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
+    .status-badge.s422 { background: rgba(129, 140, 248, 0.15); color: var(--accent); }
+    .status-badge.s503 { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
+    .json-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
 
-    .diff-col {
+    /* Header Version Selector */
+    .version-select {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.38rem 0.65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      outline: none;
+      font-family: inherit;
+    }
+    .version-select:hover { border-color: var(--primary); }
+
+    /* Modal Overlay System */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
       padding: 1rem;
-      line-height: 1.6;
     }
-    .diff-col.old-col {
-      border-inline-end: 1px solid var(--border-subtle);
-      background: rgba(248, 113, 113, 0.03);
-    }
-    .diff-col.new-col {
-      background: rgba(52, 211, 153, 0.03);
-    }
-
-    .diff-line {
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      max-width: 650px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
       display: flex;
-      gap: 0.5rem;
-      padding: 0.15rem 0;
-      white-space: pre-wrap;
+      flex-direction: column;
     }
-    .diff-line.del { color: var(--danger); background: rgba(248, 113, 113, 0.1); }
-    .diff-line.add { color: var(--success); background: rgba(52, 211, 153, 0.1); }
-    .diff-prefix { user-select: none; width: 1.2rem; }
+    .modal-header {
+      padding: 1.1rem 1.35rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
+    .modal-body { padding: 1.35rem; flex: 1; overflow-y: auto; }
+    .modal-footer {
+      padding: 1rem 1.35rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .btn-close-modal:hover { color: var(--text-main); }
+
+    /* Changelog Timeline */
+    .changelog-entry {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+    }
+    .changelog-entry.current { border-inline-start: 4px solid var(--primary); }
+    .changelog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+    .changelog-tag { font-weight: 700; color: var(--primary); font-size: 0.85rem; }
+    .changelog-date { font-size: 0.75rem; color: var(--text-dim); }
+    .changelog-items { padding-inline-start: 1.25rem; font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Review & Commenting System */
+    .comment-item {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+    }
+    .comment-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+    .comment-target-badge {
+      font-size: 0.72rem;
+      background: var(--badge-bg);
+      color: var(--primary);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .comment-quote {
+      border-inline-start: 3px solid var(--accent);
+      padding-inline-start: 0.6rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 0.35rem 0;
+      font-size: 0.82rem;
+    }
+    .btn-comment-section {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.78rem;
+      cursor: pointer;
+      margin-inline-start: 0.5rem;
+      transition: all 0.15s ease;
+      vertical-align: middle;
+    }
+    .btn-comment-section:hover { background: var(--bg-surface-hover); color: var(--primary); border-color: var(--primary); }
+
+    /* Print Stylesheet for High-Quality PDF Export */
+    @media print {
+      header.top-navbar,
+      .catalog-sidebar,
+      .sidebar-backdrop,
+      .btn-control,
+      .btn-copy,
+      .btn-copy-ref,
+      .btn-comment-section,
+      .modal-overlay,
+      #scrollProgressBar,
+      .sim-controls,
+      .sim-monitor {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 10.5pt;
+      }
+      .app-layout { display: block !important; }
+      .main-content {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .feature-card,
+      .api-endpoint-card,
+      .code-container,
+      .chart-card,
+      .sim-card,
+      table,
+      figure {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
 
     /* References List */
     .references-list {
@@ -891,12 +1102,15 @@
       .section-title {
         font-size: 1.5rem;
       }
-      .diff-header, .diff-body {
+      .json-grid {
         grid-template-columns: 1fr;
       }
-      .diff-col.old-col {
-        border-inline-end: none;
-        border-bottom: 1px solid var(--border-subtle);
+      .nav-controls {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .progress-pill {
+        display: none;
       }
     }
   </style>
@@ -926,11 +1140,33 @@
     </div>
 
     <div class="nav-controls">
+      <!-- Version Selector & Changelog -->
+      <select id="docVersionSelect" class="version-select" onchange="switchVersion(this.value)" title="RemoteCompose Specification Version">
+        <option value="2.0.0" selected>v2.0.0 (Latest)</option>
+        <option value="1.2.0">v1.2.0</option>
+        <option value="1.0.0">v1.0.0</option>
+      </select>
+      <button class="btn-control" onclick="openVersionModal()" title="View Version Changelog">📜</button>
+
       <!-- Section Counter Pill -->
       <div class="progress-pill">
         <span data-lang="en">Section <strong id="progressIndexEn">1</strong> of 11</span>
         <span data-lang="fa">بخش <strong id="progressIndexFa">۱</strong> از ۱۱</span>
       </div>
+
+      <!-- Review & Comments Trigger -->
+      <button class="btn-control" onclick="openReviewModal()" title="Review Comments & Feedback">
+        <span>💬</span>
+        <span data-lang="en">Reviews</span>
+        <span data-lang="fa">نظرات</span> (<span id="commentCount">0</span>)
+      </button>
+
+      <!-- 1-Click PDF Export -->
+      <button class="btn-control" onclick="window.print()" title="Export Document as PDF">
+        <span>📄</span>
+        <span data-lang="en">PDF</span>
+        <span data-lang="fa">خروجی PDF</span>
+      </button>
 
       <!-- Bilingual Language Switcher -->
       <button class="btn-control" id="langSwitchBtn" onclick="toggleLanguage()">
@@ -1008,10 +1244,10 @@
           <span data-lang="en">Interactive Simulator & Playground</span>
           <span data-lang="fa">شبیه‌ساز تعاملی و آزمایشگاه زنده</span>
         </a>
-        <a href="#diff-viewer" class="sidebar-link" onclick="closeSidebarOnMobile()">
+        <a href="#api-endpoints" class="sidebar-link" onclick="closeSidebarOnMobile()">
           <span class="sidebar-num">10</span>
-          <span data-lang="en">Evolution Diff: RemoteViews vs RC</span>
-          <span data-lang="fa">مقایسه تحلیلی (Diff): نسل قدیم و جدید</span>
+          <span data-lang="en">API & Ingestion Specification</span>
+          <span data-lang="fa">مشخصات وب‌سرویس و API اسناد</span>
         </a>
         <a href="#references" class="sidebar-link" onclick="closeSidebarOnMobile()">
           <span class="sidebar-num">11</span>
@@ -1840,62 +2076,335 @@ public float eval(RemoteContext context) {
         </div>
       </section>
 
-      <!-- SECTION 10: Evolution Diff Viewer -->
-      <section id="diff-viewer">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-          <h2 class="section-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
-            <span class="number">10</span>
-            <span data-lang="en">Evolution Diff: RemoteViews vs RemoteCompose</span>
-            <span data-lang="fa">مقایسه تحلیلی (Diff): نسل قدیم و جدید</span>
-          </h2>
-        </div>
+      <!-- SECTION 10: Standardized API Specification -->
+      <section id="api-endpoints">
+        <h2 class="section-title">
+          <span class="number">10</span>
+          <span data-lang="en">RemoteCompose Ingestion & Document Server API</span>
+          <span data-lang="fa">مشخصات وب‌سرویس و API سرور اسناد ریموت کامپوز</span>
+          <button class="btn-comment-section" onclick="promptAddComment('api-endpoints', 'API Specification')">💬</button>
+        </h2>
 
         <p>
           <span data-lang="en">
-            Examine how the developer experience and architectural implementation evolve from legacy reflection-based RemoteViews to declarative, high-performance RemoteCompose:
+            High-performance endpoints enabling companion devices, cloud rendering microservices, and system services to stream, compile, and validate RemoteCompose binary bytecode packages into active display players.
           </span>
           <span data-lang="fa">
-            مشاهده تفاوت‌های عمیق پیاده‌سازی و تجربه توسعه میان فناوری قدیمی RemoteViews و معماری مدرن RemoteCompose:
+            مشخصات وب‌سرویس‌ها و نقاط دسترسی اختصاصی جهت بارگذاری، کامپایل بایت‌کد و اعتبارسنجی بسته‌های باینری RemoteCompose توسط دستگاه‌های همراه، میکروسرویس‌های ابری و پردازشگرهای سیستمی.
           </span>
         </p>
 
-        <div class="diff-viewer-container">
-          <div class="diff-header">
-            <div class="diff-pane-title old-ver">
-              <span>❌</span>
-              <span>Legacy RemoteViews (Android 1.0 - 14)</span>
+        <!-- ENDPOINT 1 -->
+        <div class="api-endpoint-card">
+          <!-- 1. Description -->
+          <div class="api-meta">
+            <h3 class="api-title">
+              <span data-lang="en">Submit Binary RemoteCompose Render Batch</span>
+              <span data-lang="fa">ارسال بسته باینری دستورات گرافیکی ریموت</span>
+            </h3>
+            <p class="api-description">
+              <span data-lang="en">Transmits a serialized <code>.rc</code> binary envelope to the display controller for immediate Skia hardware rasterization and local RPN expression binding.</span>
+              <span data-lang="fa">ارسال پوسته باینری سریا‌ل‌شده <code>.rc</code> به کنترلر نمایشگر جهت ترسیم بی‌درنگ سخت‌افزاری بر بستر Skia و فعال‌سازی متغیرهای محاسباتی RPN.</span>
+            </p>
+          </div>
+
+          <!-- 2. Method + URL -->
+          <div class="api-url-bar">
+            <span class="http-badge post">POST</span>
+            <code class="endpoint-url">/api/v2/remote-compose/render-batch</code>
+            <button class="btn-copy" onclick="copyCitation('/api/v2/remote-compose/render-batch', this)">
+              <span>📋</span> <span data-lang="en">Copy URL</span><span data-lang="fa">کپی آدرس</span>
+            </button>
+          </div>
+
+          <!-- 3. Parameters Table -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Request Parameters</span>
+            <span data-lang="fa">پارامترهای ورودی</span>
+          </h4>
+          <div class="table-responsive">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th><span data-lang="en">Parameter</span><span data-lang="fa">پارامتر</span></th>
+                  <th><span data-lang="en">Type</span><span data-lang="fa">نوع</span></th>
+                  <th><span data-lang="en">Required</span><span data-lang="fa">الزامی</span></th>
+                  <th><span data-lang="en">Description</span><span data-lang="fa">توضیحات</span></th>
+                  <th><span data-lang="en">Example</span><span data-lang="fa">نمونه</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>session_token</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag required">Required</span></td>
+                  <td>
+                    <span data-lang="en">Cryptographic device session token (ECDSA-signed)</span>
+                    <span data-lang="fa">توکن رمزشده و معتبر نشست ارتباطی دستگاه</span>
+                  </td>
+                  <td><code>"tok_sec_9941a87b"</code></td>
+                </tr>
+                <tr>
+                  <td><code>document_id</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag required">Required</span></td>
+                  <td>
+                    <span data-lang="en">Unique identifier for active canvas buffer</span>
+                    <span data-lang="fa">شناسه یکتای بافر و لایه گرافیکی فعال</span>
+                  </td>
+                  <td><code>"doc_wear_card_01"</code></td>
+                </tr>
+                <tr>
+                  <td><code>wire_buffer_b64</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag required">Required</span></td>
+                  <td>
+                    <span data-lang="en">Base64 encoded binary stream starting with magic bytes RCMP01</span>
+                    <span data-lang="fa">رشته Base64 از بایت‌های باینری حاوی مجیک‌بایت RCMP01</span>
+                  </td>
+                  <td><code>"UkNDTVAwMQAB..."</code></td>
+                </tr>
+                <tr>
+                  <td><code>target_density_dpi</code></td>
+                  <td><span class="type-tag">integer</span></td>
+                  <td><span class="req-tag optional">Optional</span></td>
+                  <td>
+                    <span data-lang="en">Screen pixel density (default: 320 dpi)</span>
+                    <span data-lang="fa">تراکم پیکسلی نمایشگر مقصد (پیش‌فرض: ۳۲۰)</span>
+                  </td>
+                  <td><code>320</code></td>
+                </tr>
+                <tr>
+                  <td><code>acceleration_profile</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag optional">Optional</span></td>
+                  <td>
+                    <span data-lang="en">GPU engine: <code>SKIA_GPU</code>, <code>VULKAN</code>, <code>SOFTWARE</code></span>
+                    <span data-lang="fa">پروفایل موتور سخت‌افزاری گرافیک</span>
+                  </td>
+                  <td><code>"SKIA_GPU"</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 4. JSON Request & Response Samples (Strictly LTR) -->
+          <div class="json-grid">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-lang-badge badge-proto">JSON Request Body</span>
+                <button class="btn-copy" onclick="copyCode(this)">
+                  <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی کد</span>
+                </button>
+              </div>
+              <pre><code class="language-json">{
+  "session_token": "tok_sec_9941a87b",
+  "document_id": "doc_wear_card_01",
+  "wire_buffer_b64": "UkNDTVAwMQABAAAAAAQ...",
+  "target_density_dpi": 320,
+  "acceleration_profile": "SKIA_GPU"
+}</code></pre>
             </div>
-            <div class="diff-pane-title new-ver">
-              <span>✅</span>
-              <span>RemoteCompose (Modern AOSP & Jetpack)</span>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-lang-badge badge-bash">JSON Response (200 OK)</span>
+                <button class="btn-copy" onclick="copyCode(this)">
+                  <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی کد</span>
+                </button>
+              </div>
+              <pre><code class="language-json">{
+  "status": "SUCCESS",
+  "document_id": "doc_wear_card_01",
+  "parsed_operations": 42,
+  "allocated_vram_kb": 128.4,
+  "raster_latency_ms": 0.84,
+  "rpn_variables_bound": 3
+}</code></pre>
             </div>
           </div>
-          <div class="diff-body">
-            <div class="diff-col old-col">
-              <div class="diff-line del"><span class="diff-prefix">-</span>// Heavy Parcelable serialization</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>RemoteViews views = new RemoteViews(pkg, R.layout.widget);</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>views.setTextViewText(R.id.title, title);</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>views.setTextColor(R.id.title, 0xFFFFFFFF);</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>// Reflection calls across Binder IPC</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>views.setInt(R.id.image, "setAlpha", 180);</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>// Zero custom canvas drawing support</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>// Zero animation without sending full rebuild</div>
-              <div class="diff-line del"><span class="diff-prefix">-</span>appWidgetManager.updateAppWidget(id, views);</div>
+
+          <!-- 5. Errors Table -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Error Responses & Status Codes</span>
+            <span data-lang="fa">کدهای خطا و پاسخ‌های وضعیت</span>
+          </h4>
+          <div class="table-responsive">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th><span data-lang="en">HTTP Status</span><span data-lang="fa">کد وضعیت</span></th>
+                  <th><span data-lang="en">Error Code</span><span data-lang="fa">کد خطا</span></th>
+                  <th><span data-lang="en">Description & Resolution</span><span data-lang="fa">توضیحات و راهکار رفع خطا</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="status-badge s400">400 Bad Request</span></td>
+                  <td><code>CORRUPTED_WIRE_FORMAT</code></td>
+                  <td>
+                    <span data-lang="en">Binary magic header missing or CRC32 checksum mismatch. Re-serialize envelope.</span>
+                    <span data-lang="fa">مجیک‌هدر باینری مفقود یا چک‌سام ناهمخوان است؛ بسته باینری را مجدداً ایجاد کنید.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="status-badge s401">401 Unauthorized</span></td>
+                  <td><code>INVALID_SESSION_AUTH</code></td>
+                  <td>
+                    <span data-lang="en">Device cryptographic session signature expired or unknown. Request new session.</span>
+                    <span data-lang="fa">امضای نشست معتبر نیست یا منقضی گردیده است؛ توکن نشست جدید دریافت کنید.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="status-badge s422">422 Unprocessable</span></td>
+                  <td><code>UNSUPPORTED_BYTECODE_VERSION</code></td>
+                  <td>
+                    <span data-lang="en">RemoteCompose bytecode version exceeds display player capabilities. Target v1.2.</span>
+                    <span data-lang="fa">نسخه بایت‌کد ارسالی بالاتر از نسخه پشتیبانی‌شده توسط پخش‌کننده است.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="status-badge s503">503 Unavailable</span></td>
+                  <td><code>GPU_ACCELERATOR_BUSY</code></td>
+                  <td>
+                    <span data-lang="en">GPU command pipeline temporarily saturated. Apply exponential backoff.</span>
+                    <span data-lang="fa">خط لوله رندر موقتاً اشغال است؛ ارسال را با تاخیر افزایشی تکرار نمایید.</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ENDPOINT 2 -->
+        <div class="api-endpoint-card">
+          <!-- 1. Description -->
+          <div class="api-meta">
+            <h3 class="api-title">
+              <span data-lang="en">Query Active Document Playback State & Telemetry</span>
+              <span data-lang="fa">استعلام وضعیت پخش و سنجه‌های حافظه سند</span>
+            </h3>
+            <p class="api-description">
+              <span data-lang="en">Retrieves live display statistics, active VRAM footprint, and frame execution rate for a mounted RemoteCompose canvas.</span>
+              <span data-lang="fa">دریافت آمار زنده رندر، حجم اشغال‌شده حافظه VRAM و نرخ فریم اجرایی برای لایه فعال ریموت کامپوز.</span>
+            </p>
+          </div>
+
+          <!-- 2. Method + URL -->
+          <div class="api-url-bar">
+            <span class="http-badge get">GET</span>
+            <code class="endpoint-url">/api/v2/remote-compose/documents/{doc_id}/state</code>
+            <button class="btn-copy" onclick="copyCitation('/api/v2/remote-compose/documents/{doc_id}/state', this)">
+              <span>📋</span> <span data-lang="en">Copy URL</span><span data-lang="fa">کپی آدرس</span>
+            </button>
+          </div>
+
+          <!-- 3. Parameters Table -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Query & Path Parameters</span>
+            <span data-lang="fa">پارامترهای مسیر و کوئری</span>
+          </h4>
+          <div class="table-responsive">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th><span data-lang="en">Parameter</span><span data-lang="fa">پارامتر</span></th>
+                  <th><span data-lang="en">Type</span><span data-lang="fa">نوع</span></th>
+                  <th><span data-lang="en">Required</span><span data-lang="fa">الزامی</span></th>
+                  <th><span data-lang="en">Description</span><span data-lang="fa">توضیحات</span></th>
+                  <th><span data-lang="en">Example</span><span data-lang="fa">نمونه</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>doc_id</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag required">Path (Required)</span></td>
+                  <td>
+                    <span data-lang="en">Document identifier string</span>
+                    <span data-lang="fa">شناسه سند مورد نظر در مسیر آدرس</span>
+                  </td>
+                  <td><code>"doc_wear_card_01"</code></td>
+                </tr>
+                <tr>
+                  <td><code>include_metrics</code></td>
+                  <td><span class="type-tag">boolean</span></td>
+                  <td><span class="req-tag optional">Query (Optional)</span></td>
+                  <td>
+                    <span data-lang="en">Include frame latency and VRAM telemetry (default: true)</span>
+                    <span data-lang="fa">درج سنجه‌های زمان رندر و حجم حافظه (پیش‌فرض: true)</span>
+                  </td>
+                  <td><code>true</code></td>
+                </tr>
+                <tr>
+                  <td><code>active_tier</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag optional">Query (Optional)</span></td>
+                  <td>
+                    <span data-lang="en">Subsystem scope: <code>SYSTEM_UI</code>, <code>WEAR_OS</code>, <code>AUTO</code></span>
+                    <span data-lang="fa">فیلتر زیرسیستم مصرف‌کننده</span>
+                  </td>
+                  <td><code>"WEAR_OS"</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 4. JSON Response Sample (Strictly LTR) -->
+          <div class="json-grid">
+            <div class="code-container" style="grid-column: 1 / -1;">
+              <div class="code-header">
+                <span class="code-lang-badge badge-bash">JSON Response (200 OK)</span>
+                <button class="btn-copy" onclick="copyCode(this)">
+                  <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی کد</span>
+                </button>
+              </div>
+              <pre><code class="language-json">{
+  "document_id": "doc_wear_card_01",
+  "playback_state": "ACTIVE_LOOPING",
+  "fps_target": 120,
+  "actual_fps": 119.8,
+  "vram_usage_bytes": 131480,
+  "ops_in_memory": 42,
+  "last_render_latency_us": 840,
+  "hardware_renderer": "Skia_Vulkan_Adreno"
+}</code></pre>
             </div>
-            <div class="diff-col new-col">
-              <div class="diff-line add"><span class="diff-prefix">+</span>// Compact binary bytecode (.rc wire format)</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>@RemoteComposable</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>fun MyRemoteCard(title: String) {</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>    RemoteBox(modifier = RemoteModifier.fillMaxWidth()) {</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>        RemoteText(text = title, color = Color.White)</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>        // Direct GPU Skia Canvas support!</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>        RemoteCanvas(modifier = RemoteModifier.size(48.rdp)) {</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>            // Local 120 FPS animation via RPN engine</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>            drawCircle(radius = sin(TimeVariables.ANIMATION_TIME))</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>        }</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>    }</div>
-              <div class="diff-line add"><span class="diff-prefix">+</span>}</div>
-            </div>
+          </div>
+
+          <!-- 5. Errors Table -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Error Responses & Status Codes</span>
+            <span data-lang="fa">کدهای خطا و پاسخ‌های وضعیت</span>
+          </h4>
+          <div class="table-responsive">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th><span data-lang="en">HTTP Status</span><span data-lang="fa">کد وضعیت</span></th>
+                  <th><span data-lang="en">Error Code</span><span data-lang="fa">کد خطا</span></th>
+                  <th><span data-lang="en">Description & Resolution</span><span data-lang="fa">توضیحات و راهکار رفع خطا</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="status-badge s404">404 Not Found</span></td>
+                  <td><code>DOCUMENT_NOT_FOUND</code></td>
+                  <td>
+                    <span data-lang="en">No active document buffer matching doc_id in player cache.</span>
+                    <span data-lang="fa">سندی با شناسه مورد نظر در بافر فعال پخش‌کننده یافت نشد.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="status-badge s401">403 Forbidden</span></td>
+                  <td><code>DEVICE_ACCESS_DENIED</code></td>
+                  <td>
+                    <span data-lang="en">Caller lacks permission to inspect session diagnostics.</span>
+                    <span data-lang="fa">پردازش فراخوان مجوز دسترسی به سنجه‌های این نشست را ندارد.</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -1957,6 +2466,100 @@ public float eval(RemoteContext context) {
 
     </main>
   </div>
+
+  <!-- Version History & Changelog Modal -->
+  <div id="versionHistoryModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>
+          <span data-lang="en">RemoteCompose Specification Changelog</span>
+          <span data-lang="fa">تاریخچه نسخه‌ها و تغییرات سند</span>
+        </h3>
+        <button class="btn-close-modal" onclick="closeVersionModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="changelog-entry current">
+          <div class="changelog-head">
+            <span class="changelog-tag">v2.0.0 (Current Architecture)</span>
+            <span class="changelog-date">2026-10-03</span>
+          </div>
+          <ul class="changelog-items">
+            <li>Standardized API Ingestion & Document Server endpoint specification with tables, JSON bodies, and error codes.</li>
+            <li>Strict Left-to-Right (LTR) enforcement across all code snippets and containers in both English and Persian modes.</li>
+            <li>Interactive Inline Review System with AI JSON export and persistent HTML embedding.</li>
+            <li>1-Click PDF export optimized with dedicated print CSS stylesheet.</li>
+            <li>Enhanced mobile drawer responsiveness with touch-friendly navigation.</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-head">
+            <span class="changelog-tag">v1.2.0 (Shader & SIMD Acceleration)</span>
+            <span class="changelog-date">2026-05-18</span>
+          </div>
+          <ul class="changelog-items">
+            <li>Added SIMD vectorized RPN stack evaluation engine.</li>
+            <li>Introduced Nano-binary envelope parser and dynamic memory compaction.</li>
+            <li>Wear OS 5 standalone display controller integration.</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-head">
+            <span class="changelog-tag">v1.0.0 (Initial AOSP Specification)</span>
+            <span class="changelog-date">2025-11-10</span>
+          </div>
+          <ul class="changelog-items">
+            <li>Initial RemoteCompose architectural draft and wire format definition.</li>
+            <li>Baseline RemoteViews transition architecture.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews & Comments Modal -->
+  <div id="reviewModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
+    <div class="modal-box" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3>
+          💬 <span data-lang="en">Review Comments & Feedback</span>
+          <span data-lang="fa">نظرات و بازخوردهای بازبینی</span>
+        </h3>
+        <button class="btn-close-modal" onclick="closeReviewModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="commentsList" style="max-height: 280px; overflow-y: auto; margin-bottom: 1.25rem;">
+          <!-- Dynamically populated comments -->
+        </div>
+
+        <div style="background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 1rem;">
+          <h4 style="font-size: 0.9rem; margin-bottom: 0.65rem; color: var(--text-main);">
+            <span data-lang="en">Add Review Feedback / Note</span>
+            <span data-lang="fa">ثبت نظر یا بازخورد جدید</span>
+          </h4>
+          <input type="hidden" id="newCommentSectionId" value="overview">
+          <input type="text" id="newCommentAuthor" placeholder="Reviewer Role / Name (e.g. Lead Systems Architect)" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-main); font-size: 0.85rem; margin-bottom: 0.5rem;">
+          <input type="text" id="newCommentQuote" placeholder="Target text quote (auto-filled on selection)" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-main); font-size: 0.85rem; margin-bottom: 0.5rem;">
+          <textarea id="newCommentText" rows="3" placeholder="Enter your review feedback or technical change request..." style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-main); font-size: 0.85rem; resize: vertical; margin-bottom: 0.6rem; font-family: inherit;"></textarea>
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="btn-control" onclick="submitNewComment()" style="background: var(--primary); color: #000; font-weight: 700;">
+              <span>➕</span> <span data-lang="en">Submit Review</span><span data-lang="fa">ثبت بازخورد</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-control" onclick="exportCommentsJSON()">
+          <span>📥</span> <span data-lang="en">Export JSON (for AI)</span><span data-lang="fa">استخراج JSON (برای هوش مصنوعی)</span>
+        </button>
+        <button class="btn-control" onclick="embedCommentsAndDownloadHTML()">
+          <span>💾</span> <span data-lang="en">Save & Embed in HTML</span><span data-lang="fa">ذخیره در سند و دانلود HTML</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Embedded Comments Data Storage Tag -->
+  <script id="docEmbeddedComments" type="application/json">[]</script>
 
   <!-- Interactive Scripts -->
   <script>
@@ -2305,6 +2908,144 @@ public float eval(RemoteContext context) {
       requestAnimationFrame(simLoop);
     }
 
+    
+    // 10. Version Control Modal Handlers
+    function switchVersion(ver) {
+      openVersionModal();
+    }
+    function openVersionModal() {
+      document.getElementById('versionHistoryModal').classList.add('active');
+    }
+    function closeVersionModal() {
+      document.getElementById('versionHistoryModal').classList.remove('active');
+    }
+
+    // 11. Review & Comments Engine
+    let comments = [];
+    function loadComments() {
+      try {
+        const embeddedTag = document.getElementById('docEmbeddedComments');
+        const embedded = embeddedTag ? JSON.parse(embeddedTag.textContent || '[]') : [];
+        const local = JSON.parse(localStorage.getItem('doc_comments_rc') || '[]');
+        const map = new Map();
+        [...embedded, ...local].forEach(c => map.set(c.id, c));
+        comments = Array.from(map.values());
+      } catch (e) {
+        comments = [];
+      }
+      renderComments();
+    }
+
+    function renderComments() {
+      const countEl = document.getElementById('commentCount');
+      if (countEl) countEl.textContent = comments.length;
+      const list = document.getElementById('commentsList');
+      if (!list) return;
+
+      if (comments.length === 0) {
+        list.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 1.5rem;">No review comments recorded yet. Add technical notes or feedback below!</div>';
+        return;
+      }
+
+      list.innerHTML = comments.map(c => `
+        <div class="comment-item">
+          <div class="comment-meta">
+            <span class="comment-target-badge">#${c.sectionId}</span>
+            <span style="font-size: 0.75rem; color: var(--text-dim);">${c.author || 'Reviewer'} · ${new Date(c.createdAt).toLocaleDateString()}</span>
+          </div>
+          ${c.selectedQuote ? `<div class="comment-quote">"${c.selectedQuote}"</div>` : ''}
+          <div style="color: var(--text-main); margin: 0.35rem 0;">${c.text}</div>
+          <div style="text-align: right;">
+            <button onclick="deleteComment('${c.id}')" style="background: none; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer;">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function promptAddComment(sectionId, title) {
+      document.getElementById('newCommentSectionId').value = sectionId;
+      const selection = window.getSelection().toString().trim();
+      if (selection) {
+        document.getElementById('newCommentQuote').value = selection;
+      }
+      openReviewModal();
+    }
+
+    function submitNewComment() {
+      const text = document.getElementById('newCommentText').value.trim();
+      const author = document.getElementById('newCommentAuthor').value.trim() || 'Reviewer';
+      const sectionId = document.getElementById('newCommentSectionId').value;
+      const quote = document.getElementById('newCommentQuote').value.trim();
+      if (!text) return;
+
+      const comment = {
+        id: 'c_' + Date.now(),
+        sectionId: sectionId,
+        author: author,
+        selectedQuote: quote,
+        text: text,
+        createdAt: new Date().toISOString()
+      };
+
+      comments.push(comment);
+      localStorage.setItem('doc_comments_rc', JSON.stringify(comments));
+      document.getElementById('newCommentText').value = '';
+      document.getElementById('newCommentQuote').value = '';
+      renderComments();
+    }
+
+    function deleteComment(id) {
+      comments = comments.filter(c => c.id !== id);
+      localStorage.setItem('doc_comments_rc', JSON.stringify(comments));
+      renderComments();
+    }
+
+    function openReviewModal() {
+      renderComments();
+      document.getElementById('reviewModal').classList.add('active');
+    }
+    function closeReviewModal() {
+      document.getElementById('reviewModal').classList.remove('active');
+    }
+
+    function closeModalOnBackdrop(e, modal) {
+      if (e.target === modal) modal.classList.remove('active');
+    }
+
+    // Export Comments as JSON for AI
+    function exportCommentsJSON() {
+      const exportData = {
+        document: document.title,
+        exportedAt: new Date().toISOString(),
+        commentsCount: comments.length,
+        comments: comments
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `remote-compose-review-feedback-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Embed Comments into HTML and Download File
+    function embedCommentsAndDownloadHTML() {
+      const clone = document.documentElement.cloneNode(true);
+      const scriptTag = clone.querySelector('#docEmbeddedComments');
+      if (scriptTag) {
+        scriptTag.textContent = JSON.stringify(comments, null, 2);
+      }
+      const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'remote-compose-architecture-with-reviews.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
     // 9. Document Initialization
     document.addEventListener('DOMContentLoaded', () => {
       // Restore Theme
@@ -2330,6 +3071,9 @@ public float eval(RemoteContext context) {
 
       // Start Simulator Loop
       requestAnimationFrame(simLoop);
+
+      // Load Review Comments
+      loadComments();
     });
   </script>
 </body>
