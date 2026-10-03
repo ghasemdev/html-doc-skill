@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Standard Technical Documentation Template</title>
+  <title>Technical Documentation Starter Template</title>
 
   <!-- Typography: Vazirmatn (FA), Inter (EN), Fira Code (Monospace) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +44,7 @@
       --sidebar-bg: rgba(16, 23, 42, 0.96);
       --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
       --radius: 12px;
+      --nav-height: 52px;
     }
 
     [data-theme="light"] {
@@ -74,24 +75,33 @@
       --sidebar-bg: rgba(255, 255, 255, 0.98);
       --shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.08);
       --radius: 12px;
+      --nav-height: 52px;
     }
 
-    /* Reset & Zero-Overflow Base */
+    /* Reset & Zero-Overflow Layout Base */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      max-width: 100vw !important;
-      width: 100% !important;
+    html {
+      overflow-x: clip;
+      max-width: 100vw;
+      width: 100%;
       scroll-behavior: smooth;
       background-color: var(--bg-base);
       color: var(--text-main);
-      padding-top: 52px; /* Offset for permanently fixed navbar */
+    }
+    body {
+      overflow-x: clip;
+      max-width: 100vw;
+      width: 100%;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      padding-top: var(--nav-height); /* Offset for permanently fixed navbar ONLY on body */
     }
 
     /* Bilingual Filters */
     html[lang="en"] [data-lang="fa"] { display: none !important; }
     html[lang="fa"] [data-lang="en"] { display: none !important; }
 
-    /* RTL Typography */
+    /* Typography */
     html[dir="rtl"] {
       font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.85;
@@ -100,12 +110,6 @@
     html[dir="ltr"] {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.7;
-    }
-
-    /* Hyperlinks must always be strictly LTR */
-    a {
-      direction: ltr !important;
-      text-align: left !important;
     }
 
     /* Reading Progress Bar */
@@ -117,24 +121,23 @@
 
     /* Permanently Fixed Navbar */
     .top-navbar {
-      position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 1500;
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); z-index: 1500;
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      background: rgba(16, 23, 42, 0.95); border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle);
       padding: 0 1rem; display: flex; align-items: center; justify-content: space-between;
       width: 100%; max-width: 100vw; box-sizing: border-box;
     }
-    [data-theme="light"] .top-navbar { background: rgba(255, 255, 255, 0.96); }
 
     .brand-section { display: flex; align-items: center; gap: 0.6rem; min-width: 0; flex-shrink: 0; }
-    .brand-logo { width: 30px; height: 30px; border-radius: 6px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .brand-title { font-weight: 700; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
-    .nav-controls { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+    .brand-logo { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px var(--primary-glow); }
+    .brand-title { font-weight: 700; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+    .nav-controls { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
 
     .btn-control {
-      background: var(--bg-surface-elevated); border: 1px solid var(--border-strong);
-      color: var(--text-main); height: 34px; padding: 0 0.65rem; border-radius: 8px; cursor: pointer;
-      font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
-      transition: all 0.2s; white-space: nowrap; user-select: none;
+      background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle);
+      color: var(--text-main); height: 34px; min-height: 34px; padding: 0 0.55rem; border-radius: 8px; cursor: pointer;
+      font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem;
+      transition: all 0.2s ease; white-space: nowrap; user-select: none; font-family: inherit;
     }
     .btn-control:hover { background: var(--bg-surface-hover); border-color: var(--primary); }
     .btn-control.active-pin-mode {
@@ -143,126 +146,173 @@
       border-color: var(--primary) !important;
       box-shadow: 0 0 12px var(--primary-glow);
     }
+    #commentCount {
+      font-size: 0.72rem;
+      background: var(--primary);
+      color: #000;
+      padding: 1px 5px;
+      border-radius: 999px;
+      font-weight: 800;
+      margin-left: 2px;
+    }
 
     .version-select {
       background: var(--bg-surface-elevated); border: 1px solid var(--border-strong);
-      color: var(--primary); font-weight: 700; font-size: 0.8rem; height: 34px;
-      padding: 0 0.5rem; border-radius: 8px; cursor: pointer; outline: none;
+      color: var(--primary); font-weight: 700; font-size: 0.78rem; height: 34px;
+      padding: 0 0.4rem; border-radius: 8px; cursor: pointer; outline: none; font-family: inherit;
     }
 
-    /* Layout (without overflow-x: hidden to preserve desktop position: sticky) */
-    .app-layout { display: flex; min-height: calc(100vh - 52px); width: 100%; max-width: 100%; min-width: 0; }
+    /* Layout & Persistent Sticky Catalog Sidebar */
+    .app-layout { display: flex; min-height: calc(100vh - var(--nav-height)); width: 100%; max-width: 100%; min-width: 0; }
     .catalog-sidebar {
-      width: min(85vw, 290px); flex-shrink: 0; background: var(--sidebar-bg); border-inline-end: 1px solid var(--border-subtle);
-      position: sticky; top: 52px; height: calc(100vh - 52px); overflow-y: auto; padding: 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.5rem;
+      width: min(85vw, 290px); flex-shrink: 0; background: var(--bg-surface); border-inline-end: 1px solid var(--border-subtle);
+      position: sticky; top: var(--nav-height); height: calc(100vh - var(--nav-height)); overflow-y: auto; padding: 1.25rem 1rem;
+      display: flex; flex-direction: column; gap: 0.4rem; z-index: 100;
     }
     .sidebar-header { padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-title { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); display: flex; align-items: center; gap: 0.4rem; }
+    .btn-close-sidebar { display: none; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; }
     .sidebar-link {
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.88rem;
-      display: flex !important;
-      align-items: center;
-      gap: 0.5rem;
-      direction: inherit !important;
-      text-align: start !important;
+      padding: 0.5rem 0.75rem; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.86rem; font-weight: 500;
+      display: flex !important; align-items: center; gap: 0.6rem; direction: inherit !important; text-align: start !important; transition: all 0.15s ease; line-height: 1.4;
     }
+    .sidebar-link:hover { background: var(--bg-surface-elevated); color: var(--text-main); }
     .sidebar-link.active { background: var(--badge-bg); color: var(--primary); font-weight: 600; border-inline-start: 3px solid var(--primary); }
+    .sidebar-num { font-family: 'Fira Code', monospace; font-size: 0.75rem; opacity: 0.7; flex-shrink: 0; }
+    
+    /* RTL Catalog Numbering (Numbers strictly on the right) */
     html[dir="rtl"] .sidebar-link {
       direction: rtl !important;
       text-align: right !important;
     }
     html[dir="rtl"] .sidebar-link .sidebar-num {
       order: 1;
-      margin-inline-end: 0.25rem;
+      margin-inline-end: 0.35rem;
+      margin-inline-start: 0;
     }
     html[dir="rtl"] .sidebar-link > span:not(.sidebar-num) {
       order: 2;
     }
 
+    /* Main Content Area */
     .main-content {
       flex: 1; min-width: 0 !important; max-width: 100% !important; width: 100% !important;
-      overflow-x: hidden !important; padding: 2.5rem 3rem; box-sizing: border-box;
+      overflow-x: hidden !important; padding: 2.25rem 3rem; box-sizing: border-box;
     }
-    section { margin-bottom: 3.5rem; scroll-margin-top: 75px; position: relative; }
-    .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    section { margin-bottom: 3.5rem; scroll-margin-top: calc(var(--nav-height) + 20px); position: relative; }
+    .section-title {
+      font-size: 1.65rem; font-weight: 800; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; word-break: break-word; color: var(--text-main);
+    }
+    .section-title .number {
+      font-family: 'Fira Code', monospace; font-size: 0.95rem; color: var(--primary); background: var(--badge-bg);
+      padding: 0.2rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-subtle);
+    }
+    p { margin-bottom: 1.25rem; font-size: 0.96rem; color: var(--text-main); }
 
     /* STRICTLY LEFT-TO-RIGHT (LTR) HYPERLINKS & CODE IN ALL MODES */
-    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a, .ref-url, .endpoint-url, .code-container, pre, code, .code-header, .json-preview {
-      direction: ltr !important; text-align: left !important; unicode-bidi: isolate;
+    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a, .ref-url, .endpoint-url, a.external-link {
+      direction: ltr !important; text-align: left !important; unicode-bidi: isolate; display: inline-block;
     }
     .ref-url, html[dir="rtl"] .ref-url {
-      direction: ltr !important; text-align: left !important; display: block !important; width: 100%; word-break: break-all;
+      direction: ltr !important; text-align: left !important; unicode-bidi: isolate; display: block !important; width: 100%; word-break: break-all;
     }
-    .code-container { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: var(--radius); margin: 1.25rem 0; overflow: hidden; min-width: 0 !important; max-width: 100% !important; width: 100% !important; }
-    .code-header { background: var(--bg-surface-elevated); padding: 0.5rem 0.9rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); }
-    .code-lang-badge { padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; background: rgba(56, 189, 248, 0.15); color: var(--primary); }
+    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a {
+      color: var(--link-color); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; font-weight: 500; transition: color 0.15s ease;
+    }
+    a.doc-link:hover, p a:hover, li a:not(.sidebar-link):not(.btn-control):hover { color: var(--link-hover); }
+
+    .code-container, pre, code, .code-header, .endpoint-url, .json-preview {
+      direction: ltr !important; text-align: left !important; unicode-bidi: isolate;
+    }
+    .code-container { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: var(--radius); margin: 1.25rem 0; overflow: hidden; min-width: 0 !important; max-width: 100% !important; width: 100% !important; box-shadow: var(--shadow); }
+    .code-header { background: var(--bg-surface); padding: 0.55rem 0.9rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); font-family: 'Fira Code', monospace; font-size: 0.82rem; color: var(--text-dim); }
+    .code-lang-badge { padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; background: rgba(56, 189, 248, 0.15); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .btn-copy {
+      background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-muted);
+      border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem; transition: all 0.15s ease; font-family: inherit;
+    }
+    .btn-copy:hover { background: var(--bg-surface-hover); color: var(--text-main); }
+    .btn-copy.copied { background: var(--success-bg) !important; color: var(--success) !important; border-color: var(--success) !important; }
     pre { margin: 0; padding: 1.15rem; overflow-x: auto !important; font-family: 'Fira Code', monospace; font-size: 0.88rem; line-height: 1.6; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box; }
+    pre code { background: transparent !important; padding: 0 !important; }
+
+    /* GitHub-Style Alerts */
+    .alert { border-radius: var(--radius); padding: 1.1rem 1.35rem; margin: 1.5rem 0; border-inline-start: 4px solid; background: var(--bg-surface); }
+    .alert-note { border-color: var(--primary); background: var(--primary-glow); }
+    .alert-important { border-color: var(--accent); background: rgba(129, 140, 248, 0.12); }
+    .alert-warning { border-color: var(--warning); background: var(--warning-bg); }
+    .alert-caution { border-color: var(--danger); background: var(--danger-bg); }
+    .alert-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .alert-note .alert-header { color: var(--primary); }
+    .alert-important .alert-header { color: var(--accent); }
+    .alert-warning .alert-header { color: var(--warning); }
+    .alert-caution .alert-header { color: var(--danger); }
 
     /* Responsive Tables with Guaranteed Horizontal Scroll on Mobile */
     .table-responsive, .table-container {
       width: 100% !important; max-width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch;
       margin: 1.25rem 0; border: 1px solid var(--border-subtle); border-radius: var(--radius); box-sizing: border-box;
-      scrollbar-width: thin;
-      scrollbar-color: var(--primary) var(--bg-surface-elevated);
+      scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg-surface-elevated);
     }
-    .table-responsive::-webkit-scrollbar, .table-container::-webkit-scrollbar {
-      height: 8px;
-    }
-    .table-responsive::-webkit-scrollbar-track, .table-container::-webkit-scrollbar-track {
-      background: var(--bg-surface-elevated);
-      border-radius: 4px;
-    }
-    .table-responsive::-webkit-scrollbar-thumb, .table-container::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 4px;
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: inherit; }
-    .table-responsive table, .table-container table {
-      min-width: 650px !important; /* Prevents column crushing on mobile viewports */
-    }
-    th, td { padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
-    th { background: var(--bg-surface-elevated); font-weight: 700; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+    .table-responsive::-webkit-scrollbar, .table-container::-webkit-scrollbar { height: 7px; }
+    .table-responsive::-webkit-scrollbar-track, .table-container::-webkit-scrollbar-track { background: var(--bg-surface-elevated); }
+    .table-responsive::-webkit-scrollbar-thumb, .table-container::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: inherit; min-width: 650px !important; }
+    th, td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+    th { background: var(--bg-surface-elevated); font-weight: 700; color: var(--text-muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    tr:last-child td { border-bottom: none; }
 
-    /* API Documentation */
-    .api-endpoint-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; box-shadow: var(--shadow); }
-    .api-url-bar { display: flex; align-items: center; gap: 0.6rem; background: var(--bg-base); border: 1px solid var(--border-subtle); padding: 0.55rem 0.85rem; border-radius: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
-    .http-badge { font-family: 'Fira Code', monospace; font-weight: 800; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 6px; }
-    .http-badge.post { background: rgba(56, 189, 248, 0.18); color: var(--primary); }
-    .http-badge.get { background: rgba(52, 211, 153, 0.18); color: var(--success); }
-    .endpoint-url { font-family: 'Fira Code', monospace; font-size: 0.88rem; font-weight: 600; flex: 1; }
+    /* API Documentation Cards & Badges */
+    .api-endpoint-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.5rem; margin: 1.75rem 0; box-shadow: var(--shadow); }
+    .api-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--text-main); }
+    .api-description { color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; }
+    .api-url-bar { display: flex; align-items: center; gap: 0.75rem; background: var(--bg-base); border: 1px solid var(--border-subtle); padding: 0.6rem 0.9rem; border-radius: 8px; margin: 1rem 0 1.25rem; flex-wrap: wrap; }
+    .http-badge { font-family: 'Fira Code', monospace; font-weight: 800; font-size: 0.78rem; padding: 0.2rem 0.55rem; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .http-badge.post { background: rgba(56, 189, 248, 0.18); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .http-badge.get { background: rgba(52, 211, 153, 0.18); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.3); }
+    .endpoint-url { font-family: 'Fira Code', monospace; font-size: 0.88rem; color: var(--text-main); font-weight: 600; flex: 1; }
+    .api-subheading { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin: 1.25rem 0 0.6rem; }
+    .type-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 4px; background: var(--bg-surface-hover); color: var(--accent); }
+    .req-tag { font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; }
+    .req-tag.required { background: var(--danger-bg); color: var(--danger); }
+    .req-tag.optional { background: var(--bg-surface-hover); color: var(--text-dim); }
+    .status-badge { font-family: 'Fira Code', monospace; font-size: 0.78rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .status-badge.s200 { background: var(--success-bg); color: var(--success); }
+    .status-badge.s400 { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.s401 { background: var(--warning-bg); color: var(--warning); }
+    .status-badge.s404 { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
+    .status-badge.s500 { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
     .json-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
 
     /* Coordinate Pin Drop */
     .dropped-comment-pin {
-      position: absolute; width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
-      background: var(--primary); color: #000; font-weight: 800; font-size: 0.75rem;
+      position: absolute; width: 26px; height: 26px; border-radius: 50% 50% 50% 0;
+      background: var(--primary); color: #000; font-weight: 800; font-size: 0.72rem;
       display: flex; align-items: center; justify-content: center;
-      transform: translate(-50%, -100%) rotate(-45deg); cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.6); z-index: 50;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: translate(-50%, -100%) rotate(-45deg); cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.6); z-index: 80;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .dropped-comment-pin span { transform: rotate(45deg); }
-    .dropped-comment-pin:hover, .dropped-comment-pin.pin-highlight {
-      transform: translate(-50%, -100%) rotate(-45deg) scale(1.3);
-      background: #ffffff;
-      box-shadow: 0 0 20px #ffffff;
+    .dropped-comment-pin:hover, .dropped-comment-pin.highlighted {
+      transform: translate(-50%, -115%) rotate(-45deg) scale(1.25); background: #34d399; box-shadow: 0 0 20px #34d399;
     }
 
     /* Slide-Out Comment Drawer */
-    .comment-drawer-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 2500; opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0.25s; }
-    .comment-drawer-backdrop.active { opacity: 1; visibility: visible; }
+    .comment-drawer-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 2500; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.25s, visibility 0.25s; }
+    .comment-drawer-backdrop.active { opacity: 1; visibility: visible; pointer-events: auto; }
     .comment-drawer {
       position: fixed; top: 0; width: min(88vw, 400px); height: 100vh; background: var(--bg-surface);
       border-inline-start: 1px solid var(--border-strong); z-index: 2510; display: flex; flex-direction: column;
-      box-shadow: -10px 0 40px rgba(0,0,0,0.6); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s, visibility 0.25s;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.6); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, visibility 0.2s ease;
       opacity: 0; visibility: hidden; pointer-events: none;
     }
     html[dir="ltr"] .comment-drawer { right: 0; transform: translateX(100%); }
     html[dir="rtl"] .comment-drawer { left: 0; border-inline-start: none; border-inline-end: 1px solid var(--border-strong); transform: translateX(-100%); }
     .comment-drawer.open { transform: translateX(0) !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
     .drawer-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .drawer-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
     .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
     .drawer-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg-base); flex-shrink: 0; box-sizing: border-box; }
     .btn-drawer {
@@ -274,6 +324,8 @@
     }
     .btn-drawer:hover { background: var(--bg-surface-hover); border-color: var(--primary); color: var(--primary); }
     .comment-item { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; font-size: 0.85rem; box-sizing: border-box; width: 100%; overflow: hidden; }
+    .comment-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+    .comment-target-badge { font-size: 0.72rem; background: var(--badge-bg); color: var(--primary); padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 600; }
     .btn-jump-pin {
       display: inline-flex !important; align-items: center; justify-content: center; gap: 0.35rem;
       height: 30px !important; min-height: 30px !important; padding: 0 0.75rem !important; border-radius: 6px;
@@ -282,6 +334,16 @@
       font-family: inherit; white-space: nowrap !important; box-sizing: border-box !important; flex-shrink: 0;
     }
     .btn-jump-pin:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+    .btn-delete-pin { background: none; border: none; color: var(--danger); font-size: 0.76rem; cursor: pointer; padding: 0.25rem 0.5rem; font-family: inherit; font-weight: 600; transition: opacity 0.15s ease; }
+    .btn-delete-pin:hover { text-decoration: underline; opacity: 0.8; }
+
+    /* Modals & Action Buttons */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); z-index: 3000; justify-content: center; align-items: center; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius); max-width: 480px; width: 100%; max-height: 85vh; overflow-y: auto; display: flex; flex-direction: column; }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 1.25rem; }
+    .btn-close-modal { background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
     .btn-modal {
       display: inline-flex !important; align-items: center; justify-content: center; gap: 0.35rem;
       height: 38px !important; min-height: 38px !important; padding: 0 1.2rem !important; border-radius: 8px;
@@ -293,35 +355,59 @@
     .btn-modal-submit:hover { filter: brightness(1.1); box-shadow: 0 0 12px var(--primary-glow); }
     .btn-modal-cancel:hover { background: var(--bg-surface-hover); border-color: var(--border-strong); }
 
-    /* Modals */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); z-index: 3000; justify-content: center; align-items: center; padding: 1rem; }
-    .modal-overlay.active { display: flex; }
-    .modal-box { background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius); max-width: 500px; width: 100%; max-height: 85vh; overflow-y: auto; display: flex; flex-direction: column; }
-    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
-    .modal-body { padding: 1.25rem; flex: 1; }
+    /* References Styling */
+    .references-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.25rem; }
+    .ref-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; box-shadow: var(--shadow); }
+    .ref-info { flex: 1; min-width: 250px; }
+    .ref-tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--primary); background: var(--badge-bg); padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.35rem; }
+    .ref-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.3rem; }
+    .ref-url { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: var(--link-color); word-break: break-all; margin-top: 0.25rem; text-decoration: underline; text-decoration-thickness: 1px; }
+    .btn-copy-ref {
+      background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-main);
+      padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s ease; white-space: nowrap; font-family: inherit;
+    }
+    .btn-copy-ref:hover { background: var(--bg-surface-hover); border-color: var(--primary); color: var(--primary); }
+    .btn-copy-ref.copied { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
 
     /* Mobile Responsive Optimizations */
+    .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); z-index: 2050; }
+    @media (max-width: 1024px) { .main-content { padding: 1.75rem 1.5rem; } }
     @media (max-width: 820px) {
       .catalog-sidebar {
         position: fixed; top: 0; inset-inline-start: 0; height: 100vh; z-index: 2100;
         transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
       }
       html[dir="rtl"] .catalog-sidebar { transform: translateX(100%); }
       .catalog-sidebar.open { transform: translateX(0) !important; }
+      .btn-close-sidebar { display: block; }
+      .sidebar-backdrop.active { display: block; }
       .main-content { padding: 1.25rem 0.85rem !important; }
     }
 
     @media (max-width: 768px) {
-      .top-navbar { padding: 0.35rem 0.5rem !important; height: 48px !important; }
-      .brand-title, .progress-pill { display: none !important; }
-      .nav-controls { gap: 0.2rem !important; }
-      .version-select { width: 62px !important; max-width: 62px !important; height: 32px !important; font-size: 0.72rem !important; }
+      .top-navbar { padding: 0 0.5rem !important; height: var(--nav-height) !important; }
+      .brand-title { display: none !important; }
+      .brand-section { gap: 0.35rem !important; }
+      .nav-controls { gap: 0.25rem !important; }
+      .version-select { width: 58px !important; max-width: 58px !important; font-size: 0.72rem !important; padding: 0 0.2rem !important; }
       .nav-controls .btn-control { width: 32px !important; height: 32px !important; min-height: 32px !important; padding: 0 !important; font-size: 0.85rem !important; }
       .btn-control .btn-label { display: none !important; }
+      .brand-logo { width: 28px !important; height: 28px !important; }
+      .section-title { font-size: 1.25rem !important; }
+    }
+
+    @media (max-width: 360px) {
+      .top-navbar { padding: 0 0.25rem !important; }
+      .nav-controls { gap: 0.15rem !important; }
+      .version-select { width: 50px !important; max-width: 50px !important; font-size: 0.68rem !important; }
+      .nav-controls .btn-control { width: 28px !important; height: 28px !important; min-height: 28px !important; font-size: 0.78rem !important; }
+      .brand-logo { width: 24px !important; height: 24px !important; font-size: 0.8rem !important; }
     }
 
     @media print {
-      .top-navbar, .catalog-sidebar, .comment-drawer, .btn-control, .api-comment-bar, .dropped-comment-pin { display: none !important; }
+      .top-navbar, .catalog-sidebar, .sidebar-backdrop, .comment-drawer, .btn-control, .btn-copy, .btn-copy-ref, .modal-overlay, .dropped-comment-pin { display: none !important; }
       body { background: #ffffff !important; color: #000000 !important; }
       .main-content { max-width: 100% !important; padding: 0 !important; }
     }
@@ -331,14 +417,17 @@
 
   <div id="readingProgressBar"></div>
 
-  <!-- Header -->
+  <!-- Pinned Top Navbar -->
   <header class="top-navbar">
     <div class="brand-section">
       <button class="btn-control" onclick="toggleSidebar()" title="Catalog">
         <span>📑</span> <span class="btn-label" data-lang="en">Catalog</span><span class="btn-label" data-lang="fa">فهرست</span>
       </button>
-      <div class="brand-logo">RC</div>
-      <div class="brand-title">Documentation</div>
+      <div class="brand-logo">DOC</div>
+      <div class="brand-title">
+        <span data-lang="en">Technical Documentation</span>
+        <span data-lang="fa">مستندات فنی سامانه</span>
+      </div>
     </div>
 
     <div class="nav-controls">
@@ -356,10 +445,10 @@
 
       <!-- Review Comments Trigger -->
       <button class="btn-control" onclick="toggleCommentDrawer()" title="Review Comments">
-        <span>💬</span> <span id="commentCount" style="font-size: 0.7rem;">0</span>
+        <span>💬</span> <span id="commentCount">0</span>
       </button>
 
-      <!-- Lang & Theme -->
+      <!-- Language & Theme Switchers -->
       <button class="btn-control" onclick="toggleLanguage()" title="Language">
         <span>🌐</span>
       </button>
@@ -369,122 +458,281 @@
     </div>
   </header>
 
+  <!-- Sidebar Backdrop on Mobile -->
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
   <div class="app-layout">
     <!-- Catalog Sidebar -->
     <aside id="catalogSidebar" class="catalog-sidebar">
       <div class="sidebar-header">
-        <div style="font-weight: 700;">📑 Catalog</div>
-        <button onclick="toggleSidebar()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+        <div class="sidebar-title">
+          <span>📑</span>
+          <span data-lang="en">Navigation Catalog</span>
+          <span data-lang="fa">فهرست سرفصل‌ها</span>
+        </div>
+        <button class="btn-close-sidebar" onclick="toggleSidebar()">✕</button>
       </div>
-      <nav style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem;">
-        <a href="#overview" class="sidebar-link active"><span class="sidebar-num">01</span> <span>Overview</span></a>
-        <a href="#api-spec" class="sidebar-link"><span class="sidebar-num">02</span> <span>API Specification</span></a>
-        <a href="#code" class="sidebar-link"><span class="sidebar-num">03</span> <span>Code Implementation</span></a>
+      <nav class="sidebar-nav">
+        <a href="#overview" class="sidebar-link active" onclick="closeSidebarOnMobile()">
+          <span class="sidebar-num">01</span>
+          <span data-lang="en">Executive Overview</span>
+          <span data-lang="fa">نمای کلی سند</span>
+        </a>
+        <a href="#api-spec" class="sidebar-link" onclick="closeSidebarOnMobile()">
+          <span class="sidebar-num">02</span>
+          <span data-lang="en">Standard API Specification</span>
+          <span data-lang="fa">مشخصات وب‌سرویس API</span>
+        </a>
+        <a href="#code" class="sidebar-link" onclick="closeSidebarOnMobile()">
+          <span class="sidebar-num">03</span>
+          <span data-lang="en">Code Implementation</span>
+          <span data-lang="fa">پیاده‌سازی و نمونه کد</span>
+        </a>
+        <a href="#references" class="sidebar-link" onclick="closeSidebarOnMobile()">
+          <span class="sidebar-num">04</span>
+          <span data-lang="en">Authoritative References</span>
+          <span data-lang="fa">مراجع و استانداردهای معتبر</span>
+        </a>
       </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
+      <!-- SECTION 01: Overview -->
       <section id="overview">
-        <h2 class="section-title">01 · Overview</h2>
-        <p>Production documentation template featuring standardized API tables, coordinate drag & drop comments, PDF export via html2pdf, and multi-version routing.</p>
+        <h2 class="section-title">
+          <span class="number">01</span>
+          <span data-lang="en">Executive Overview</span>
+          <span data-lang="fa">نمای کلی سند</span>
+        </h2>
+        <p>
+          <span data-lang="en">This technical documentation template embodies modern web standards: dual-theme engine, instant Persian/English bilingual switching, standardized 5-part API specification cards, universal coordinate pin commenting, and multi-version routing.</span>
+          <span data-lang="fa">این قالب مستندات فنی استانداردهای پیشرفته وب را پیاده‌سازی می‌کند: موتور تم دوگانه، سوئیچ آنی دوزبانه فارسی و انگلیسی، مستندسازی استاندارد ۵بخشی API، سیستم پین‌گذاری نظرات روی مختصات و مسیریابی چندنسخه‌ای.</span>
+        </p>
+
+        <!-- GitHub-Style Alert Example -->
+        <div class="alert alert-note">
+          <div class="alert-header">
+            <span>💡</span>
+            <span data-lang="en">Architectural Note</span>
+            <span data-lang="fa">یادداشت معماری</span>
+          </div>
+          <p>
+            <span data-lang="en">All code blocks and technical URLs remain strictly Left-to-Right (LTR) regardless of document direction.</span>
+            <span data-lang="fa">تمامی بلوک‌های کد و آدرس‌های اینترنتی بدون توجه به جهت سند همواره چپ‌چین (LTR) باقی می‌مانند.</span>
+          </p>
+        </div>
       </section>
 
-      <!-- Standard API Specification Section -->
+      <!-- SECTION 02: Standard API Specification -->
       <section id="api-spec">
-        <h2 class="section-title">02 · API Specification</h2>
+        <h2 class="section-title">
+          <span class="number">02</span>
+          <span data-lang="en">Standard API Specification</span>
+          <span data-lang="fa">مشخصات وب‌سرویس API</span>
+        </h2>
 
         <div class="api-endpoint-card">
-          <!-- Description -->
-          <h3 style="font-size: 1.1rem; margin-bottom: 0.35rem;">Sync Data Batch</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Ingests data payloads into the processing queue.</p>
-
-          <!-- Method + URL -->
-          <div class="api-url-bar">
-            <span class="http-badge post">POST</span>
-            <code class="endpoint-url">/api/v2/data/sync</code>
+          <!-- 1. Title & Business Description (Top) -->
+          <div class="api-meta">
+            <h3 class="api-title">
+              <span data-lang="en">Batch Ingestion Endpoint</span>
+              <span data-lang="fa">وب‌سرویس دریافت دسته‌ای داده‌ها</span>
+            </h3>
+            <p class="api-description">
+              <span data-lang="en">Ingests binary and JSON telemetry buffers into the worker pipeline for background verification.</span>
+              <span data-lang="fa">بسته‌های بافر باینری و داده‌های تله‌متری را جهت پردازش پس‌زمینه در صف پردازش قرار می‌دهد.</span>
+            </p>
           </div>
 
-          <!-- Parameters Table -->
+          <!-- 2. HTTP Method Badge + URL Bar with Copy -->
+          <div class="api-url-bar">
+            <span class="http-badge post">POST</span>
+            <code class="endpoint-url">/api/v2/telemetry/ingest</code>
+            <button class="btn-copy" onclick="copyCode(this)">
+              <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی آدرس</span>
+            </button>
+          </div>
+
+          <!-- 3. Parameters Table -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Request Parameters</span>
+            <span data-lang="fa">پارامترهای ورودی</span>
+          </h4>
           <div class="table-responsive">
             <table>
               <thead>
                 <tr>
-                  <th>Parameter</th>
-                  <th>Type</th>
-                  <th>Required</th>
-                  <th>Description</th>
-                  <th>Example</th>
+                  <th><span data-lang="en">Parameter</span><span data-lang="fa">پارامتر</span></th>
+                  <th><span data-lang="en">Type</span><span data-lang="fa">نوع</span></th>
+                  <th><span data-lang="en">Required</span><span data-lang="fa">الزامی</span></th>
+                  <th><span data-lang="en">Description</span><span data-lang="fa">توضیحات</span></th>
+                  <th><span data-lang="en">Example</span><span data-lang="fa">نمونه</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>session_token</code></td>
-                  <td>string</td>
-                  <td>Required</td>
-                  <td>Cryptographic authorization token</td>
-                  <td><code>"tok_9981"</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag required">Header (Required)</span></td>
+                  <td>
+                    <span data-lang="en">Cryptographic session token generated by the authentication authority.</span>
+                    <span data-lang="fa">توکن رمزنگاری‌شده نشست صادر شده از مرجع احراز هویت.</span>
+                  </td>
+                  <td><code>"tok_sec_9941"</code></td>
+                </tr>
+                <tr>
+                  <td><code>sync_mode</code></td>
+                  <td><span class="type-tag">string</span></td>
+                  <td><span class="req-tag optional">Query (Optional)</span></td>
+                  <td>
+                    <span data-lang="en">Sync strategy: <code>STREAM</code> or <code>BATCH</code> (default: <code>BATCH</code>).</span>
+                    <span data-lang="fa">استراتژی همگام‌سازی داده‌ها (پیش‌فرض: BATCH).</span>
+                  </td>
+                  <td><code>"BATCH"</code></td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- JSON Bodies (Strictly LTR) -->
+          <!-- 4. JSON Request & Response Preview (Strictly LTR) -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Request & Response Payload Schema</span>
+            <span data-lang="fa">ساختار ورودی و پاسخ JSON</span>
+          </h4>
           <div class="json-grid">
             <div class="code-container">
               <div class="code-header">
-                <span class="code-lang-badge">JSON Request</span>
+                <span class="code-lang-badge">JSON Request Body</span>
+                <button class="btn-copy" onclick="copyCode(this)">
+                  <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی کد</span>
+                </button>
               </div>
               <pre><code class="language-json">{
-  "document_id": "doc_101",
-  "sync_all": true
+  "document_id": "doc_sec_01",
+  "batch_size": 256,
+  "flush_immediate": true
 }</code></pre>
             </div>
             <div class="code-container">
               <div class="code-header">
                 <span class="code-lang-badge">JSON Response (200 OK)</span>
+                <button class="btn-copy" onclick="copyCode(this)">
+                  <span>📋</span> <span data-lang="en">Copy</span><span data-lang="fa">کپی کد</span>
+                </button>
               </div>
               <pre><code class="language-json">{
-  "status": "SUCCESS",
-  "records_count": 42
+  "status": "ACCEPTED",
+  "records_queued": 256,
+  "trace_id": "tr_884210"
 }</code></pre>
             </div>
+          </div>
+
+          <!-- 5. Status & Error Codes Table -->
+          <h4 class="api-subheading">
+            <span data-lang="en">Error Responses & Status Codes</span>
+            <span data-lang="fa">کدهای خطا و پاسخ‌های وضعیت</span>
+          </h4>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th><span data-lang="en">HTTP Status</span><span data-lang="fa">کد وضعیت</span></th>
+                  <th><span data-lang="en">Error Code</span><span data-lang="fa">کد خطا</span></th>
+                  <th><span data-lang="en">Description & Resolution</span><span data-lang="fa">توضیحات و راهکار رفع خطا</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="status-badge s400">400 Bad Request</span></td>
+                  <td><code>INVALID_PAYLOAD</code></td>
+                  <td>
+                    <span data-lang="en">JSON payload failed schema validation or missing required fields.</span>
+                    <span data-lang="fa">ساختار ورودی با شمای معتبر همخوانی ندارد یا فیلدهای الزامی موجود نیستند.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="status-badge s401">401 Unauthorized</span></td>
+                  <td><code>TOKEN_EXPIRED</code></td>
+                  <td>
+                    <span data-lang="en">Supplied cryptographic authorization token is invalid or expired.</span>
+                    <span data-lang="fa">توکن احراز هویت منقضی شده یا نامعتبر است.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="status-badge s404">404 Not Found</span></td>
+                  <td><code>DOCUMENT_NOT_FOUND</code></td>
+                  <td>
+                    <span data-lang="en">Target document buffer matching doc_id was not found in cache.</span>
+                    <span data-lang="fa">سند با شناسه مورد نظر در بافر فعال یافت نشد.</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
+      <!-- SECTION 03: Code Implementation -->
       <section id="code">
-        <h2 class="section-title">03 · Code Implementation</h2>
+        <h2 class="section-title">
+          <span class="number">03</span>
+          <span data-lang="en">Code Implementation</span>
+          <span data-lang="fa">پیاده‌سازی و نمونه کد</span>
+        </h2>
+        <p>
+          <span data-lang="en">Client implementation demonstrating asynchronous ingestion with automatic token refresh:</span>
+          <span data-lang="fa">نمونه پیاده‌سازی کلاینت جهت ارسال ناهمگام با تمدید خودکار توکن:</span>
+        </p>
         <div class="code-container">
           <div class="code-header">
-            <span class="code-lang-badge">JavaScript</span>
+            <span class="code-lang-badge">TypeScript</span>
+            <button class="btn-copy" onclick="copyCode(this)">
+              <span>📋</span> <span data-lang="en">Copy Code</span><span data-lang="fa">کپی کد</span>
+            </button>
           </div>
-          <pre><code class="language-javascript">// Code is always strictly LTR
-export async function syncBatch(token) {
-  return await fetch('/api/v2/data/sync', { headers: { Authorization: token } });
+          <pre><code class="language-typescript">export async function ingestTelemetry(docId: string, token: string): Promise&lt;boolean&gt; {
+  const response = await fetch('/api/v2/telemetry/ingest', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ document_id: docId, batch_size: 256, flush_immediate: true })
+  });
+
+  return response.ok;
 }</code></pre>
+        </div>
+      </section>
+
+      <!-- SECTION 04: Authoritative References -->
+      <section id="references">
+        <h2 class="section-title">
+          <span class="number">04</span>
+          <span data-lang="en">Authoritative References</span>
+          <span data-lang="fa">مراجع و استانداردهای معتبر</span>
+        </h2>
+        <div class="references-list">
+          <div class="ref-card">
+            <div class="ref-info">
+              <span class="ref-tag">Official Documentation</span>
+              <h4 class="ref-title">W3C Web Cryptography API Specification</h4>
+              <a href="https://www.w3.org/TR/WebCryptoAPI/" target="_blank" rel="noopener noreferrer" class="ref-url">https://www.w3.org/TR/WebCryptoAPI/</a>
+            </div>
+            <button class="btn-copy-ref" onclick="copyCitation('https://www.w3.org/TR/WebCryptoAPI/', this)">
+              <span>🔗</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
+            </button>
+          </div>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Slide-Out Comment Drawer -->
-  <div id="commentDrawerBackdrop" class="comment-drawer-backdrop" onclick="toggleCommentDrawer()"></div>
-  <aside id="commentDrawer" class="comment-drawer">
-    <div class="drawer-header">
-      <div style="font-weight: 700;">💬 Review Comments</div>
-      <button onclick="toggleCommentDrawer()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-    </div>
-    <div class="drawer-body" id="drawerCommentsList"></div>
-    <div class="drawer-footer">
-      <button class="btn-drawer" onclick="exportCommentsJSON()"><span>📥</span> <span data-lang="en">Export JSON (for AI)</span><span data-lang="fa">استخراج JSON (برای هوش مصنوعی)</span></button>
-      <button class="btn-drawer" onclick="embedCommentsAndDownloadHTML()"><span>💾</span> <span data-lang="en">Save & Embed in HTML</span><span data-lang="fa">ذخیره در سند و دانلود HTML</span></button>
-    </div>
-  </aside>
-
-  <!-- Pin Coordinate Modal -->
+  <!-- Comment Pin Input Modal -->
   <div id="pinInputModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
-    <div class="modal-box" style="max-width: 480px;">
+    <div class="modal-box">
       <div class="modal-header">
         <h3>
           📍 <span data-lang="en">Add Review Comment at Coordinate</span>
@@ -515,7 +763,7 @@ export async function syncBatch(token) {
                   data-placeholder-fa="متن نظر، یادداشت یا تغییر مورد نظر در این نقطه را بنویسید..." 
                   style="width: 100%; padding: 0.55rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-base); color: var(--text-main); font-size: 0.85rem; resize: vertical; margin-bottom: 1rem; font-family: inherit; box-sizing: border-box;"></textarea>
         
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+        <div style="display: flex; justify-content: flex-end; gap: 0.6rem;">
           <button class="btn-modal btn-modal-cancel" onclick="closePinModal()">
             <span data-lang="en">Cancel</span>
             <span data-lang="fa">انصراف</span>
@@ -529,57 +777,134 @@ export async function syncBatch(token) {
     </div>
   </div>
 
+  <!-- Slide-Out Review Comments Drawer -->
+  <div id="commentDrawerBackdrop" class="comment-drawer-backdrop" onclick="toggleCommentDrawer()"></div>
+  <aside id="commentDrawer" class="comment-drawer">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span>💬</span>
+        <h3>
+          <span data-lang="en">Review Comments</span>
+          <span data-lang="fa">نظرات بازبینی</span>
+        </h3>
+      </div>
+      <button class="btn-close-modal" onclick="toggleCommentDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="drawerCommentsList">
+      <!-- Dynamically filled comments -->
+    </div>
+    <div class="drawer-footer">
+      <button class="btn-drawer" onclick="exportCommentsJSON()">
+        <span>📥</span> <span data-lang="en">Export JSON (for AI)</span><span data-lang="fa">استخراج JSON (برای هوش مصنوعی)</span>
+      </button>
+      <button class="btn-drawer" onclick="embedCommentsAndDownloadHTML()">
+        <span>💾</span> <span data-lang="en">Save & Embed in HTML</span><span data-lang="fa">ذخیره در سند و دانلود HTML</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Embedded Comments Storage -->
   <script id="docEmbeddedComments" type="application/json">[]</script>
 
+  <!-- Interactive Logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      hljs.highlightAll();
+      try { hljs.highlightAll(); } catch (e) {}
       initPinCommentSystem();
+      initReadingProgress();
     });
 
-    // Theme & Language
+    // 1. Theme Engine
     let currentTheme = localStorage.getItem('doc_theme') || 'dark';
     function setTheme(t) {
       currentTheme = t;
       localStorage.setItem('doc_theme', t);
       document.documentElement.setAttribute('data-theme', t);
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.textContent = t === 'dark' ? '☀️' : '🌙';
     }
     function toggleTheme() { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     setTheme(currentTheme);
 
+    // 2. Bilingual Engine
     let currentLang = localStorage.getItem('doc_lang') || 'en';
+    function updatePlaceholders(lang) {
+      document.querySelectorAll('[data-placeholder-en]').forEach(el => {
+        el.placeholder = (lang === 'fa') ? el.getAttribute('data-placeholder-fa') : el.getAttribute('data-placeholder-en');
+      });
+    }
+
+    function updatePinCoordDisplay() {
+      const display = document.getElementById('pinCoordDisplay');
+      if (!display || !pendingPinCoord) return;
+      const isFa = document.documentElement.lang === 'fa';
+      display.textContent = isFa 
+        ? `بخش: #${pendingPinCoord.secId} · مختصات: (X: ${pendingPinCoord.x}%, Y: ${pendingPinCoord.y}%)`
+        : `#${pendingPinCoord.secId} · Coordinate: (X: ${pendingPinCoord.x}%, Y: ${pendingPinCoord.y}%)`;
+    }
+
     function setLanguage(l) {
       currentLang = l;
       localStorage.setItem('doc_lang', l);
       document.documentElement.lang = l;
       document.documentElement.dir = l === 'fa' ? 'rtl' : 'ltr';
+      updatePlaceholders(l);
+      updatePinCoordDisplay();
     }
     function toggleLanguage() { setLanguage(currentLang === 'en' ? 'fa' : 'en'); }
     setLanguage(currentLang);
 
-    // Sidebar
-    function toggleSidebar() {
-      document.getElementById('catalogSidebar').classList.toggle('open');
+    // 3. Reading Progress Indicator
+    function initReadingProgress() {
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const p = h > 0 ? (window.scrollY / h) * 100 : 0;
+        const bar = document.getElementById('readingProgressBar');
+        if (bar) bar.style.width = p + '%';
+      }, { passive: true });
     }
 
-    // Version Navigation (Relative-path aware to prevent 404s)
-    function switchVersion(ver) {
-      const isInsideSub = window.location.pathname.includes('/examples/v');
-      const prefix = isInsideSub ? '../' : 'examples/';
-      if (ver === '2.0.0') {
-        window.location.href = isInsideSub ? '../../index.html' : 'index.html';
-      } else if (ver === '1.2.0') {
-        window.location.href = prefix + 'v1.2.0/remote-compose.html';
-      } else if (ver === '1.0.0') {
-        window.location.href = prefix + 'v1.0.0/remote-compose.html';
+    // 4. Sidebar Drawer Navigation
+    function toggleSidebar() {
+      const sb = document.getElementById('catalogSidebar');
+      const bd = document.getElementById('sidebarBackdrop');
+      if (sb) sb.classList.toggle('open');
+      if (bd) bd.classList.toggle('active');
+    }
+    function closeSidebarOnMobile() {
+      if (window.innerWidth <= 820) {
+        const sb = document.getElementById('catalogSidebar');
+        const bd = document.getElementById('sidebarBackdrop');
+        if (sb) sb.classList.remove('open');
+        if (bd) bd.classList.remove('active');
       }
     }
 
-    // Global Pin Commenting System (Accessible from Toolbar on Entire Document)
+    // 5. Version Navigation (Relative-path resolution to prevent 404s)
+    function switchVersion(ver) {
+      const p = window.location.pathname;
+      let root = '';
+      if (p.includes('/examples/v')) {
+        root = '../../';
+      } else if (p.includes('/examples/')) {
+        root = '../';
+      } else {
+        root = './';
+      }
+
+      if (ver === '2.0.0') {
+        window.location.href = root + 'index.html';
+      } else if (ver === '1.2.0') {
+        window.location.href = root + 'examples/v1.2.0/remote-compose.html';
+      } else if (ver === '1.0.0') {
+        window.location.href = root + 'examples/v1.0.0/remote-compose.html';
+      }
+    }
+
+    // 6. Universal Coordinate Pin Drop Commenting System
     let apiPins = [];
     let isPinModeActive = false;
-    let pendingPinCoord = { secId: 'overview', x: 0, y: 0 };
+    let pendingPinCoord = null;
 
     function initPinCommentSystem() {
       const main = document.querySelector('.main-content');
@@ -595,7 +920,7 @@ export async function syncBatch(token) {
           const secId = sec.id || 'overview';
 
           pendingPinCoord = { secId, x: relX, y: relY, secElement: sec };
-          openPinInputAt(relX, relY);
+          openPinInputModal();
         });
       }
       loadApiPins();
@@ -607,10 +932,25 @@ export async function syncBatch(token) {
       const main = document.querySelector('.main-content');
       if (btn) btn.classList.toggle('active-pin-mode', isPinModeActive);
       if (main) main.style.cursor = isPinModeActive ? 'crosshair' : 'default';
+
+      if (isPinModeActive) {
+        const toast = document.createElement('div');
+        toast.id = 'pinToastNotification';
+        toast.style.cssText = 'position: fixed; top: 62px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 999px; z-index: 2000; box-shadow: 0 4px 15px var(--primary-glow);';
+        const isFa = document.documentElement.lang === 'fa';
+        toast.textContent = isFa ? '📍 حالت پین فعال است: برای ثبت نظر روی هر بخش کلیک کنید' : '📍 Pin Mode ACTIVE: Click anywhere to drop a comment';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      } else {
+        const t = document.getElementById('pinToastNotification');
+        if (t) t.remove();
+      }
     }
 
-    function openPinInputAt(x, y) {
-      document.getElementById('pinCoordDisplay').textContent = 'Coordinate: (X: ' + x + '%, Y: ' + y + '%)';
+    function openPinInputModal() {
+      if (!pendingPinCoord) return;
+      updatePinCoordDisplay();
+      updatePlaceholders(document.documentElement.lang || 'en');
       document.getElementById('pinTextInput').value = '';
       document.getElementById('pinInputModal').classList.add('active');
     }
@@ -620,12 +960,14 @@ export async function syncBatch(token) {
     }
     function closePinModal() {
       document.getElementById('pinInputModal').classList.remove('active');
+      if (isPinModeActive) togglePinMode();
     }
 
     function saveDroppedPin() {
       const text = document.getElementById('pinTextInput').value.trim();
       const author = document.getElementById('pinAuthorInput').value.trim() || 'Reviewer';
-      if (!text) return;
+      if (!text || !pendingPinCoord) return;
+
       apiPins.push({
         id: 'pin_' + Date.now(),
         secId: pendingPinCoord.secId,
@@ -635,9 +977,12 @@ export async function syncBatch(token) {
         text: text,
         createdAt: new Date().toISOString()
       });
+
       localStorage.setItem('starter_pins', JSON.stringify(apiPins));
       closePinModal();
       renderPins();
+      renderDrawerComments();
+      toggleCommentDrawer(true);
     }
 
     function loadApiPins() {
@@ -645,23 +990,24 @@ export async function syncBatch(token) {
         const embeddedTag = document.getElementById('docEmbeddedComments');
         const embedded = embeddedTag ? JSON.parse(embeddedTag.textContent || '[]') : [];
         const local = JSON.parse(localStorage.getItem('starter_pins') || '[]');
-        apiPins = [...embedded, ...local];
+        const map = new Map();
+        [...embedded, ...local].forEach(p => map.set(p.id, p));
+        apiPins = Array.from(map.values());
       } catch (e) { apiPins = []; }
       renderPins();
+      renderDrawerComments();
     }
 
     function renderPins() {
-      // Remove existing pins from sections
       document.querySelectorAll('.dropped-comment-pin').forEach(el => el.remove());
 
       apiPins.forEach((p, i) => {
         const sec = document.getElementById(p.secId) || document.querySelector('.main-content');
         if (!sec) return;
-        if (getComputedStyle(sec).position === 'static') sec.style.position = 'relative';
 
         const pin = document.createElement('div');
         pin.className = 'dropped-comment-pin';
-        pin.id = 'pin_marker_' + i;
+        pin.id = 'pin_marker_' + p.id;
         pin.style.left = p.x + '%';
         pin.style.top = p.y + '%';
         pin.title = '#' + (i + 1) + ': ' + p.text;
@@ -675,28 +1021,60 @@ export async function syncBatch(token) {
 
       const count = document.getElementById('commentCount');
       if (count) count.textContent = apiPins.length;
+    }
+
+    function renderDrawerComments() {
       const list = document.getElementById('drawerCommentsList');
-      if (list) {
-        list.innerHTML = apiPins.map((p, i) => `
-          <div class="comment-item">
-            <div style="font-weight: 700; color: var(--primary);">Pin #${i + 1} (${p.secId} - X: ${p.x}%, Y: ${p.y}%)</div>
-            <div style="margin: 0.25rem 0;">${p.text}</div>
-            <div style="font-size: 0.72rem; color: var(--text-dim); display: flex; justify-content: space-between;">
-              <span>${p.author}</span>
-              <button onclick="jumpToPin(${i})" class="btn-jump-pin"><span>🎯</span> <span>Jump to Pin</span></button>
-            </div>
+      if (!list) return;
+
+      if (apiPins.length === 0) {
+        list.innerHTML = `
+          <div style="color: var(--text-dim); text-align: center; padding: 3rem 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.6rem; opacity: 0.7;">💬</div>
+            <div data-lang="en" style="line-height: 1.6; font-size: 0.9rem;">No review comments recorded yet.<br>Click the 📍 Pin icon in the top toolbar to drop a note on any section!</div>
+            <div data-lang="fa" style="line-height: 1.8; font-size: 0.9rem;">هنوز هیچ نظری ثبت نشده است.<br>روی آیکون 📍 پین در نوار ابزار کلیک کنید تا روی هر بخش سند نظر بگذارید!</div>
           </div>
-        `).join('') || '<div style="color: var(--text-dim); text-align: center;">No comments yet.</div>';
+        `;
+        return;
+      }
+
+      list.innerHTML = apiPins.map((p, i) => `
+        <div class="comment-item" id="drawer_item_${p.id}">
+          <div class="comment-meta">
+            <span class="comment-target-badge"><span data-lang="en">Pin</span><span data-lang="fa">پین</span> #${i + 1} · #${p.secId} (${p.x}%, ${p.y}%)</span>
+            <span style="font-size: 0.72rem; color: var(--text-dim);">${p.author} · ${new Date(p.createdAt).toLocaleDateString()}</span>
+          </div>
+          <div style="color: var(--text-main); margin: 0.4rem 0; font-size: 0.88rem; line-height: 1.5; word-break: break-word;">${p.text}</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;">
+            <button onclick="jumpToPin('${p.id}', '${p.secId}')" class="btn-jump-pin">
+              <span>🎯</span> <span data-lang="en">Jump to Pin</span><span data-lang="fa">پرش به پین</span>
+            </button>
+            <button onclick="deletePin('${p.id}')" class="btn-delete-pin">
+              <span data-lang="en">Delete</span><span data-lang="fa">حذف</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function jumpToPin(id, secId) {
+      toggleCommentDrawer(false);
+      const pin = document.getElementById('pin_marker_' + id);
+      if (pin) {
+        pin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        pin.classList.add('highlighted');
+        setTimeout(() => pin.classList.remove('highlighted'), 2500);
+      } else {
+        const sec = document.getElementById(secId);
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
-    function jumpToPin(index) {
-      const pin = document.getElementById('pin_marker_' + index);
-      if (pin) {
-        pin.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        pin.classList.add('pin-highlight');
-        setTimeout(() => pin.classList.remove('pin-highlight'), 2500);
-      }
+    function deletePin(id) {
+      apiPins = apiPins.filter(p => p.id !== id);
+      localStorage.setItem('starter_pins', JSON.stringify(apiPins));
+      renderPins();
+      renderDrawerComments();
     }
 
     function toggleCommentDrawer(force) {
@@ -708,9 +1086,9 @@ export async function syncBatch(token) {
     }
 
     function exportCommentsJSON() {
-      const data = { exportedAt: new Date().toISOString(), pins: apiPins };
+      const data = { document: document.title, exportedAt: new Date().toISOString(), pins: apiPins };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'api-review-pins.json'; a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'doc-review-pins.json'; a.click();
     }
 
     function embedCommentsAndDownloadHTML() {
@@ -718,7 +1096,29 @@ export async function syncBatch(token) {
       const tag = clone.querySelector('#docEmbeddedComments');
       if (tag) tag.textContent = JSON.stringify(apiPins, null, 2);
       const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'doc-with-comments.html'; a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'document-with-embedded-comments.html'; a.click();
+    }
+
+    // 7. Clipboard Utilities
+    function copyCode(btn) {
+      const container = btn.closest('.code-container, .api-url-bar');
+      const code = container ? container.querySelector('code, pre') : null;
+      if (!code) return;
+      navigator.clipboard.writeText(code.textContent.trim()).then(() => {
+        const orig = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '<span>✓</span> Copied!';
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function copyCitation(url, btn) {
+      navigator.clipboard.writeText(url).then(() => {
+        const orig = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '<span>✓</span> Copied!';
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      });
     }
   </script>
 </body>

@@ -7,7 +7,7 @@ description: >
   persistent Acrobat/ChatGPT-style catalog sidebar navigation, reading progress indicator,
   strictly LTR colorful syntax-highlighted code blocks, standardized API documentation tables,
   coordinate drag-and-drop commenting on API specs with slide-out review drawer, JSON export for AI,
-  and embedded HTML persistence, 1-click PDF export via html2pdf.js, real multi-version navigation
+  and embedded HTML persistence, real multi-version navigation
   with archive banners, flawless zero-overflow mobile layout, context-aware modularity, and strict anti-hallucination ground-truth enforcement.
 metadata:
   version: 2.0.0
