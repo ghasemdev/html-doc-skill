@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" id="hljs-theme-light" disabled>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
-  <!-- Chart.js for Data Visualizations & Benchmarks -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <!-- html2pdf.js for Client-Side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root, [data-theme="dark"] {
@@ -79,910 +79,534 @@
       --radius: 12px;
     }
 
-    /* Zero-Reload Bilingual Display Filter */
+    /* Reset & Zero-Overflow Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+      scroll-behavior: smooth;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+    }
+
+    /* Bilingual Filters */
     html[lang="en"] [data-lang="fa"] { display: none !important; }
     html[lang="fa"] [data-lang="en"] { display: none !important; }
 
-    /* RTL & Typography Rules (Persian Writing Skill Standard) */
+    /* RTL Typography */
     html[dir="rtl"] {
       font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.85;
-      font-size: 15.5px;
       letter-spacing: normal !important;
     }
     html[dir="ltr"] {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.7;
-      font-size: 15px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
-    body {
-      background-color: var(--bg-base);
-      color: var(--text-main);
-      overflow-x: hidden;
-      min-height: 100vh;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-
-    /* Top Reading Progress Bar */
+    /* Reading Progress Bar */
     #readingProgressBar {
       position: fixed; top: 0; left: 0; height: 3px;
       background: linear-gradient(90deg, var(--primary), var(--accent));
       width: 0%; z-index: 9999; transition: width 0.1s ease-out;
     }
 
-    /* Distinct Inline Links */
-    a.doc-link, p a, li a:not(.nav-item):not(.sidebar-link):not(.btn-control) {
-      color: var(--link-color);
-      text-decoration: underline;
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 3px;
-      font-weight: 500;
-      transition: color 0.15s ease, text-decoration-color 0.15s ease;
-    }
-    a.doc-link:hover, p a:hover, li a:not(.nav-item):not(.sidebar-link):not(.btn-control):hover {
-      color: var(--link-hover);
-      text-decoration-color: var(--primary);
-    }
-
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-
-    /* Header Nav */
-    header {
+    /* Sticky Navbar */
+    .top-navbar {
       position: sticky; top: 0; z-index: 1000;
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       background: rgba(16, 23, 42, 0.88); border-bottom: 1px solid var(--border-subtle);
+      padding: 0.6rem 1.25rem; display: flex; align-items: center; justify-content: space-between;
+      width: 100%; max-width: 100vw; box-sizing: border-box;
     }
-    [data-theme="light"] header { background: rgba(255, 255, 255, 0.88); }
-    .nav-inner {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; flex-wrap: wrap; gap: 10px;
-    }
-    .logo-area { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-main); font-weight: 800; font-size: 16px; }
-    .logo-badge { background: linear-gradient(135deg, #0284c7, #6366f1); color: white; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
-    
-    .nav-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    
-    .progress-pill {
-      background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle);
-      color: var(--text-muted); padding: 5px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600;
-      white-space: nowrap;
-    }
-    .progress-pill strong { color: var(--primary); }
+    [data-theme="light"] .top-navbar { background: rgba(255, 255, 255, 0.92); }
+
+    .brand-section { display: flex; align-items: center; gap: 0.6rem; min-width: 0; flex-shrink: 1; }
+    .brand-logo { width: 30px; height: 30px; border-radius: 6px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand-title { font-weight: 700; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+    .nav-controls { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
 
     .btn-control {
       background: var(--bg-surface-elevated); border: 1px solid var(--border-strong);
-      color: var(--text-main); min-height: 38px; padding: 6px 12px; border-radius: 8px; cursor: pointer;
-      font-size: 12.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-main); height: 34px; padding: 0 0.65rem; border-radius: 8px; cursor: pointer;
+      font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
       transition: all 0.2s; white-space: nowrap; user-select: none;
     }
     .btn-control:hover { background: var(--bg-surface-hover); border-color: var(--primary); }
 
     .version-select {
       background: var(--bg-surface-elevated); border: 1px solid var(--border-strong);
-      color: var(--primary); font-weight: 700; font-size: 12px; min-height: 38px;
-      padding: 4px 10px; border-radius: 8px; cursor: pointer; outline: none;
+      color: var(--primary); font-weight: 700; font-size: 0.8rem; height: 34px;
+      padding: 0 0.5rem; border-radius: 8px; cursor: pointer; outline: none;
     }
 
-    /* Sidebar Drawer */
-    .sidebar-backdrop {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1050;
-      opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease;
-    }
-    .sidebar-backdrop.active { opacity: 1; visibility: visible; }
+    /* Layout */
+    .app-layout { display: flex; min-height: calc(100vh - 52px); width: 100%; max-width: 100%; min-width: 0; overflow-x: hidden; }
     .catalog-sidebar {
-      position: fixed; top: 0; width: min(85vw, 300px); height: 100vh;
-      background: var(--sidebar-bg); border-right: 1px solid var(--border-subtle);
-      z-index: 1060; display: flex; flex-direction: column;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+      width: min(85vw, 290px); flex-shrink: 0; background: var(--sidebar-bg); border-inline-end: 1px solid var(--border-subtle);
+      position: sticky; top: 52px; height: calc(100vh - 52px); overflow-y: auto; padding: 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.5rem;
     }
-    html[dir="ltr"] .catalog-sidebar { left: 0; transform: translateX(-100%); }
-    html[dir="rtl"] .catalog-sidebar { right: 0; border-right: none; border-left: 1px solid var(--border-subtle); transform: translateX(100%); }
-    .catalog-sidebar.open { transform: translateX(0) !important; }
-    .sidebar-header { padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); }
-    .sidebar-nav { flex: 1; overflow-y: auto; padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-link {
-      padding: 9px 12px; border-radius: 8px; color: var(--text-muted); text-decoration: none;
-      font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 10px; transition: all 0.15s ease;
+    .sidebar-header { padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-link { padding: 0.5rem 0.75rem; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem; }
+    .sidebar-link.active { background: var(--badge-bg); color: var(--primary); font-weight: 600; }
+
+    .main-content {
+      flex: 1; min-width: 0 !important; max-width: 100% !important; width: 100% !important;
+      overflow-x: hidden !important; padding: 2.5rem 3rem; box-sizing: border-box;
     }
-    .sidebar-link:hover { background: var(--bg-surface-hover); color: var(--text-main); }
-    .sidebar-link.active { background: var(--badge-bg); color: var(--primary); font-weight: 700; }
-
-    /* Hero */
-    .hero { padding: 45px 0 30px; border-bottom: 1px solid var(--border-subtle); background: radial-gradient(circle at 50% 10%, var(--primary-glow) 0%, transparent 60%); }
-    .hero-title { font-size: clamp(24px, 4vw, 36px); font-weight: 900; line-height: 1.3; margin-bottom: 14px; background: linear-gradient(135deg, var(--text-main) 30%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-subtitle { font-size: 15px; color: var(--text-muted); max-width: 900px; line-height: 1.75; }
-
-    /* Sections & Cards */
-    section { padding: 40px 0; border-bottom: 1px solid var(--border-subtle); }
-    .section-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin: 18px 0; }
-    .card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+    section { margin-bottom: 3.5rem; scroll-margin-top: 75px; position: relative; }
+    .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
 
     /* STRICTLY LEFT-TO-RIGHT (LTR) CODE BLOCKS IN ALL MODES */
-    .code-container,
-    pre,
-    code,
-    .code-header,
-    .endpoint-url,
-    .json-preview {
-      direction: ltr !important;
-      text-align: left !important;
-      unicode-bidi: isolate;
+    .code-container, pre, code, .code-header, .endpoint-url, .json-preview {
+      direction: ltr !important; text-align: left !important; unicode-bidi: isolate;
     }
-    .code-container {
-      background: var(--code-bg);
-      border: 1px solid var(--code-border);
-      border-radius: 12px;
-      margin: 16px 0;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-    .code-header {
-      background: var(--bg-surface-elevated);
-      padding: 9px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-subtle);
-      font-family: 'Fira Code', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .code-lang-badge {
-      padding: 2px 7px;
-      border-radius: 5px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--primary);
-    }
-    .btn-copy {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-strong);
-      color: var(--text-main);
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 11.5px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s ease;
-    }
-    .btn-copy.copied { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
-    pre {
-      margin: 0;
-      padding: 16px;
-      overflow-x: auto;
-      font-family: 'Fira Code', monospace;
-      font-size: 13.5px;
-      line-height: 1.6;
-      background: transparent !important;
-    }
-    pre code.hljs { background: transparent !important; padding: 0 !important; font-family: 'Fira Code', monospace; }
+    .code-container { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: var(--radius); margin: 1.25rem 0; overflow: hidden; min-width: 0 !important; max-width: 100% !important; width: 100% !important; }
+    .code-header { background: var(--bg-surface-elevated); padding: 0.5rem 0.9rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); }
+    .code-lang-badge { padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; background: rgba(56, 189, 248, 0.15); color: var(--primary); }
+    pre { margin: 0; padding: 1.15rem; overflow-x: auto !important; font-family: 'Fira Code', monospace; font-size: 0.88rem; line-height: 1.6; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box; }
 
-    /* API DOCUMENTATION STYLES */
-    .api-endpoint-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 22px;
-      margin: 20px 0;
-      box-shadow: var(--shadow);
+    /* Responsive Tables */
+    .table-responsive, .table-container {
+      width: 100% !important; max-width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch;
+      margin: 1.25rem 0; border: 1px solid var(--border-subtle); border-radius: var(--radius); box-sizing: border-box;
     }
-    .api-meta { margin-bottom: 14px; }
-    .api-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
-    .api-description { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
-    .api-url-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg-base);
-      border: 1px solid var(--border-subtle);
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-    .http-badge {
-      font-family: 'Fira Code', monospace;
-      font-weight: 800;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: inherit; }
+    th, td { padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+    th { background: var(--bg-surface-elevated); font-weight: 700; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+
+    /* API Documentation */
+    .api-endpoint-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; box-shadow: var(--shadow); }
+    .api-url-bar { display: flex; align-items: center; gap: 0.6rem; background: var(--bg-base); border: 1px solid var(--border-subtle); padding: 0.55rem 0.85rem; border-radius: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .http-badge { font-family: 'Fira Code', monospace; font-weight: 800; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 6px; }
     .http-badge.post { background: rgba(56, 189, 248, 0.18); color: var(--primary); }
     .http-badge.get { background: rgba(52, 211, 153, 0.18); color: var(--success); }
-    .http-badge.put { background: rgba(251, 191, 36, 0.18); color: var(--warning); }
-    .http-badge.delete { background: rgba(248, 113, 113, 0.18); color: var(--danger); }
-    .endpoint-url { font-family: 'Fira Code', monospace; font-size: 13.5px; color: var(--text-main); font-weight: 600; flex: 1; }
-    .api-subheading { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin: 16px 0 8px; }
-    
-    /* Responsive Tables */
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin: 12px 0 18px;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
-    }
-    .api-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      text-align: inherit;
-    }
-    .api-table th {
-      background: var(--bg-surface-elevated);
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-    .api-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      vertical-align: top;
-    }
-    .api-table tr:last-child td { border-bottom: none; }
-    .type-tag { font-family: 'Fira Code', monospace; font-size: 11px; padding: 2px 6px; border-radius: 4px; background: var(--bg-surface-hover); color: var(--accent); }
-    .req-tag { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
-    .req-tag.required { background: var(--danger-bg); color: var(--danger); }
-    .req-tag.optional { background: var(--bg-surface-hover); color: var(--text-dim); }
-    .status-badge { font-family: 'Fira Code', monospace; font-size: 11.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
-    .status-badge.s200 { background: var(--success-bg); color: var(--success); }
-    .status-badge.s400 { background: var(--danger-bg); color: var(--danger); }
-    .status-badge.s401 { background: var(--warning-bg); color: var(--warning); }
+    .endpoint-url { font-family: 'Fira Code', monospace; font-size: 0.88rem; font-weight: 600; flex: 1; }
+    .json-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
 
-    /* JSON Grid */
-    .json-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 12px 0; }
-
-    /* Modals & Drawers */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; padding: 16px;
+    /* Coordinate Pin Drop on Section */
+    .api-comment-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+      background: var(--bg-surface-elevated); border: 1px dashed var(--primary); padding: 0.6rem 0.9rem;
+      border-radius: 8px; margin: 1rem 0 1.25rem; flex-wrap: wrap;
     }
+    .api-pin-bubble {
+      display: inline-flex; align-items: center; gap: 0.4rem; background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #000; font-weight: 700; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-radius: 999px; cursor: grab; user-select: none;
+    }
+    .dropped-comment-pin {
+      position: absolute; width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
+      background: var(--primary); color: #000; font-weight: 800; font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transform: translate(-50%, -100%) rotate(-45deg); cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.6); z-index: 50;
+    }
+    .dropped-comment-pin span { transform: rotate(45deg); }
+
+    /* Slide-Out Comment Drawer */
+    .comment-drawer-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 2500; opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0.25s; }
+    .comment-drawer-backdrop.active { opacity: 1; visibility: visible; }
+    .comment-drawer {
+      position: fixed; top: 0; width: min(88vw, 400px); height: 100vh; background: var(--bg-surface);
+      border-inline-start: 1px solid var(--border-strong); z-index: 2510; display: flex; flex-direction: column;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.6); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html[dir="ltr"] .comment-drawer { right: 0; transform: translateX(100%); }
+    html[dir="rtl"] .comment-drawer { left: 0; border-inline-start: none; border-inline-end: 1px solid var(--border-strong); transform: translateX(-100%); }
+    .comment-drawer.open { transform: translateX(0) !important; }
+    .drawer-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .drawer-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg-base); }
+    .comment-item { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.75rem; font-size: 0.85rem; }
+
+    /* Modals */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); z-index: 3000; justify-content: center; align-items: center; padding: 1rem; }
     .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: var(--bg-surface); border: 1px solid var(--border-strong);
-      border-radius: 14px; max-width: 600px; width: 100%; max-height: 85vh;
-      overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column;
-    }
-    .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
-    .modal-body { padding: 20px; }
-    .modal-footer { padding: 14px 20px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
-    .btn-close-modal { background: transparent; border: none; font-size: 18px; color: var(--text-muted); cursor: pointer; }
-
-    /* Reviews / Comments System */
-    .comment-item {
-      background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 10px;
-      padding: 12px; margin-bottom: 10px; font-size: 13px;
-    }
-    .comment-target-badge { font-size: 11px; background: var(--badge-bg); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 600; display: inline-block; margin-bottom: 6px; }
-    .comment-quote { border-inline-start: 3px solid var(--accent); padding-inline-start: 8px; color: var(--text-muted); font-style: italic; margin-bottom: 6px; font-size: 12.5px; }
-
-    /* Print Stylesheet for PDF Export */
-    @media print {
-      header, .catalog-sidebar, .sidebar-backdrop, .btn-control, .btn-copy, .btn-comment-section, .modal-overlay, #readingProgressBar {
-        display: none !important;
-      }
-      body { background: #ffffff !important; color: #000000 !important; font-size: 10.5pt; }
-      .container { max-width: 100% !important; padding: 0 !important; }
-      .card, .api-endpoint-card, .code-container, table { break-inside: avoid; page-break-inside: avoid; }
-      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    }
+    .modal-box { background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius); max-width: 500px; width: 100%; max-height: 85vh; overflow-y: auto; display: flex; flex-direction: column; }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 1.25rem; flex: 1; }
 
     /* Mobile Responsive Optimizations */
+    @media (max-width: 820px) {
+      .catalog-sidebar {
+        position: fixed; top: 0; inset-inline-start: 0; height: 100vh; z-index: 2100;
+        transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      html[dir="rtl"] .catalog-sidebar { transform: translateX(100%); }
+      .catalog-sidebar.open { transform: translateX(0) !important; }
+      .main-content { padding: 1.25rem 0.85rem !important; }
+    }
+
     @media (max-width: 768px) {
-      .container { padding: 0 16px; }
-      .nav-inner { justify-content: space-between; }
-      .nav-actions { width: 100%; justify-content: space-between; overflow-x: auto; padding-top: 4px; }
-      .progress-pill { display: none; }
-      .card-grid, .json-grid { grid-template-columns: 1fr; }
+      .top-navbar { padding: 0.35rem 0.5rem !important; height: 48px !important; }
+      .brand-title, .progress-pill { display: none !important; }
+      .nav-controls { gap: 0.2rem !important; }
+      .version-select { width: 62px !important; max-width: 62px !important; height: 32px !important; font-size: 0.72rem !important; }
+      .btn-control { width: 32px !important; height: 32px !important; min-height: 32px !important; padding: 0 !important; font-size: 0.85rem !important; }
+      .btn-control .btn-label { display: none !important; }
+    }
+
+    @media print {
+      .top-navbar, .catalog-sidebar, .comment-drawer, .btn-control, .api-comment-bar, .dropped-comment-pin { display: none !important; }
+      body { background: #ffffff !important; color: #000000 !important; }
+      .main-content { max-width: 100% !important; padding: 0 !important; }
     }
   </style>
 </head>
 <body>
 
   <div id="readingProgressBar"></div>
-  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
-  <!-- Persistent Catalog Navigation -->
-  <aside id="catalogSidebar" class="catalog-sidebar">
-    <div class="sidebar-header">
-      <div style="font-weight: 700; color: var(--text-main);">📑 <span data-lang="en">Catalog</span><span data-lang="fa">فهرست موضوعی</span></div>
-      <button onclick="toggleSidebar()" class="btn-close-modal">✕</button>
+  <!-- Header -->
+  <header class="top-navbar">
+    <div class="brand-section">
+      <button class="btn-control" onclick="toggleSidebar()" title="Catalog">
+        <span>📑</span> <span class="btn-label" data-lang="en">Catalog</span><span class="btn-label" data-lang="fa">فهرست</span>
+      </button>
+      <div class="brand-logo">RC</div>
+      <div class="brand-title">Documentation</div>
     </div>
-    <nav class="sidebar-nav">
-      <a href="#overview" class="sidebar-link active" onclick="closeSidebarOnMobile()">01 · <span data-lang="en">Overview</span><span data-lang="fa">چکیده فنی</span></a>
-      <a href="#api-spec" class="sidebar-link" onclick="closeSidebarOnMobile()">02 · <span data-lang="en">API Specification</span><span data-lang="fa">مشخصات وب‌سرویس و API</span></a>
-      <a href="#code" class="sidebar-link" onclick="closeSidebarOnMobile()">03 · <span data-lang="en">Code Implementation</span><span data-lang="fa">پیاده‌سازی کد</span></a>
-      <a href="#references" class="sidebar-link" onclick="closeSidebarOnMobile()">04 · <span data-lang="en">References</span><span data-lang="fa">مراجع و استانداردها</span></a>
-    </nav>
-  </aside>
 
-  <!-- Sticky Header -->
-  <header>
-    <div class="container nav-inner">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <button class="btn-control" onclick="toggleSidebar()" title="Catalog">
-          <span>📑</span> <span data-lang="en">Catalog</span><span data-lang="fa">فهرست</span>
-        </button>
-        <a href="#" class="logo-area">
-          <span>📘</span>
-          <span data-lang="en">Documentation</span>
-          <span data-lang="fa">مستندات فنی</span>
-          <span class="logo-badge">v2.0</span>
-        </a>
-      </div>
+    <div class="nav-controls">
+      <!-- Version Selector -->
+      <select id="docVersionSelect" class="version-select" onchange="switchVersion(this.value)">
+        <option value="2.0.0" selected>v2.0</option>
+        <option value="1.2.0">v1.2</option>
+        <option value="1.0.0">v1.0</option>
+      </select>
 
-      <div class="nav-actions">
-        <!-- Version Selector -->
-        <select id="docVersionSelect" class="version-select" onchange="switchVersion(this.value)">
-          <option value="2.0.0" selected>v2.0.0 (Latest)</option>
-          <option value="1.1.0">v1.1.0</option>
-          <option value="1.0.0">v1.0.0</option>
-        </select>
-        <button class="btn-control" onclick="openVersionModal()" title="Changelog">📜</button>
+      <!-- Review Comments Trigger -->
+      <button class="btn-control" onclick="toggleCommentDrawer()" title="Review Comments">
+        <span>💬</span> <span id="commentCount" style="font-size: 0.7rem;">0</span>
+      </button>
 
-        <div class="progress-pill">
-          <span data-lang="en">Section <strong id="progressIndexEn">1</strong> of 4</span>
-          <span data-lang="fa">بخش <strong id="progressIndexFa">۱</strong> از ۴</span>
-        </div>
+      <!-- PDF Export via html2pdf -->
+      <button class="btn-control" onclick="exportDocumentToPDF()" title="Export PDF">
+        <span>📄</span>
+      </button>
 
-        <!-- Review & Comments Trigger -->
-        <button class="btn-control" onclick="openReviewModal()">
-          <span>💬</span> <span data-lang="en">Reviews</span><span data-lang="fa">نظرات</span> (<span id="commentCount">0</span>)
-        </button>
-
-        <!-- PDF Export -->
-        <button class="btn-control" onclick="window.print()">
-          <span>📄</span> <span data-lang="en">PDF</span><span data-lang="fa">خروجی PDF</span>
-        </button>
-
-        <!-- Language & Theme -->
-        <button class="btn-control" onclick="toggleLanguage()">
-          <span>🌐</span> <strong id="langText">فارسی</strong>
-        </button>
-        <button class="btn-control" onclick="toggleTheme()">
-          <span id="themeIcon">☀️</span> <span id="themeText">Light</span>
-        </button>
-      </div>
+      <!-- Lang & Theme -->
+      <button class="btn-control" onclick="toggleLanguage()" title="Language">
+        <span>🌐</span>
+      </button>
+      <button class="btn-control" onclick="toggleTheme()" title="Theme">
+        <span id="themeIcon">☀️</span>
+      </button>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <div class="hero">
-    <div class="container">
-      <h1 class="hero-title">
-        <span data-lang="en">Technical Architecture & API Reference</span>
-        <span data-lang="fa">راهنمای جامع معماری و مشخصات API</span>
-      </h1>
-      <p class="hero-subtitle">
-        <span data-lang="en">Production documentation template with standardized API tables, strictly LTR code blocks, interactive comments with AI export, and PDF generation.</span>
-        <span data-lang="fa">قالب استاندارد مستندات فنی با جدول‌های استاندارد وب‌سرویس، کدهای کاملاً چپ‌چین (LTR)، سامانه ثبت نظر و استخراج JSON برای هوش مصنوعی و خروجی چاپی PDF.</span>
-      </p>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- Section 1: Overview -->
-    <section id="overview">
-      <div class="section-title">
-        <div>01 · <span data-lang="en">Executive Overview</span><span data-lang="fa">چکیده و اهداف سامانه</span></div>
-        <button class="btn-control" onclick="promptAddComment('overview', 'Executive Overview')">💬 <span data-lang="en">Add Note</span><span data-lang="fa">ثبت نظر</span></button>
+  <div class="app-layout">
+    <!-- Catalog Sidebar -->
+    <aside id="catalogSidebar" class="catalog-sidebar">
+      <div class="sidebar-header">
+        <div style="font-weight: 700;">📑 Catalog</div>
+        <button onclick="toggleSidebar()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
       </div>
-      <p style="color: var(--text-muted); font-size: 14.5px; line-height: 1.8;">
-        <span data-lang="en">This technical document details the design system, data exchange protocols, and verification procedures. Select text or click the comment buttons to record architectural feedback.</span>
-        <span data-lang="fa">این سند فنی ساختار معماری، پروتکل‌های تبادل داده و مشخصات وب‌سرویس را تشریح می‌کند. می‌توانید هر بخشی از متن را انتخاب کرده یا با دکمه ثبت نظر، یادداشت و بازخورد ساختاری ثبت کنید.</span>
-      </p>
-    </section>
+      <nav style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem;">
+        <a href="#overview" class="sidebar-link active">01 · Overview</a>
+        <a href="#api-spec" class="sidebar-link">02 · API Specification</a>
+        <a href="#code" class="sidebar-link">03 · Code Implementation</a>
+      </nav>
+    </aside>
 
-    <!-- Section 2: Standard API Documentation -->
-    <section id="api-spec">
-      <div class="section-title">
-        <div>02 · <span data-lang="en">API Endpoint Specification</span><span data-lang="fa">مشخصات وب‌سرویس و API</span></div>
-        <button class="btn-control" onclick="promptAddComment('api-spec', 'API Endpoint Specification')">💬 <span data-lang="en">Add Note</span><span data-lang="fa">ثبت نظر</span></button>
-      </div>
+    <!-- Main Content -->
+    <main class="main-content">
+      <section id="overview">
+        <h2 class="section-title">01 · Overview</h2>
+        <p>Production documentation template featuring standardized API tables, coordinate drag & drop comments, PDF export via html2pdf, and multi-version routing.</p>
+      </section>
 
-      <div class="api-endpoint-card">
-        <!-- 1. Description -->
-        <div class="api-meta">
-          <h3 class="api-title">
-            <span data-lang="en">Sync Document Payload</span>
-            <span data-lang="fa">همگام‌سازی و بارگذاری داده‌های سند</span>
-          </h3>
-          <p class="api-description">
-            <span data-lang="en">Transmits serialized entity data to the processing server for cryptographic validation and storage.</span>
-            <span data-lang="fa">ارسال ساختار داده‌های سریا‌ل‌شده به سرور پردازشی جهت اعتبارسنجی رمزنگاری و ثبت در پایگاه داده.</span>
-          </p>
+      <!-- Standard API Specification Section -->
+      <section id="api-spec">
+        <h2 class="section-title">02 · API Specification</h2>
+        
+        <!-- Drag & Drop Commenting Pin Bar -->
+        <div class="api-comment-bar">
+          <div class="api-pin-bubble" draggable="true" id="dragPinBubble" title="Drag onto section to pin comment">
+            <span>📍</span> <span>Drag to Pin Comment</span>
+          </div>
+          <button class="btn-control" id="btnPinMode" onclick="togglePinMode()">
+            <span>📌</span> <span id="pinModeText">Pin Mode: Off</span>
+          </button>
         </div>
+        <div id="droppedPinsContainer"></div>
 
-        <!-- 2. Method + URL -->
-        <div class="api-url-bar">
-          <span class="http-badge post">POST</span>
-          <code class="endpoint-url">/api/v2/documents/sync</code>
-          <button class="btn-copy" onclick="copyRawText('/api/v2/documents/sync', this)">📋 <span class="copy-text">Copy URL</span></button>
-        </div>
+        <div class="api-endpoint-card">
+          <!-- Description -->
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.35rem;">Sync Data Batch</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Ingests data payloads into the processing queue.</p>
 
-        <!-- 3. Parameters Table -->
-        <h4 class="api-subheading">
-          <span data-lang="en">Request Parameters</span>
-          <span data-lang="fa">پارامترهای ورودی</span>
-        </h4>
-        <div class="table-responsive">
-          <table class="api-table">
-            <thead>
-              <tr>
-                <th><span data-lang="en">Parameter</span><span data-lang="fa">پارامتر</span></th>
-                <th><span data-lang="en">Type</span><span data-lang="fa">نوع</span></th>
-                <th><span data-lang="en">Required</span><span data-lang="fa">الزامی</span></th>
-                <th><span data-lang="en">Description</span><span data-lang="fa">توضیحات</span></th>
-                <th><span data-lang="en">Example</span><span data-lang="fa">مثال</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>session_token</code></td>
-                <td><span class="type-tag">string</span></td>
-                <td><span class="req-tag required">Required</span></td>
-                <td>
-                  <span data-lang="en">Bearer authentication token</span>
-                  <span data-lang="fa">توکن احراز هویت نشست دستگاه</span>
-                </td>
-                <td><code>"sec_9841af"</code></td>
-              </tr>
-              <tr>
-                <td><code>document_id</code></td>
-                <td><span class="type-tag">string</span></td>
-                <td><span class="req-tag required">Required</span></td>
-                <td>
-                  <span data-lang="en">Unique identifier of target document</span>
-                  <span data-lang="fa">شناسه یکتای سند مورد نظر</span>
-                </td>
-                <td><code>"doc_2026_01"</code></td>
-              </tr>
-              <tr>
-                <td><code>compress_mode</code></td>
-                <td><span class="type-tag">boolean</span></td>
-                <td><span class="req-tag optional">Optional</span></td>
-                <td>
-                  <span data-lang="en">Enable gzip compression flag (default: true)</span>
-                  <span data-lang="fa">فعال‌سازی فشرده‌سازی محتوا (پیش‌فرض: true)</span>
-                </td>
-                <td><code>true</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- 4. JSON Request/Response Samples (Strictly LTR) -->
-        <div class="json-grid">
-          <div class="code-container">
-            <div class="code-header">
-              <span class="code-lang-badge">JSON Request</span>
-              <button class="btn-copy" onclick="copyCode(this)">📋 <span class="copy-text">Copy</span></button>
-            </div>
-            <pre><code class="language-json">{
-  "document_id": "doc_2026_01",
-  "compress_mode": true,
-  "payload": {
-    "checksum": "sha256:e3b0c442...",
-    "records_count": 128
-  }
-}</code></pre>
+          <!-- Method + URL -->
+          <div class="api-url-bar">
+            <span class="http-badge post">POST</span>
+            <code class="endpoint-url">/api/v2/data/sync</code>
           </div>
 
-          <div class="code-container">
-            <div class="code-header">
-              <span class="code-lang-badge">JSON Response (200 OK)</span>
-              <button class="btn-copy" onclick="copyCode(this)">📋 <span class="copy-text">Copy</span></button>
+          <!-- Parameters Table -->
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>session_token</code></td>
+                  <td>string</td>
+                  <td>Required</td>
+                  <td>Cryptographic authorization token</td>
+                  <td><code>"tok_9981"</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- JSON Bodies (Strictly LTR) -->
+          <div class="json-grid">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-lang-badge">JSON Request</span>
+              </div>
+              <pre><code class="language-json">{
+  "document_id": "doc_101",
+  "sync_all": true
+}</code></pre>
             </div>
-            <pre><code class="language-json">{
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-lang-badge">JSON Response (200 OK)</span>
+              </div>
+              <pre><code class="language-json">{
   "status": "SUCCESS",
-  "sync_timestamp": 1772619200,
-  "processed_records": 128
+  "records_count": 42
 }</code></pre>
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- 5. Status / Error Codes Table -->
-        <h4 class="api-subheading">
-          <span data-lang="en">Error Responses</span>
-          <span data-lang="fa">پاسخ‌های خطا و کد وضعیت</span>
-        </h4>
-        <div class="table-responsive">
-          <table class="api-table">
-            <thead>
-              <tr>
-                <th><span data-lang="en">HTTP Status</span><span data-lang="fa">کد وضعیت</span></th>
-                <th><span data-lang="en">Error Code</span><span data-lang="fa">کد خطا</span></th>
-                <th><span data-lang="en">Description</span><span data-lang="fa">توضیحات و رفع خطا</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="status-badge s400">400 Bad Request</span></td>
-                <td><code>INVALID_SCHEMA</code></td>
-                <td>
-                  <span data-lang="en">The JSON payload failed schema validation against specification.</span>
-                  <span data-lang="fa">ساختار ارسالی با شمای مشخص‌شده همخوانی ندارد.</span>
-                </td>
-              </tr>
-              <tr>
-                <td><span class="status-badge s401">401 Unauthorized</span></td>
-                <td><code>EXPIRED_TOKEN</code></td>
-                <td>
-                  <span data-lang="en">The session authentication token has expired or is invalid.</span>
-                  <span data-lang="fa">توکن احراز هویت ارسال‌شده منقضی گردیده است.</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Strictly LTR Code Implementation -->
-    <section id="code">
-      <div class="section-title">
-        <div>03 · <span data-lang="en">Code Implementation</span><span data-lang="fa">پیاده‌سازی کد فنی</span></div>
-        <button class="btn-control" onclick="promptAddComment('code', 'Code Implementation')">💬 <span data-lang="en">Add Note</span><span data-lang="fa">ثبت نظر</span></button>
-      </div>
-      <div class="code-container">
-        <div class="code-header">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="code-lang-badge">JS</span>
-            <span>sync_client.js</span>
+      <section id="code">
+        <h2 class="section-title">03 · Code Implementation</h2>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang-badge">JavaScript</span>
           </div>
-          <button class="btn-copy" onclick="copyCode(this)">
-            <span>📋</span> <span class="copy-text" data-lang="en">Copy</span><span data-lang="fa" class="copy-text">کپی کد</span>
-          </button>
-        </div>
-        <pre><code class="language-javascript">// Code block is ALWAYS LTR regardless of page direction
-export async function syncDocument(endpoint, docId, token) {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ document_id: docId, compress_mode: true })
-  });
-  return await response.json();
+          <pre><code class="language-javascript">// Code is always strictly LTR
+export async function syncBatch(token) {
+  return await fetch('/api/v2/data/sync', { headers: { Authorization: token } });
 }</code></pre>
-      </div>
-    </section>
-
-    <!-- Section 4: References -->
-    <section id="references">
-      <div class="section-title">
-        <div>04 · <span data-lang="en">References & Specifications</span><span data-lang="fa">مراجع و استانداردهای معتبر</span></div>
-        <button class="btn-control" onclick="promptAddComment('references', 'References')">💬 <span data-lang="en">Add Note</span><span data-lang="fa">ثبت نظر</span></button>
-      </div>
-      <div class="card-grid">
-        <div class="card">
-          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 6px;">RFC 9110: HTTP Semantics</div>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Standard defining HTTP methods, status codes, and header fields.</p>
-          <button class="btn-control" onclick="copyRawText('https://www.rfc-editor.org/rfc/rfc9110', this)">
-            🔗 <span data-lang="en">Copy Reference URL</span><span data-lang="fa">کپی لینک مرجع</span>
-          </button>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
   </div>
 
-  <!-- Version History Modal -->
-  <div id="versionHistoryModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
+  <!-- Slide-Out Comment Drawer -->
+  <div id="commentDrawerBackdrop" class="comment-drawer-backdrop" onclick="toggleCommentDrawer()"></div>
+  <aside id="commentDrawer" class="comment-drawer">
+    <div class="drawer-header">
+      <div style="font-weight: 700;">💬 API Review Comments</div>
+      <button onclick="toggleCommentDrawer()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+    </div>
+    <div class="drawer-body" id="drawerCommentsList"></div>
+    <div class="drawer-footer">
+      <button class="btn-control" onclick="exportCommentsJSON()">📥 Export JSON (for AI)</button>
+      <button class="btn-control" onclick="embedCommentsAndDownloadHTML()">💾 Save & Embed in HTML</button>
+    </div>
+  </aside>
+
+  <!-- Pin Coordinate Modal -->
+  <div id="pinInputModal" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 style="font-size: 16px;">
-          <span data-lang="en">Document Version Changelog</span>
-          <span data-lang="fa">تاریخچه تغییرات و نسخه‌ها</span>
-        </h3>
-        <button class="btn-close-modal" onclick="closeVersionModal()">✕</button>
-      </div>
-      <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
-        <div style="padding: 12px; background: var(--bg-base); border-radius: 8px; border: 1px solid var(--border-subtle);">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <strong style="color: var(--primary);">v2.0.0 (Current)</strong>
-            <span style="font-size: 12px; color: var(--text-dim);">2026-10-03</span>
-          </div>
-          <ul style="padding-inline-start: 18px; font-size: 13px; color: var(--text-muted);">
-            <li>Strict LTR code blocks for both RTL and LTR view modes.</li>
-            <li>Standardized API Documentation table pattern with parameters, JSON, and errors.</li>
-            <li>Interactive inline comments system with JSON AI export and HTML embedding.</li>
-            <li>1-Click PDF export optimization.</li>
-          </ul>
-        </div>
-        <div style="padding: 12px; background: var(--bg-base); border-radius: 8px; border: 1px solid var(--border-subtle); opacity: 0.75;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <strong>v1.0.0</strong>
-            <span style="font-size: 12px; color: var(--text-dim);">2026-09-15</span>
-          </div>
-          <ul style="padding-inline-start: 18px; font-size: 13px; color: var(--text-muted);">
-            <li>Initial documentation release.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reviews & Comments Modal -->
-  <div id="reviewModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
-    <div class="modal-box" style="max-width: 680px;">
-      <div class="modal-header">
-        <h3 style="font-size: 16px;">
-          💬 <span data-lang="en">Review Comments & Feedback</span>
-          <span data-lang="fa">نظرات و بازخوردهای بازبینی</span>
-        </h3>
-        <button class="btn-close-modal" onclick="closeReviewModal()">✕</button>
+        <div style="font-weight: 700;">📍 Add Pinned Comment</div>
+        <button onclick="closePinModal()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
       </div>
       <div class="modal-body">
-        <div id="commentsList" style="max-height: 280px; overflow-y: auto; margin-bottom: 16px;">
-          <!-- Dynamically populated comments -->
-        </div>
-
-        <div style="background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 14px;">
-          <h4 style="font-size: 13.5px; margin-bottom: 10px; color: var(--text-main);">
-            <span data-lang="en">Add New Comment</span>
-            <span data-lang="fa">ثبت نظر جدید</span>
-          </h4>
-          <input type="hidden" id="newCommentSectionId" value="overview">
-          <input type="text" id="newCommentAuthor" placeholder="Your Name / Reviewer Role (e.g. Lead Architect)" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-main); font-size: 13px; margin-bottom: 8px;">
-          <textarea id="newCommentText" rows="3" placeholder="Enter your review feedback or suggested change..." style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-main); font-size: 13px; resize: vertical; margin-bottom: 8px; font-family: inherit;"></textarea>
-          <div style="display: flex; justify-content: flex-end;">
-            <button class="btn-control" onclick="submitNewComment()" style="background: var(--primary); color: #000; font-weight: 700;">
-              <span>➕</span> <span data-lang="en">Submit Comment</span><span data-lang="fa">افزودن نظر</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-control" onclick="exportCommentsJSON()">
-          <span>📥</span> <span data-lang="en">Export JSON (for AI)</span><span data-lang="fa">استخراج JSON (برای AI)</span>
-        </button>
-        <button class="btn-control" onclick="embedCommentsAndDownloadHTML()">
-          <span>💾</span> <span data-lang="en">Save & Embed in HTML</span><span data-lang="fa">امبد در سند و دانلود HTML</span>
-        </button>
+        <div id="pinCoordDisplay" style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Coordinate: (X: 0%, Y: 0%)</div>
+        <input type="text" id="pinAuthorInput" placeholder="Reviewer Role (e.g. Lead Architect)" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-strong); border-radius: 6px;">
+        <textarea id="pinTextInput" rows="3" placeholder="Enter review note..." style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-strong); border-radius: 6px;"></textarea>
+        <button class="btn-control" onclick="saveDroppedPin()" style="background: var(--primary); color: #000; font-weight: 700; width: 100%; justify-content: center;">Save Pin</button>
       </div>
     </div>
   </div>
 
-  <!-- Embedded Comments Storage Tag -->
   <script id="docEmbeddedComments" type="application/json">[]</script>
 
   <script>
-    // Syntax Highlighting
     document.addEventListener('DOMContentLoaded', () => {
       hljs.highlightAll();
-      initScrollProgress();
-      loadComments();
+      initPinCommentSystem();
     });
 
-    // Language Toggle
-    let currentLang = localStorage.getItem('doc_lang') || 'en';
-    function setLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('doc_lang', lang);
-      document.documentElement.setAttribute('lang', lang);
-      document.documentElement.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
-      document.getElementById('langText').textContent = lang === 'fa' ? 'English' : 'فارسی';
-    }
-    function toggleLanguage() { setLanguage(currentLang === 'en' ? 'fa' : 'en'); }
-    setLanguage(currentLang);
-
-    // Theme Toggle
+    // Theme & Language
     let currentTheme = localStorage.getItem('doc_theme') || 'dark';
-    function setTheme(theme) {
-      currentTheme = theme;
-      localStorage.setItem('doc_theme', theme);
-      document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('themeIcon').textContent = theme === 'dark' ? '☀️' : '🌙';
-      document.getElementById('themeText').textContent = theme === 'dark' ? 'Light' : 'Dark';
-      const d = document.getElementById('hljs-theme-dark');
-      const l = document.getElementById('hljs-theme-light');
-      if (d && l) { d.disabled = (theme === 'light'); l.disabled = (theme === 'dark'); }
+    function setTheme(t) {
+      currentTheme = t;
+      localStorage.setItem('doc_theme', t);
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
     }
     function toggleTheme() { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     setTheme(currentTheme);
 
+    let currentLang = localStorage.getItem('doc_lang') || 'en';
+    function setLanguage(l) {
+      currentLang = l;
+      localStorage.setItem('doc_lang', l);
+      document.documentElement.lang = l;
+      document.documentElement.dir = l === 'fa' ? 'rtl' : 'ltr';
+    }
+    function toggleLanguage() { setLanguage(currentLang === 'en' ? 'fa' : 'en'); }
+    setLanguage(currentLang);
+
     // Sidebar
     function toggleSidebar() {
       document.getElementById('catalogSidebar').classList.toggle('open');
-      document.getElementById('sidebarBackdrop').classList.toggle('active');
-    }
-    function closeSidebarOnMobile() {
-      if (window.innerWidth <= 1024) {
-        document.getElementById('catalogSidebar').classList.remove('open');
-        document.getElementById('sidebarBackdrop').classList.remove('active');
-      }
     }
 
-    // Scrollspy & Reading Progress
-    const sectionIds = ['overview', 'api-spec', 'code', 'references'];
-    function initScrollProgress() {
-      const pBar = document.getElementById('readingProgressBar');
-      const pEn = document.getElementById('progressIndexEn');
-      const pFa = document.getElementById('progressIndexFa');
-      const faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-      window.addEventListener('scroll', () => {
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-        pBar.style.width = scrolled + '%';
-        let idx = 1;
-        sectionIds.forEach((id, i) => {
-          const el = document.getElementById(id);
-          if (el && el.getBoundingClientRect().top <= 200) idx = i + 1;
-        });
-        if (pEn) pEn.textContent = idx;
-        if (pFa) pFa.textContent = idx.toString().replace(/\d/g, d => faDigits[d]);
-        document.querySelectorAll('.sidebar-link').forEach((link, i) => {
-          link.classList.toggle('active', i + 1 === idx);
-        });
-      });
-    }
-
-    // Copy Code Helper
-    function copyCode(btn) {
-      const el = btn.closest('.code-container').querySelector('pre code');
-      if (!el) return;
-      navigator.clipboard.writeText(el.innerText).then(() => {
-        btn.classList.add('copied');
-        const txt = btn.querySelector('.copy-text');
-        if (txt) txt.textContent = currentLang === 'fa' ? '✓ کپی شد!' : '✓ Copied!';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          if (txt) txt.textContent = currentLang === 'fa' ? 'کپی کد' : 'Copy';
-        }, 2000);
-      });
-    }
-
-    function copyRawText(text, btn) {
-      navigator.clipboard.writeText(text).then(() => {
-        btn.classList.add('copied');
-        setTimeout(() => btn.classList.remove('copied'), 2000);
-      });
-    }
-
-    // Version Control Modal
+    // Version Navigation
     function switchVersion(ver) {
-      openVersionModal();
-    }
-    function openVersionModal() {
-      document.getElementById('versionHistoryModal').classList.add('active');
-    }
-    function closeVersionModal() {
-      document.getElementById('versionHistoryModal').classList.remove('active');
+      if (ver === '1.2.0') window.location.href = 'examples/v1.2.0/remote-compose.html';
+      else if (ver === '1.0.0') window.location.href = 'examples/v1.0.0/remote-compose.html';
     }
 
-    // Reviews & Comments System
-    let comments = [];
-    function loadComments() {
-      try {
-        const embeddedTag = document.getElementById('docEmbeddedComments');
-        const embedded = embeddedTag ? JSON.parse(embeddedTag.textContent || '[]') : [];
-        const local = JSON.parse(localStorage.getItem('doc_comments') || '[]');
-        const map = new Map();
-        [...embedded, ...local].forEach(c => map.set(c.id, c));
-        comments = Array.from(map.values());
-      } catch (e) {
-        comments = [];
+    // PDF Export via html2pdf
+    function exportDocumentToPDF() {
+      const element = document.querySelector('.main-content');
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: 'Technical-Documentation.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1.5, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      if (typeof html2pdf !== 'undefined') {
+        html2pdf().set(opt).from(element).save();
+      } else {
+        window.print();
       }
-      renderComments();
     }
 
-    function renderComments() {
-      const countEl = document.getElementById('commentCount');
-      if (countEl) countEl.textContent = comments.length;
-      const list = document.getElementById('commentsList');
-      if (!list) return;
+    // Pin Commenting System on Section #api-spec
+    let apiPins = [];
+    let isPinModeActive = false;
+    let pendingPinCoord = { x: 0, y: 0 };
 
-      if (comments.length === 0) {
-        list.innerHTML = `<div style="color: var(--text-dim); text-align: center; padding: 20px;">No comments recorded yet. Add your review notes below!</div>`;
-        return;
+    function initPinCommentSystem() {
+      const sec = document.getElementById('api-spec');
+      const bubble = document.getElementById('dragPinBubble');
+      if (bubble) {
+        bubble.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', 'pin');
+        });
       }
-
-      list.innerHTML = comments.map(c => `
-        <div class="comment-item">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="comment-target-badge">#${c.sectionId}</span>
-            <span style="font-size: 11px; color: var(--text-dim);">${c.author || 'Reviewer'} · ${new Date(c.createdAt).toLocaleDateString()}</span>
-          </div>
-          ${c.selectedQuote ? `<div class="comment-quote">"${c.selectedQuote}"</div>` : ''}
-          <div style="color: var(--text-main); margin: 6px 0;">${c.text}</div>
-          <div style="text-align: right;">
-            <button onclick="deleteComment('${c.id}')" style="background: none; border: none; color: var(--danger); font-size: 11.5px; cursor: pointer;">Delete</button>
-          </div>
-        </div>
-      `).join('');
+      if (sec) {
+        sec.addEventListener('dragover', (e) => e.preventDefault());
+        sec.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const r = sec.getBoundingClientRect();
+          openPinInputAt(Math.round(((e.clientX - r.left)/r.width)*100), Math.round(((e.clientY - r.top)/r.height)*100));
+        });
+        sec.addEventListener('click', (e) => {
+          if (!isPinModeActive || e.target.closest('.api-comment-bar') || e.target.closest('.modal-overlay')) return;
+          const r = sec.getBoundingClientRect();
+          openPinInputAt(Math.round(((e.clientX - r.left)/r.width)*100), Math.round(((e.clientY - r.top)/r.height)*100));
+        });
+      }
+      loadApiPins();
     }
 
-    function promptAddComment(sectionId, title) {
-      document.getElementById('newCommentSectionId').value = sectionId;
-      openReviewModal();
+    function togglePinMode() {
+      isPinModeActive = !isPinModeActive;
+      document.getElementById('pinModeText').textContent = isPinModeActive ? 'Pin Mode: ACTIVE' : 'Pin Mode: Off';
     }
 
-    function submitNewComment() {
-      const text = document.getElementById('newCommentText').value.trim();
-      const author = document.getElementById('newCommentAuthor').value.trim() || 'Reviewer';
-      const sectionId = document.getElementById('newCommentSectionId').value;
+    function openPinInputAt(x, y) {
+      pendingPinCoord = { x, y };
+      document.getElementById('pinCoordDisplay').textContent = 'Coordinate: (X: ' + x + '%, Y: ' + y + '%)';
+      document.getElementById('pinTextInput').value = '';
+      document.getElementById('pinInputModal').classList.add('active');
+    }
+
+    function closePinModal() {
+      document.getElementById('pinInputModal').classList.remove('active');
+    }
+
+    function saveDroppedPin() {
+      const text = document.getElementById('pinTextInput').value.trim();
+      const author = document.getElementById('pinAuthorInput').value.trim() || 'Reviewer';
       if (!text) return;
-
-      const comment = {
-        id: 'c_' + Date.now(),
-        sectionId: sectionId,
+      apiPins.push({
+        id: 'pin_' + Date.now(),
+        x: pendingPinCoord.x,
+        y: pendingPinCoord.y,
         author: author,
         text: text,
         createdAt: new Date().toISOString()
-      };
-
-      comments.push(comment);
-      localStorage.setItem('doc_comments', JSON.stringify(comments));
-      document.getElementById('newCommentText').value = '';
-      renderComments();
+      });
+      localStorage.setItem('starter_pins', JSON.stringify(apiPins));
+      closePinModal();
+      renderPins();
     }
 
-    function deleteComment(id) {
-      comments = comments.filter(c => c.id !== id);
-      localStorage.setItem('doc_comments', JSON.stringify(comments));
-      renderComments();
+    function loadApiPins() {
+      try {
+        const embeddedTag = document.getElementById('docEmbeddedComments');
+        const embedded = embeddedTag ? JSON.parse(embeddedTag.textContent || '[]') : [];
+        const local = JSON.parse(localStorage.getItem('starter_pins') || '[]');
+        apiPins = [...embedded, ...local];
+      } catch (e) { apiPins = []; }
+      renderPins();
     }
 
-    function openReviewModal() {
-      renderComments();
-      document.getElementById('reviewModal').classList.add('active');
-    }
-    function closeReviewModal() {
-      document.getElementById('reviewModal').classList.remove('active');
+    function renderPins() {
+      const cont = document.getElementById('droppedPinsContainer');
+      if (cont) {
+        cont.innerHTML = apiPins.map((p, i) => `
+          <div class="dropped-comment-pin" style="left: ${p.x}%; top: ${p.y}%;" onclick="toggleCommentDrawer(true)">
+            <span>${i + 1}</span>
+          </div>
+        `).join('');
+      }
+      const count = document.getElementById('commentCount');
+      if (count) count.textContent = apiPins.length;
+      const list = document.getElementById('drawerCommentsList');
+      if (list) {
+        list.innerHTML = apiPins.map((p, i) => `
+          <div class="comment-item">
+            <div style="font-weight: 700; color: var(--primary);">Pin #${i + 1} (X: ${p.x}%, Y: ${p.y}%)</div>
+            <div style="margin: 0.25rem 0;">${p.text}</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">${p.author}</div>
+          </div>
+        `).join('') || '<div style="color: var(--text-dim); text-align: center;">No comments yet.</div>';
+      }
     }
 
-    function closeModalOnBackdrop(e, modal) {
-      if (e.target === modal) modal.classList.remove('active');
+    function toggleCommentDrawer(force) {
+      const d = document.getElementById('commentDrawer');
+      const b = document.getElementById('commentDrawerBackdrop');
+      if (force === true) { d.classList.add('open'); b.classList.add('active'); }
+      else if (force === false) { d.classList.remove('open'); b.classList.remove('active'); }
+      else { d.classList.toggle('open'); b.classList.toggle('active'); }
     }
 
-    // Export Comments as JSON for AI
     function exportCommentsJSON() {
-      const exportData = {
-        document: document.title,
-        exportedAt: new Date().toISOString(),
-        commentsCount: comments.length,
-        comments: comments
-      };
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `doc-review-feedback-${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
+      const data = { exportedAt: new Date().toISOString(), pins: apiPins };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'api-review-pins.json'; a.click();
     }
 
-    // Embed Comments into HTML and Download File
     function embedCommentsAndDownloadHTML() {
       const clone = document.documentElement.cloneNode(true);
-      const scriptTag = clone.querySelector('#docEmbeddedComments');
-      if (scriptTag) {
-        scriptTag.textContent = JSON.stringify(comments, null, 2);
-      }
-      const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
-      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `documentation-with-embedded-reviews.html`;
-      a.click();
-      URL.revokeObjectURL(url);
+      const tag = clone.querySelector('#docEmbeddedComments');
+      if (tag) tag.textContent = JSON.stringify(apiPins, null, 2);
+      const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'doc-with-comments.html'; a.click();
     }
   </script>
 </body>

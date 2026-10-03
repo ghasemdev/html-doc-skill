@@ -518,7 +518,7 @@
     pre code { background: transparent !important; padding: 0 !important; }
 
     /* Tables */
-    .table-responsive, .table-container {
+    .table-responsive {
       width: 100%;
       max-width: 100% !important;
       overflow-x: auto !important;
@@ -830,79 +830,12 @@
       .progress-pill, button[title="View Version Changelog"] { display: none !important; }
       .section-title { font-size: 1.25rem !important; flex-wrap: wrap !important; word-break: break-word !important; }
     }
-
-    @media (max-width: 768px) {
-      .top-navbar {
-        padding: 0.35rem 0.5rem !important;
-        height: 48px !important;
-        width: 100% !important;
-        max-width: 100vw !important;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-      }
-      .brand-section {
-        gap: 0.3rem !important;
-        min-width: 0 !important;
-        flex: 0 1 auto !important;
-      }
-      .brand-logo {
-        width: 26px !important;
-        height: 26px !important;
-        font-size: 0.85rem !important;
-      }
-      .brand-title {
-        display: none !important;
-      }
-      .brand-pill {
-        display: none !important;
-      }
-      .btn-sidebar-toggle {
-        width: 32px !important;
-        height: 32px !important;
-        min-height: 32px !important;
-        padding: 0 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-      }
-      .btn-sidebar-toggle span:not(:first-child) {
-        display: none !important;
-      }
-      .nav-controls {
-        gap: 0.2rem !important;
-        flex: 0 0 auto !important;
-      }
-      .progress-pill, .btn-changelog {
-        display: none !important;
-      }
-      .version-select {
-        width: 62px !important;
-        max-width: 62px !important;
-        height: 32px !important;
-        padding: 0 0.15rem !important;
-        font-size: 0.72rem !important;
-      }
-      .btn-control {
-        width: 32px !important;
-        height: 32px !important;
-        min-height: 32px !important;
-        padding: 0 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 0.85rem !important;
-      }
-      .btn-control .btn-label {
-        display: none !important;
-      }
-      #commentCount {
-        font-size: 0.65rem !important;
-      }
-    }
-
   </style>
 </head>
 <body>
+  <div class="version-archive-banner">
+    <span>⚠️ <span data-lang="en">You are viewing initial baseline version <strong>v1.0.0</strong>.</span><span data-lang="fa">شما در حال مشاهده نسخه اولیه پایه <strong>v1.0.0</strong> هستید.</span> <a href="../v2.0.0/remote-compose.html" class="doc-link"><span data-lang="en">Switch to Latest (v2.0.0) →</span><span data-lang="fa">انتقال به نسخه جاری (v2.0.0) ←</span></a></span>
+  </div>
 
   <!-- Top Scroll Progress Bar -->
   <div id="scrollProgressBar"></div>
@@ -929,11 +862,11 @@
     <div class="nav-controls">
       <!-- Version Selector & Changelog -->
       <select id="docVersionSelect" class="version-select" onchange="switchVersion(this.value)" title="RemoteCompose Specification Version">
-        <option value="2.0.0" selected>v2.0.0 (Latest)</option>
+        <option value="2.0.0">v2.0.0 (Latest)</option>
         <option value="1.2.0">v1.2.0</option>
-        <option value="1.0.0">v1.0.0</option>
+        <option value="1.0.0" selected>v1.0.0 (Baseline)</option>
       </select>
-      <button class="btn-control" onclick="openVersionModal()" title="View Version Changelog" class="btn-control btn-changelog">📜</button>
+      <button class="btn-control" onclick="openVersionModal()" title="View Version Changelog">📜</button>
 
       <!-- Section Counter Pill -->
       <div class="progress-pill">
