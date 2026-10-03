@@ -58,6 +58,7 @@
       --link-hover: #7dd3fc;
       --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
       --radius: 12px;
+      --nav-height: 52px;
     }
 
     [data-theme="light"] {
@@ -88,32 +89,33 @@
       --link-hover: #0369a1;
       --shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.08);
       --radius: 12px;
+      --nav-height: 52px;
     }
 
-    /* Reset & Base Styles */
+    /* Reset & Base */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    html { overflow-x: clip; }
     html, body {
-      overflow-x: hidden !important;
-      max-width: 100vw !important;
-      width: 100% !important;
+      max-width: 100vw;
+      width: 100%;
       scroll-behavior: smooth;
       background-color: var(--bg-base);
       color: var(--text-main);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       line-height: 1.65;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      padding-top: var(--nav-height); /* Offset for permanently fixed navbar */
     }
 
-    /* Bilingual Data-Lang Filter */
+    /* Bilingual Filters */
     html[lang="en"] [data-lang="fa"] { display: none !important; }
     html[lang="fa"] [data-lang="en"] { display: none !important; }
 
-    /* Persian Orthography Enforcement */
+    /* RTL Typography */
     html[lang="fa"] body {
       font-family: 'Vazirmatn', Tahoma, sans-serif;
       line-height: 1.85 !important;
@@ -136,35 +138,37 @@
       transition: width 0.08s ease;
     }
 
-    /* Sticky Navbar */
+    /* Permanently Fixed Navbar */
     .top-navbar {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
       z-index: 1500;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.65rem 1.25rem;
+      padding: 0 1rem;
       background: var(--bg-surface);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-subtle);
       width: 100%;
-      max-width: 100vw;
       box-sizing: border-box;
     }
 
     .brand-section {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
       min-width: 0;
-      flex-shrink: 1;
+      flex-shrink: 0;
     }
 
     .brand-logo {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 8px;
       background: linear-gradient(135deg, var(--primary), var(--accent));
       display: flex;
@@ -172,61 +176,38 @@
       justify-content: center;
       color: #ffffff;
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 1rem;
       box-shadow: 0 0 15px var(--primary-glow);
       flex-shrink: 0;
     }
 
     .brand-title {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
       white-space: nowrap;
-    }
-
-    .brand-pill {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      background: var(--badge-bg);
-      color: var(--primary);
-      border: 1px solid var(--border-subtle);
     }
 
     .nav-controls {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.35rem;
       flex-shrink: 0;
     }
-
-    .progress-pill {
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      background: var(--bg-surface-elevated);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      white-space: nowrap;
-    }
-    .progress-pill strong { color: var(--primary); }
 
     .btn-control {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      justify-content: center;
+      gap: 0.25rem;
       background: var(--bg-surface-elevated);
       color: var(--text-main);
       border: 1px solid var(--border-subtle);
-      padding: 0.38rem 0.75rem;
+      height: 34px;
+      min-height: 34px;
+      padding: 0 0.55rem;
       border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 600;
@@ -238,28 +219,44 @@
     }
     .btn-control:hover {
       background: var(--bg-surface-hover);
-      border-color: var(--border-strong);
-      transform: translateY(-1px);
+      border-color: var(--primary);
+    }
+    .btn-control.active-pin-mode {
+      background: var(--primary) !important;
+      color: #000 !important;
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+    #commentCount {
+      font-size: 0.72rem;
+      background: var(--primary);
+      color: #000;
+      padding: 1px 5px;
+      border-radius: 999px;
+      font-weight: 800;
+      margin-left: 2px;
     }
 
-    .btn-sidebar-toggle { display: none; }
+    .btn-sidebar-toggle {
+      width: 34px;
+      padding: 0;
+    }
 
-    /* Version Selector */
     .version-select {
       background: var(--bg-surface-elevated);
       border: 1px solid var(--border-strong);
       color: var(--primary);
       font-weight: 700;
-      font-size: 0.8rem;
-      padding: 0.35rem 0.6rem;
+      font-size: 0.78rem;
+      height: 34px;
+      padding: 0 0.4rem;
       border-radius: 8px;
       cursor: pointer;
       outline: none;
       font-family: inherit;
     }
-    .version-select:hover { border-color: var(--primary); }
 
-    /* Archive Version Warning Banner */
+    /* Archive Version Banner */
     .version-archive-banner {
       background: rgba(251, 191, 36, 0.12);
       border-bottom: 1px solid rgba(251, 191, 36, 0.3);
@@ -270,34 +267,30 @@
       font-weight: 600;
     }
 
-    /* Layout: Sidebar + Main Content */
+    /* Layout & Persistent Sticky Catalog Sidebar */
     .app-layout {
       display: flex;
-      min-height: calc(100vh - 60px);
+      min-height: calc(100vh - var(--nav-height));
       width: 100%;
-      max-width: 100%;
       min-width: 0;
-      overflow-x: hidden;
     }
 
-    /* Catalog Sidebar */
     .catalog-sidebar {
       width: min(85vw, 290px);
       flex-shrink: 0;
       background: var(--bg-surface);
       border-inline-end: 1px solid var(--border-subtle);
       position: sticky;
-      top: 60px;
-      height: calc(100vh - 60px);
+      top: var(--nav-height);
+      height: calc(100vh - var(--nav-height));
       overflow-y: auto;
       padding: 1.25rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
       scrollbar-width: thin;
       scrollbar-color: var(--border-strong) transparent;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 100;
     }
 
     .sidebar-header {
@@ -331,11 +324,11 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      padding: 0.55rem 0.75rem;
+      padding: 0.5rem 0.75rem;
       border-radius: 8px;
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 500;
       transition: all 0.15s ease;
       line-height: 1.4;
@@ -351,18 +344,18 @@
 
     /* Main Content Area */
     .main-content {
+      overflow-x: hidden; /* main-content guard */
       flex: 1;
       min-width: 0 !important;
       max-width: 100% !important;
-      width: 100% !important;
-      overflow-x: hidden !important;
       padding: 2.25rem 3rem;
       box-sizing: border-box;
     }
 
     section {
       margin-bottom: 3.5rem;
-      scroll-margin-top: 85px;
+      scroll-margin-top: calc(var(--nav-height) + 20px);
+      position: relative;
     }
 
     .section-title {
@@ -388,30 +381,33 @@
       border: 1px solid var(--border-subtle);
     }
 
-    /* Distinct Inline Hyperlinks */
+    /* STRICTLY LEFT-TO-RIGHT (LTR) HYPERLINKS & CODE */
+    a, a.doc-link, p a, li a, .ref-url, .endpoint-url {
+      direction: ltr !important;
+      text-align: left !important;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
     a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control) {
       color: var(--link-color);
       text-decoration: underline;
       text-decoration-thickness: 1.5px;
       text-underline-offset: 3px;
       font-weight: 500;
-      transition: color 0.15s ease, text-decoration-color 0.15s ease;
+      transition: color 0.15s ease;
     }
-    a.doc-link:hover, p a:hover, li a:not(.sidebar-link):not(.btn-control):hover {
-      color: var(--link-hover);
-      text-decoration-color: var(--primary);
-    }
+    a.doc-link:hover, p a:hover { color: var(--link-hover); }
 
     p { margin-bottom: 1.25rem; font-size: 0.96rem; color: var(--text-main); }
 
     /* Cards & Grids */
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem; }
     .feature-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius);
-      padding: 1.4rem;
+      padding: 1.35rem;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
@@ -439,12 +435,7 @@
     .alert-caution .alert-header { color: var(--danger); }
 
     /* STRICTLY LEFT-TO-RIGHT (LTR) CODE BLOCKS IN ALL MODES */
-    .code-container,
-    pre,
-    code,
-    .code-header,
-    .endpoint-url,
-    .json-preview {
+    .code-container, pre, code, .code-header, .endpoint-url, .json-preview {
       direction: ltr !important;
       text-align: left !important;
       unicode-bidi: isolate;
@@ -503,6 +494,7 @@
       font-family: inherit;
     }
     .btn-copy:hover { background: var(--bg-surface-hover); color: var(--text-main); }
+    .btn-copy.copied { background: var(--success-bg) !important; color: var(--success) !important; border-color: var(--success) !important; }
 
     pre {
       margin: 0;
@@ -517,9 +509,9 @@
     }
     pre code { background: transparent !important; padding: 0 !important; }
 
-    /* Tables */
-    .table-responsive {
-      width: 100%;
+    /* MANDATORY HORIZONTAL SCROLL FOR ALL TABLES */
+    .table-container, .table-responsive {
+      width: 100% !important;
       max-width: 100% !important;
       overflow-x: auto !important;
       -webkit-overflow-scrolling: touch;
@@ -527,9 +519,22 @@
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius);
       box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) var(--bg-surface-elevated);
+    }
+    .table-container::-webkit-scrollbar, .table-responsive::-webkit-scrollbar {
+      height: 7px;
+    }
+    .table-container::-webkit-scrollbar-track, .table-responsive::-webkit-scrollbar-track {
+      background: var(--bg-surface-elevated);
+    }
+    .table-container::-webkit-scrollbar-thumb, .table-responsive::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
     }
 
     table {
+      min-width: 650px !important; /* Enforces spacious columns and triggers horizontal scroll on mobile */
       width: 100%;
       border-collapse: collapse;
       font-size: 0.88rem;
@@ -571,7 +576,7 @@
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      min-height: 300px;
+      min-height: 280px;
       max-width: 100% !important;
       overflow: hidden !important;
     }
@@ -589,8 +594,7 @@
     .stack-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.35rem; }
     .stack-item { display: flex; justify-content: space-between; padding: 0.25rem 0.5rem; background: rgba(255, 255, 255, 0.02); border-radius: 4px; font-size: 0.78rem; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
 
-    /* Standardized API Documentation Styles */
-    #api-endpoints { position: relative; }
+    /* API Documentation Styles */
     .api-endpoint-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -652,52 +656,23 @@
     .status-badge.s503 { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
     .json-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
 
-    /* Coordinate Pin Drop on Section 10 */
-    .api-comment-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      background: var(--bg-surface-elevated);
-      border: 1px dashed var(--primary);
-      padding: 0.6rem 0.9rem;
-      border-radius: 8px;
-      margin: 1rem 0 1.25rem;
-      flex-wrap: wrap;
-    }
-    .api-pin-bubble {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #000;
-      font-weight: 700;
-      font-size: 0.8rem;
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
-      cursor: grab;
-      user-select: none;
-      box-shadow: 0 4px 12px var(--primary-glow);
-    }
-    .api-pin-bubble:active { cursor: grabbing; transform: scale(1.05); }
-    .pin-hint { font-size: 0.78rem; color: var(--text-muted); flex: 1; min-width: 180px; }
-
+    /* Global Coordinate Pins */
     .dropped-comment-pin {
       position: absolute;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50% 50% 50% 0;
       background: var(--primary);
       color: #000;
       font-weight: 800;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       display: flex;
       align-items: center;
       justify-content: center;
       transform: translate(-50%, -100%) rotate(-45deg);
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(56, 189, 248, 0.6);
-      z-index: 50;
+      z-index: 80;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .dropped-comment-pin span { transform: rotate(45deg); }
@@ -707,7 +682,7 @@
       box-shadow: 0 0 20px #34d399;
     }
 
-    /* Slide-Out Comment Drawer */
+    /* Slide-Out Comment Drawer (Guaranteed Zero Mobile Leakage) */
     .comment-drawer-backdrop {
       position: fixed;
       inset: 0;
@@ -716,9 +691,15 @@
       z-index: 2500;
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
       transition: opacity 0.25s ease, visibility 0.25s ease;
     }
-    .comment-drawer-backdrop.active { opacity: 1; visibility: visible; }
+    .comment-drawer-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
     .comment-drawer {
       position: fixed;
       top: 0;
@@ -730,13 +711,19 @@
       display: flex;
       flex-direction: column;
       box-shadow: -10px 0 40px rgba(0,0,0,0.6);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, visibility 0.2s ease;
+      visibility: hidden;
+      pointer-events: none;
+      opacity: 0;
     }
     html[dir="ltr"] .comment-drawer { right: 0; transform: translateX(100%); }
     html[dir="rtl"] .comment-drawer { left: 0; border-inline-start: none; border-inline-end: 1px solid var(--border-strong); transform: translateX(-100%); }
-    .comment-drawer.open { transform: translateX(0) !important; }
+    .comment-drawer.open {
+      visibility: visible !important;
+      pointer-events: auto !important;
+      opacity: 1 !important;
+      transform: translateX(0) !important;
+    }
     .drawer-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
     .drawer-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
     .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -747,40 +734,77 @@
 
     /* Modals */
     .modal-overlay {
-      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(6px); z-index: 3000; justify-content: center; align-items: center; padding: 1rem;
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
     }
     .modal-overlay.active { display: flex; }
     .modal-box {
-      background: var(--bg-surface); border: 1px solid var(--border-strong);
-      border-radius: var(--radius); max-width: 600px; width: 100%; max-height: 85vh;
-      overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7); display: flex; flex-direction: column;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      max-width: 480px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
-    .modal-header { padding: 1.1rem 1.35rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
-    .modal-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
-    .modal-body { padding: 1.35rem; flex: 1; overflow-y: auto; }
-    .btn-close-modal { background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; line-height: 1; }
-    .btn-close-modal:hover { color: var(--text-main); }
-    .changelog-entry { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 1rem; margin-bottom: 0.85rem; }
-    .changelog-entry.current { border-inline-start: 4px solid var(--primary); }
-    .changelog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-    .changelog-tag { font-weight: 700; color: var(--primary); font-size: 0.85rem; }
-    .changelog-date { font-size: 0.75rem; color: var(--text-dim); }
-    .changelog-items { padding-inline-start: 1.25rem; font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 1.25rem; }
+    .btn-close-modal { background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
 
-    /* Print Stylesheet for High-Quality PDF Export */
-    @media print {
-      header.top-navbar, .catalog-sidebar, .sidebar-backdrop, .comment-drawer,
-      .comment-drawer-backdrop, .btn-control, .btn-copy, .btn-copy-ref, .modal-overlay,
-      #scrollProgressBar, .sim-controls, .sim-monitor, .api-comment-bar, .dropped-comment-pin {
-        display: none !important;
-      }
-      body { background: #ffffff !important; color: #000000 !important; font-size: 10.5pt; }
-      .app-layout { display: block !important; }
-      .main-content { max-width: 100% !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
-      .feature-card, .api-endpoint-card, .code-container, .sim-card, table, figure { break-inside: avoid; page-break-inside: avoid; }
-      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    /* References Styling */
+    .references-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.25rem; }
+    .ref-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
     }
+    .ref-info { flex: 1; min-width: 250px; }
+    .ref-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--badge-bg);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.35rem;
+    }
+    .ref-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.3rem; }
+    .ref-url { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: var(--link-color); word-break: break-all; }
+    .btn-copy-ref {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-copy-ref:hover { background: var(--bg-surface-hover); border-color: var(--primary); color: var(--primary); }
+    .btn-copy-ref.copied { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
 
     /* Mobile Responsive Optimizations */
     @media (max-width: 1024px) {
@@ -790,14 +814,26 @@
     @media (max-width: 820px) {
       .btn-sidebar-toggle { display: inline-flex; }
       .catalog-sidebar {
-        position: fixed; top: 0; inset-inline-start: 0; height: 100vh; z-index: 2100;
-        transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        position: fixed;
+        top: 0;
+        inset-inline-start: 0;
+        height: 100vh;
+        z-index: 2100;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: 10px 0 30px rgba(0,0,0,0.5);
       }
       html[dir="rtl"] .catalog-sidebar { transform: translateX(100%); }
       .catalog-sidebar.open { transform: translateX(0) !important; }
       .btn-close-sidebar { display: block; }
-      .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 2050; display: none; }
+      .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 2050;
+        display: none;
+      }
       .sidebar-backdrop.active { display: block; }
       .main-content { padding: 1.25rem 0.85rem !important; }
       .json-grid { grid-template-columns: 1fr; }
@@ -805,30 +841,68 @@
 
     @media (max-width: 768px) {
       .top-navbar {
-        padding: 0.4rem 0.6rem !important;
-        height: 52px !important;
-        box-sizing: border-box !important;
+        padding: 0 0.5rem !important;
+        height: var(--nav-height) !important;
       }
-      .brand-section { gap: 0.35rem !important; flex: 0 0 auto !important; }
       .brand-title { display: none !important; }
-      .btn-sidebar-toggle {
-        width: 34px !important; height: 34px !important; padding: 0 !important; margin: 0 !important;
-        display: inline-flex !important; align-items: center !important; justify-content: center !important;
-      }
-      .btn-sidebar-toggle span:not(:first-child) { display: none !important; }
-      .nav-controls { gap: 0.25rem !important; margin: 0 !important; flex: 0 0 auto !important; }
+      .brand-section { gap: 0.35rem !important; }
+      .nav-controls { gap: 0.25rem !important; }
       .version-select {
-        width: 68px !important; max-width: 68px !important; height: 34px !important;
-        padding: 0.2rem 0.3rem !important; font-size: 0.72rem !important;
+        width: 60px !important;
+        max-width: 60px !important;
+        font-size: 0.72rem !important;
+        padding: 0 0.2rem !important;
+      }
+      .version-select {
+        width: 58px !important;
+        max-width: 58px !important;
+        font-size: 0.72rem !important;
+        padding: 0 0.2rem !important;
       }
       .btn-control {
-        width: 34px !important; height: 34px !important; min-height: 34px !important; padding: 0 !important;
-        display: inline-flex !important; align-items: center !important; justify-content: center !important;
+        width: 32px !important;
+        height: 32px !important;
+        min-height: 32px !important;
+        padding: 0 !important;
         font-size: 0.85rem !important;
       }
-      .btn-control .btn-label { display: none !important; }
-      .progress-pill, button[title="View Version Changelog"] { display: none !important; }
-      .section-title { font-size: 1.25rem !important; flex-wrap: wrap !important; word-break: break-word !important; }
+      .brand-logo {
+        width: 28px !important;
+        height: 28px !important;
+      }
+      .section-title {
+        font-size: 1.25rem !important;
+        flex-wrap: wrap !important;
+        word-break: break-word !important;
+      }
+    }
+
+    /* Print Stylesheet for High-Quality PDF Export */
+    
+    @media (max-width: 360px) {
+      .top-navbar { padding: 0 0.25rem !important; }
+      .nav-controls { gap: 0.15rem !important; }
+      .version-select { width: 50px !important; max-width: 50px !important; font-size: 0.68rem !important; }
+      .btn-control { width: 28px !important; height: 28px !important; min-height: 28px !important; font-size: 0.78rem !important; }
+      .brand-logo { width: 24px !important; height: 24px !important; font-size: 0.8rem !important; }
+    }
+
+    @media print {
+      header.top-navbar, .catalog-sidebar, .sidebar-backdrop, .comment-drawer,
+      .comment-drawer-backdrop, .btn-control, .btn-copy, .btn-copy-ref, .modal-overlay,
+      #scrollProgressBar, .sim-controls, .sim-monitor, .dropped-comment-pin {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 10pt;
+        padding-top: 0 !important;
+      }
+      .app-layout { display: block !important; }
+      .main-content { max-width: 100% !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
+      .feature-card, .api-endpoint-card, .code-container, .sim-card, table, figure { break-inside: avoid; page-break-inside: avoid; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>
 </head>
@@ -843,56 +917,46 @@
   <!-- Top Sticky Navigation Bar -->
   <header class="top-navbar">
     <div class="brand-section">
-      <button class="btn-control btn-sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
+      <button class="btn-control btn-sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Catalog Sidebar">
         <span>📑</span>
-        <span data-lang="en">Index</span>
-        <span data-lang="fa">فهرست</span>
       </button>
       <div class="brand-logo">RC</div>
       <div class="brand-title">
         <span>RemoteCompose</span>
-        <span class="brand-pill" data-lang="en">Deep Architectural Specification</span>
-        <span class="brand-pill" data-lang="fa">شناسنامه جامع معماری</span>
       </div>
     </div>
 
     <div class="nav-controls">
-      <!-- Version Selector & Changelog -->
-      <select id="docVersionSelect" class="version-select" onchange="switchVersion(this.value)" title="RemoteCompose Specification Version">
-        <option value="2.0.0" selected>v2.0.0 (Latest)</option>
-        <option value="1.2.0">v1.2.0</option>
-        <option value="1.0.0">v1.0.0</option>
+      <!-- Version Selector with Real Multi-Version Navigation -->
+      <select id="docVersionSelect" class="version-select" onchange="switchVersion(this.value)" title="Document Version">
+        <option value="2.0.0" selected>v2.0</option>
+        <option value="1.2.0">v1.2</option>
+        <option value="1.0.0">v1.0</option>
       </select>
-      <button class="btn-control" onclick="openVersionModal()" title="View Version Changelog">📜</button>
 
-      <!-- Section Counter Pill -->
-      <div class="progress-pill">
-        <span data-lang="en">Section <strong id="progressIndexEn">1</strong> of 11</span>
-        <span data-lang="fa">بخش <strong id="progressIndexFa">۱</strong> از ۱۱</span>
-      </div>
-
-      <!-- Review & Comments Trigger -->
-      <button class="btn-control" onclick="toggleCommentDrawer()" title="Review Comments & Feedback">
-        <span>💬</span>
-        <span class="btn-label" data-lang="en">Reviews</span><span class="btn-label" data-lang="fa">نظرات</span> (<span id="commentCount">0</span>)
+      <!-- Global Pin Mode Button (Drop comment pin anywhere on document) -->
+      <button class="btn-control" id="btnGlobalPinMode" onclick="togglePinMode()" title="Toggle Pin Commenting">
+        <span>📍</span>
       </button>
 
-      <!-- 1-Click PDF Export -->
-      <button class="btn-control" onclick="exportDocumentToPDF()" title="Export Document as PDF via html2pdf">
+      <!-- Slide-Out Comment Drawer Trigger -->
+      <button class="btn-control" id="btnDrawerTrigger" onclick="toggleCommentDrawer()" title="Review Comments Drawer">
+        <span>💬</span><span id="commentCount">0</span>
+      </button>
+
+      <!-- 1-Click Client-Side PDF Export (html2pdf) -->
+      <button class="btn-control" onclick="exportDocumentToPDF()" title="Export PDF">
         <span>📄</span>
-        <span class="btn-label" data-lang="en">PDF</span><span class="btn-label" data-lang="fa">خروجی PDF</span>
       </button>
 
       <!-- Bilingual Language Switcher -->
-      <button class="btn-control" id="langSwitchBtn" onclick="toggleLanguage()">
+      <button class="btn-control" id="langSwitchBtn" onclick="toggleLanguage()" title="Language">
         <span>🌐</span>
-        <span class="btn-label" data-lang="en">فارسی</span><span class="btn-label" data-lang="fa">English</span>
       </button>
 
       <!-- Theme Switcher -->
-      <button class="btn-control" id="themeSwitchBtn" onclick="toggleTheme()">
+      <button class="btn-control" id="themeSwitchBtn" onclick="toggleTheme()" title="Toggle Theme">
         <span id="themeIcon">☀️</span>
-        <span class="btn-label" data-lang="en" id="themeLabelEn">Light</span><span class="btn-label" data-lang="fa" id="themeLabelFa">روشن</span>
       </button>
     </div>
   </header>
@@ -1797,24 +1861,7 @@ public float eval(RemoteContext context) {
           <span data-lang="fa">مشخصات وب‌سرویس و API سرور اسناد ریموت کامپوز</span>
         </h2>
 
-        <!-- Interactive Drag & Drop Commenting Bar -->
-        <div class="api-comment-bar" id="apiCommentBar">
-          <div class="api-pin-bubble" draggable="true" id="dragPinBubble" title="Drag me onto any coordinate or parameter table in this section!">
-            <span>📍</span>
-            <span data-lang="en">Drag Pin onto Section</span>
-            <span data-lang="fa">پین نظر را بکشید و رها کنید</span>
-          </div>
-          <div class="pin-hint">
-            <span data-lang="en">Drag pin or activate Pin Mode to comment on any (X, Y) coordinate in this API spec.</span>
-            <span data-lang="fa">پین را به هر نقطه دلخواه (X, Y) از جدول یا کدها بکشید، یا حالت پین را فعال کنید.</span>
-          </div>
-          <button class="btn-control" id="btnPinMode" onclick="togglePinMode()">
-            <span>📌</span>
-            <span data-lang="en" id="pinModeTextEn">Pin Mode: Off</span>
-            <span data-lang="fa" id="pinModeTextFa">حالت پین: خاموش</span>
-          </button>
-        </div>
-        <div id="droppedPinsContainer"></div>
+        
 
         <p>
           <span data-lang="en">
@@ -2198,53 +2245,7 @@ public float eval(RemoteContext context) {
     </main>
   </div>
 
-  <!-- Version History & Changelog Modal -->
-  <div id="versionHistoryModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3>
-          <span data-lang="en">RemoteCompose Specification Changelog</span>
-          <span data-lang="fa">تاریخچه نسخه‌ها و تغییرات سند</span>
-        </h3>
-        <button class="btn-close-modal" onclick="closeVersionModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="changelog-entry current">
-          <div class="changelog-head">
-            <span class="changelog-tag">v2.0.0 (Current Architecture)</span>
-            <span class="changelog-date">2026-10-03</span>
-          </div>
-          <ul class="changelog-items">
-            <li>Standardized API Ingestion & Document Server endpoint specification with tables, JSON bodies, and error codes.</li>
-            <li>Strict Left-to-Right (LTR) enforcement across all code snippets and containers in both English and Persian modes.</li>
-            <li>Interactive Inline Review System with AI JSON export and persistent HTML embedding.</li>
-            <li>1-Click PDF export optimized with dedicated print CSS stylesheet.</li>
-            <li>Enhanced mobile drawer responsiveness with touch-friendly navigation.</li>
-          </ul>
-        </div>
-        <div class="changelog-entry">
-          <div class="changelog-head">
-            <span class="changelog-tag">v1.2.0 (Shader & SIMD Acceleration)</span>
-            <span class="changelog-date">2026-05-18</span>
-          </div>
-          <ul class="changelog-items">
-            <li>Added SIMD vectorized RPN stack evaluation engine.</li>
-            <li>Introduced Nano-binary envelope parser and dynamic memory compaction.</li>
-            <li>Wear OS 5 standalone display controller integration.</li>
-          </ul>
-        </div>
-        <div class="changelog-entry">
-          <div class="changelog-head">
-            <span class="changelog-tag">v1.0.0 (Initial AOSP Specification)</span>
-            <span class="changelog-date">2025-11-10</span>
-          </div>
-          <ul class="changelog-items">
-            <li>Initial RemoteCompose architectural draft and wire format definition.</li>
-            <li>Baseline RemoteViews transition architecture.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  
   </div>
 
   <!-- Comment Pin Input Modal (for dropped pin) -->
@@ -2657,207 +2658,221 @@ public float eval(RemoteContext context) {
       document.getElementById('versionHistoryModal').classList.remove('active');
     }
 
-        // 11. Real Version Navigation Handler
+        // 11. Robust Multi-Version Routing (Zero 404 on GitHub Pages)
     function switchVersion(ver) {
       const p = window.location.pathname;
-      const isSub = p.includes('/examples/v') || p.includes('/v2.0.0/') || p.includes('/v1.2.0/') || p.includes('/v1.0.0/');
-      let target = '';
-      if (ver === '2.0.0') {
-        target = isSub ? '../v2.0.0/remote-compose.html' : 'examples/v2.0.0/remote-compose.html';
-      } else if (ver === '1.2.0') {
-        target = isSub ? '../v1.2.0/remote-compose.html' : 'examples/v1.2.0/remote-compose.html';
-      } else if (ver === '1.0.0') {
-        target = isSub ? '../v1.0.0/remote-compose.html' : 'examples/v1.0.0/remote-compose.html';
+      let root = '';
+      if (p.includes('/examples/v')) {
+        root = '../../';
+      } else if (p.includes('/examples/')) {
+        root = '../';
+      } else {
+        root = './';
       }
-      if (target) window.location.href = target;
+
+      if (ver === '2.0.0') {
+        window.location.href = root + 'index.html';
+      } else if (ver === '1.2.0') {
+        window.location.href = root + 'examples/v1.2.0/remote-compose.html';
+      } else if (ver === '1.0.0') {
+        window.location.href = root + 'examples/v1.0.0/remote-compose.html';
+      }
     }
 
-    // 12. 3rd-Party PDF Export (html2pdf.js) with Progress Toast
+    // 12. Client-Side PDF Export (html2pdf.js) with Light Theme Normalization
     function exportDocumentToPDF() {
       const toast = document.createElement('div');
-      toast.style.position = 'fixed';
-      toast.style.bottom = '24px';
-      toast.style.right = '24px';
-      toast.style.background = 'var(--primary-dark)';
-      toast.style.color = '#fff';
-      toast.style.padding = '12px 20px';
-      toast.style.borderRadius = '8px';
-      toast.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
-      toast.style.zIndex = '9999';
-      toast.style.fontWeight = '600';
-      toast.style.fontSize = '14px';
-      toast.style.display = 'flex';
-      toast.style.alignItems = 'center';
-      toast.style.gap = '10px';
+      toast.id = 'pdfProgressToast';
+      toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #0284c7; color: #fff; padding: 12px 18px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 8px;';
       toast.innerHTML = '<span>⏳</span> <span>Generating PDF document via html2pdf... please wait</span>';
       document.body.appendChild(toast);
 
+      // Temporarily normalize to light theme for uniform crisp vector rendering
+      const prevTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', 'light');
+      if (typeof updateChartsTheme === 'function') updateChartsTheme('light');
+
+      // Temporarily hide pins
+      document.querySelectorAll('.dropped-comment-pin').forEach(el => el.style.display = 'none');
+
       const element = document.querySelector('.main-content');
       const opt = {
-        margin: [8, 8, 8, 8],
-        filename: 'RemoteCompose-Architecture-v2.0.0.pdf',
+        margin: [10, 10, 10, 10],
+        filename: 'RemoteCompose-Architecture-Specification.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1.5, useCORS: true, logging: false },
+        html2canvas: { scale: 1.6, useCORS: true, logging: false, backgroundColor: '#ffffff', scrollY: 0 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'] }
       };
 
       if (typeof html2pdf !== 'undefined') {
         html2pdf().set(opt).from(element).save().then(() => {
-          toast.remove();
+          finishPdfExport(prevTheme, toast);
         }).catch(err => {
-          console.error('html2pdf failed:', err);
-          toast.remove();
+          console.warn('html2pdf fallback to window.print():', err);
+          finishPdfExport(prevTheme, toast);
           window.print();
         });
       } else {
-        toast.remove();
+        finishPdfExport(prevTheme, toast);
         window.print();
       }
     }
 
-    // 13. Coordinate Drag & Drop Pin System on #api-endpoints
-    let apiPins = [];
-    let isPinModeActive = false;
-    let pendingPinCoord = { x: 0, y: 0 };
+    function finishPdfExport(prevTheme, toast) {
+      if (toast) toast.remove();
+      document.documentElement.setAttribute('data-theme', prevTheme);
+      if (typeof updateChartsTheme === 'function') updateChartsTheme(prevTheme);
+      document.querySelectorAll('.dropped-comment-pin').forEach(el => el.style.display = '');
+    }
 
-    function initPinCommentSystem() {
-      const apiSec = document.getElementById('api-endpoints');
-      const bubble = document.getElementById('dragPinBubble');
+    // 13. Global Pin Commenting System (Accessible from Toolbar on Entire Document)
+    let globalPins = [];
+    let isGlobalPinMode = false;
+    let pendingPinTarget = null;
 
-      // Drag and Drop
-      if (bubble) {
-        bubble.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', 'comment_pin');
-          e.dataTransfer.effectAllowed = 'copy';
+    function initGlobalPinSystem() {
+      const main = document.querySelector('.main-content');
+      if (main) {
+        main.addEventListener('click', (e) => {
+          if (!isGlobalPinMode) return;
+          if (e.target.closest('.dropped-comment-pin') || e.target.closest('.modal-overlay') || e.target.closest('.comment-drawer') || e.target.closest('.top-navbar')) return;
+
+          // Find closest section
+          const sec = e.target.closest('section') || main;
+          const rect = sec.getBoundingClientRect();
+          const relX = Math.max(2, Math.min(98, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
+          const relY = Math.max(2, Math.min(98, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
+          const secId = sec.id || 'general';
+          const secTitleEl = sec.querySelector('.section-title');
+          const secTitle = secTitleEl ? secTitleEl.textContent.trim().replace(/^\d+\s*[·.]\s*/, '') : 'General';
+
+          pendingPinTarget = { secId, secTitle, x: relX, y: relY, secElement: sec };
+          openPinInputModal();
         });
       }
-
-      if (apiSec) {
-        apiSec.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'copy';
-        });
-
-        apiSec.addEventListener('drop', (e) => {
-          e.preventDefault();
-          const rect = apiSec.getBoundingClientRect();
-          const relX = Math.round(((e.clientX - rect.left) / rect.width) * 100);
-          const relY = Math.round(((e.clientY - rect.top) / rect.height) * 100);
-          openPinInputAt(relX, relY);
-        });
-
-        // Click when Pin Mode is On
-        apiSec.addEventListener('click', (e) => {
-          if (!isPinModeActive) return;
-          if (e.target.closest('#apiCommentBar') || e.target.closest('.dropped-comment-pin') || e.target.closest('.modal-overlay')) return;
-          const rect = apiSec.getBoundingClientRect();
-          const relX = Math.round(((e.clientX - rect.left) / rect.width) * 100);
-          const relY = Math.round(((e.clientY - rect.top) / rect.height) * 100);
-          openPinInputAt(relX, relY);
-        });
-      }
-
-      loadApiPins();
+      loadGlobalPins();
     }
 
     function togglePinMode() {
-      isPinModeActive = !isPinModeActive;
-      const apiSec = document.getElementById('api-endpoints');
-      if (apiSec) apiSec.style.cursor = isPinModeActive ? 'crosshair' : 'default';
-      const btn = document.getElementById('btnPinMode');
-      if (btn) btn.style.borderColor = isPinModeActive ? 'var(--primary)' : 'var(--border-subtle)';
-      const tEn = document.getElementById('pinModeTextEn');
-      const tFa = document.getElementById('pinModeTextFa');
-      if (tEn) tEn.textContent = isPinModeActive ? 'Pin Mode: ACTIVE (Click section)' : 'Pin Mode: Off';
-      if (tFa) tFa.textContent = isPinModeActive ? 'حالت پین: فعال (کلیک روی بخش)' : 'حالت پین: خاموش';
+      isGlobalPinMode = !isGlobalPinMode;
+      const btn = document.getElementById('btnGlobalPinMode');
+      const main = document.querySelector('.main-content');
+      if (btn) btn.classList.toggle('active-pin-mode', isGlobalPinMode);
+      if (main) main.style.cursor = isGlobalPinMode ? 'crosshair' : 'default';
+
+      if (isGlobalPinMode) {
+        const toast = document.createElement('div');
+        toast.id = 'pinModeNotification';
+        toast.style.cssText = 'position: fixed; top: 62px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 999px; z-index: 2000; box-shadow: 0 4px 15px var(--primary-glow);';
+        toast.textContent = '📍 Pin Mode ACTIVE: Click anywhere to drop a comment';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      } else {
+        const t = document.getElementById('pinModeNotification');
+        if (t) t.remove();
+      }
     }
 
-    function openPinInputAt(x, y) {
-      pendingPinCoord = { x, y };
-      document.getElementById('pinCoordDisplay').textContent = 'Coordinate: (X: ' + x + '%, Y: ' + y + '%)';
+    function openPinInputModal() {
+      if (!pendingPinTarget) return;
+      document.getElementById('pinCoordDisplay').textContent = '#' + pendingPinTarget.secId + ' · Coordinate: (X: ' + pendingPinTarget.x + '%, Y: ' + pendingPinTarget.y + '%)';
       document.getElementById('pinTextInput').value = '';
       document.getElementById('pinInputModal').classList.add('active');
     }
 
     function closePinModal() {
       document.getElementById('pinInputModal').classList.remove('active');
+      if (isGlobalPinMode) togglePinMode(); // Exit pin mode after placing
     }
 
     function saveDroppedPin() {
       const text = document.getElementById('pinTextInput').value.trim();
-      const author = document.getElementById('pinAuthorInput').value.trim() || 'API Reviewer';
-      if (!text) return;
+      const author = document.getElementById('pinAuthorInput').value.trim() || 'Reviewer';
+      if (!text || !pendingPinTarget) return;
 
       const pin = {
         id: 'pin_' + Date.now(),
-        pinNum: apiPins.length + 1,
-        sectionId: 'api-endpoints',
-        sectionTitle: 'RemoteCompose Ingestion & Document Server API',
-        x: pendingPinCoord.x,
-        y: pendingPinCoord.y,
+        pinNum: globalPins.length + 1,
+        sectionId: pendingPinTarget.secId,
+        sectionTitle: pendingPinTarget.secTitle,
+        x: pendingPinTarget.x,
+        y: pendingPinTarget.y,
         author: author,
         text: text,
         createdAt: new Date().toISOString()
       };
 
-      apiPins.push(pin);
+      globalPins.push(pin);
       savePinsStorage();
       closePinModal();
-      renderPinsOnSection();
+      renderAllPins();
       renderDrawerComments();
       toggleCommentDrawer(true);
     }
 
-    function loadApiPins() {
+    function loadGlobalPins() {
       try {
         const embeddedTag = document.getElementById('docEmbeddedComments');
         const embedded = embeddedTag ? JSON.parse(embeddedTag.textContent || '[]') : [];
-        const local = JSON.parse(localStorage.getItem('rc_api_pins') || '[]');
+        const local = JSON.parse(localStorage.getItem('rc_global_pins') || '[]');
         const map = new Map();
         [...embedded, ...local].forEach(p => map.set(p.id, p));
-        apiPins = Array.from(map.values());
+        globalPins = Array.from(map.values());
       } catch (e) {
-        apiPins = [];
+        globalPins = [];
       }
-      renderPinsOnSection();
+      renderAllPins();
       renderDrawerComments();
     }
 
     function savePinsStorage() {
-      localStorage.setItem('rc_api_pins', JSON.stringify(apiPins));
+      localStorage.setItem('rc_global_pins', JSON.stringify(globalPins));
     }
 
-    function renderPinsOnSection() {
-      const container = document.getElementById('droppedPinsContainer');
-      if (!container) return;
-      container.innerHTML = apiPins.map((p, idx) => `
-        <div class="dropped-comment-pin" id="marker_${p.id}" style="left: ${p.x}%; top: ${p.y}%;" onclick="openCommentDrawerAndHighlight('${p.id}')" title="Pin #${idx + 1}: ${p.text}">
-          <span>${idx + 1}</span>
-        </div>
-      `).join('');
+    function renderAllPins() {
+      // Clear previous pin markers
+      document.querySelectorAll('.dropped-comment-pin').forEach(el => el.remove());
+
+      globalPins.forEach((p, idx) => {
+        const sec = document.getElementById(p.sectionId);
+        if (!sec) return;
+        const pinEl = document.createElement('div');
+        pinEl.className = 'dropped-comment-pin';
+        pinEl.id = 'marker_' + p.id;
+        pinEl.style.left = p.x + '%';
+        pinEl.style.top = p.y + '%';
+        pinEl.title = 'Pin #' + (idx + 1) + ': ' + p.text;
+        pinEl.innerHTML = '<span>' + (idx + 1) + '</span>';
+        pinEl.onclick = (e) => {
+          e.stopPropagation();
+          openCommentDrawerAndHighlight(p.id);
+        };
+        sec.appendChild(pinEl);
+      });
+
       const countEl = document.getElementById('commentCount');
-      if (countEl) countEl.textContent = apiPins.length;
+      if (countEl) countEl.textContent = globalPins.length;
     }
 
     function renderDrawerComments() {
       const list = document.getElementById('drawerCommentsList');
       if (!list) return;
 
-      if (apiPins.length === 0) {
-        list.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 2rem 1rem;">No pinned comments yet. Drag the pin bubble or activate Pin Mode in the API section to place a note!</div>';
+      if (globalPins.length === 0) {
+        list.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 2.5rem 1rem;">No comments recorded yet. Click the 📍 Pin icon in the top toolbar to drop a note on any section!</div>';
         return;
       }
 
-      list.innerHTML = apiPins.map((p, idx) => `
+      list.innerHTML = globalPins.map((p, idx) => `
         <div class="comment-item" id="drawer_item_${p.id}">
           <div class="comment-meta">
-            <span class="comment-target-badge">Pin #${idx + 1} · (X: ${p.x}%, Y: ${p.y}%)</span>
+            <span class="comment-target-badge">Pin #${idx + 1} · #${p.sectionId} (${p.x}%, ${p.y}%)</span>
             <span style="font-size: 0.72rem; color: var(--text-dim);">${p.author} · ${new Date(p.createdAt).toLocaleDateString()}</span>
           </div>
           <div style="color: var(--text-main); margin: 0.4rem 0; font-size: 0.88rem; line-height: 1.5;">${p.text}</div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-            <button onclick="jumpToPin('${p.id}')" class="btn-control" style="font-size: 0.75rem; padding: 0.2rem 0.6rem;">🎯 Jump to Pin</button>
+            <button onclick="jumpToPin('${p.id}', '${p.sectionId}')" class="btn-control" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; height: 28px; min-height: 28px;">🎯 Jump to Pin</button>
             <button onclick="deletePin('${p.id}')" style="background: none; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer;">Delete</button>
           </div>
         </div>
@@ -2891,20 +2906,23 @@ public float eval(RemoteContext context) {
       }, 300);
     }
 
-    function jumpToPin(pinId) {
+    function jumpToPin(pinId, sectionId) {
       toggleCommentDrawer(false);
       const marker = document.getElementById('marker_' + pinId);
       if (marker) {
         marker.scrollIntoView({ behavior: 'smooth', block: 'center' });
         marker.classList.add('highlighted');
         setTimeout(() => marker.classList.remove('highlighted'), 2500);
+      } else {
+        const sec = document.getElementById(sectionId);
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
     function deletePin(pinId) {
-      apiPins = apiPins.filter(p => p.id !== pinId);
+      globalPins = globalPins.filter(p => p.id !== pinId);
       savePinsStorage();
-      renderPinsOnSection();
+      renderAllPins();
       renderDrawerComments();
     }
 
@@ -2912,16 +2930,15 @@ public float eval(RemoteContext context) {
     function exportCommentsJSON() {
       const exportData = {
         document: document.title,
-        sectionTarget: "RemoteCompose Ingestion & Document Server API",
         exportedAt: new Date().toISOString(),
-        totalPins: apiPins.length,
-        pins: apiPins
+        totalPins: globalPins.length,
+        pins: globalPins
       };
       const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'remote-compose-api-review-pins-' + new Date().toISOString().slice(0,10) + '.json';
+      a.download = 'remote-compose-review-pins-' + new Date().toISOString().slice(0,10) + '.json';
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -2931,14 +2948,14 @@ public float eval(RemoteContext context) {
       const clone = document.documentElement.cloneNode(true);
       const scriptTag = clone.querySelector('#docEmbeddedComments');
       if (scriptTag) {
-        scriptTag.textContent = JSON.stringify(apiPins, null, 2);
+        scriptTag.textContent = JSON.stringify(globalPins, null, 2);
       }
       const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
       const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'remote-compose-architecture-with-api-comments.html';
+      a.download = 'remote-compose-architecture-with-embedded-reviews.html';
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -2971,7 +2988,7 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(simLoop);
 
       // Load Review Comments
-      initPinCommentSystem();
+      initGlobalPinSystem();
     });
   </script>
 </body>

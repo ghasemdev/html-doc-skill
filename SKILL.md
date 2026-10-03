@@ -142,39 +142,73 @@ Follow this **strict hierarchical structure** when documenting endpoints:
 
 ---
 
-## 7. Coordinate Drag & Drop Commenting & Slide-Out Drawer
+## 7. Global Pin Commenting & Slide-Out Drawer
 
-Review and feedback on API specifications use a coordinate pin drop system:
-1. **Draggable Pin Widget:** A sticky bar containing `📍 Drag Pin onto Section` with active Pin Mode toggle.
-2. **Coordinate Pin Drop:** Dragging the bubble or clicking anywhere inside the API section drops a numbered pin at relative $(X\%, Y\%)$.
-3. **Pin Input Modal:** Prompts for reviewer role/name and review feedback.
-4. **Slide-Out Comment Drawer:** Clicking the top toolbar `💬` icon slides out a full-height drawer with:
-   - List of all dropped pins with $(X\%, Y\%)$ coordinates.
+Review and feedback across the entire document use a coordinate pin drop system:
+1. **Global Pin Trigger in Navbar:** The top toolbar features a persistent `📍` Pin button toggling Pin Mode on/off. When active, clicking anywhere on the document (or inside specific sections) drops a pin at $(X\%, Y\%)$.
+2. **Pin Input Modal:** Prompts for reviewer role/name and review feedback.
+3. **Slide-Out Comment Drawer:** Clicking the top toolbar `💬` icon slides out a full-height drawer with:
+   - List of all dropped pins with section tags and $(X\%, Y\%)$ coordinates.
    - `🎯 Jump to Pin` button that smoothly scrolls to the exact element and pulses the pin.
    - `📥 Export JSON (for AI)` downloading AI-ready structured review data.
    - `💾 Save & Embed in HTML` downloading an updated HTML file with comments permanently embedded inside `<script id="docEmbeddedComments" type="application/json">`.
+4. **Leakage Prevention on Mobile:** The closed drawer must be completely hidden via:
+   ```css
+   .comment-drawer {
+     opacity: 0;
+     visibility: hidden;
+     pointer-events: none;
+     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s, visibility 0.25s;
+   }
+   .comment-drawer.open {
+     transform: translateX(0) !important;
+     opacity: 1 !important;
+     visibility: visible !important;
+     pointer-events: auto !important;
+   }
+   ```
 
 ---
 
-## 8. 3rd-Party PDF Export (`html2pdf.js`)
+## 8. 3rd-Party PDF Export (`html2pdf.js`) with Theme Normalization
 
 Use client-side library `html2pdf.js` via CDN:
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 ```
 
+> [!IMPORTANT]
+> **Theme Normalization Rule:**
+> When dark mode is active, `html2canvas` captures dark backgrounds, but print media styles or canvas rendering can cause mixed dark/light artifacts.
+> **Always temporarily switch to `light` theme before rendering the PDF canvas**, and restore the original theme in a `finally` block:
+
 ```javascript
-function exportDocumentToPDF() {
+async function exportDocumentToPDF() {
   const element = document.querySelector('.main-content');
+  const prevTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', 'light');
+
   const opt = {
-    margin: [8, 8, 8, 8],
+    margin: [10, 10, 10, 10],
     filename: 'Technical-Documentation.pdf',
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 1.5, useCORS: true, logging: false },
+    html2canvas: { scale: 1.6, useCORS: true, logging: false, backgroundColor: '#ffffff', scrollY: 0 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
-  html2pdf().set(opt).from(element).save();
+
+  try {
+    if (typeof html2pdf !== 'undefined') {
+      await html2pdf().set(opt).from(element).save();
+    } else {
+      window.print();
+    }
+  } catch (err) {
+    console.warn('PDF export fallback:', err);
+    window.print();
+  } finally {
+    document.documentElement.setAttribute('data-theme', prevTheme);
+  }
 }
 ```
 
@@ -184,71 +218,98 @@ function exportDocumentToPDF() {
 
 Provide real routing between versions:
 - Place versions in `examples/v2.0.0/`, `examples/v1.2.0/`, `examples/v1.0.0/`.
-- The version dropdown navigates between versions via `switchVersion(ver)`.
+- Ensure version switching dynamically determines relative paths to prevent 404 errors on GitHub Pages:
+  ```javascript
+  function switchVersion(ver) {
+    const isInsideSub = window.location.pathname.includes('/examples/v');
+    const prefix = isInsideSub ? '../' : 'examples/';
+    if (ver === '2.0.0') {
+      window.location.href = isInsideSub ? '../../index.html' : 'index.html';
+    } else if (ver === '1.2.0') {
+      window.location.href = prefix + 'v1.2.0/remote-compose.html';
+    } else if (ver === '1.0.0') {
+      window.location.href = prefix + 'v1.0.0/remote-compose.html';
+    }
+  }
+  ```
 - Older archived versions display a top warning banner:
   `⚠️ You are viewing archived version v1.0.0. [Switch to Latest (v2.0.0)]`.
+- Document history is kept in `CHANGELOG.md` — do NOT add a changelog button or modal in the document UI.
 
 ---
 
 ## 10. Mobile Responsiveness Best Practices (Zero-Overflow Guarantee)
 
-To guarantee zero horizontal scroll bugs and optimal mobile UX:
+To guarantee zero horizontal scroll bugs, sticky preservation, and optimal mobile UX:
 
-1. **Top Navbar Mobile Compaction:**
-   On screens $\le 768\text{px}$:
-   - Hide subtitles and badges (`.brand-pill`, `.progress-pill`).
-   - Hide text labels on control buttons (`.btn-label { display: none; }`).
-   - Compact button sizes ($32\times32\text{px}$) with icon-only presentation.
-   - Limit version select width to $65\text{px}$.
-   - Ensure the entire header fits on a single line $\le 300\text{px}$.
-
-2. **Zero Horizontal Overflow:**
+1. **Permanently Fixed Navbar on Scroll:**
    ```css
-   html, body, .app-layout {
-     overflow-x: hidden !important;
-     max-width: 100vw !important;
-     width: 100% !important;
-     box-sizing: border-box;
+   body {
+     padding-top: 52px; /* Fixed offset */
    }
-   .main-content {
-     min-width: 0 !important;
-     max-width: 100% !important;
-     width: 100% !important;
-     overflow-x: hidden !important;
-     box-sizing: border-box !important;
+   .top-navbar {
+     position: fixed;
+     top: 0;
+     left: 0;
+     right: 0;
+     height: 52px;
+     z-index: 1500;
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     box-sizing: border-box;
    }
    ```
 
-3. **Tables and Code Containers:**
-   Wrap all tables in `.table-responsive` / `.table-container`:
+2. **Preserve Desktop Sticky Sidebar (Avoid overflow-x on layout):**
+   > [!CAUTION]
+   > Do NOT add `overflow-x: hidden` to `.app-layout`. Any `overflow` property on an ancestor element breaks `position: sticky` on `.catalog-sidebar` during desktop scrolling!
+
+   ```css
+   .app-layout {
+     display: flex;
+     min-height: calc(100vh - 52px);
+     width: 100%;
+     min-width: 0;
+     /* Do NOT add overflow-x: hidden here */
+   }
+   .catalog-sidebar {
+     position: sticky;
+     top: 52px;
+     height: calc(100vh - 52px);
+     overflow-y: auto;
+   }
+   ```
+
+3. **Tables with Guaranteed Horizontal Scroll:**
+   Wrapping a table in an overflow container is NOT enough — mobile browsers crush table columns into unreadable vertical text. **Always enforce `min-width: 650px !important;` on tables**:
    ```css
    .table-responsive, .table-container {
      width: 100% !important;
      max-width: 100% !important;
      overflow-x: auto !important;
      -webkit-overflow-scrolling: touch;
-     box-sizing: border-box;
+     scrollbar-width: thin;
+     scrollbar-color: var(--primary) var(--bg-surface-elevated);
    }
-   .code-container {
-     min-width: 0 !important;
-     max-width: 100% !important;
-     width: 100% !important;
-     overflow: hidden !important;
-   }
-   pre {
-     min-width: 0 !important;
-     max-width: 100% !important;
-     overflow-x: auto !important;
-     box-sizing: border-box;
+   .table-responsive table, .table-container table {
+     min-width: 650px !important;
    }
    ```
 
-4. **Scalable Canvas:**
+4. **Strictly LTR Links and Code:**
+   In all language modes, URLs, file paths, code, and links must be strictly LTR:
    ```css
-   canvas {
-     width: 100% !important;
-     max-width: 400px !important;
-     height: auto !important;
-     box-sizing: border-box;
+   a, .endpoint-url, pre, code {
+     direction: ltr !important;
+     text-align: left !important;
+     unicode-bidi: isolate;
    }
    ```
+
+5. **Top Navbar Mobile Compaction:**
+   On screens $\le 768\text{px}$:
+   - Hide brand subtitles and reading progress text (`.brand-pill`, `.progress-pill`).
+   - Hide text labels on control buttons (`.btn-label { display: none; }`).
+   - Compact button sizes ($32\times32\text{px}$ or $34\times34\text{px}$) with icon-only presentation.
+   - Limit version select width to $62\text{px}$.
+   - Guarantee zero icon overlap on viewports down to $320\text{px}$.

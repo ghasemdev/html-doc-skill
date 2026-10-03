@@ -82,12 +82,12 @@
     /* Reset & Zero-Overflow Base */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      overflow-x: hidden !important;
       max-width: 100vw !important;
       width: 100% !important;
       scroll-behavior: smooth;
       background-color: var(--bg-base);
       color: var(--text-main);
+      padding-top: 52px; /* Offset for permanently fixed navbar */
     }
 
     /* Bilingual Filters */
@@ -105,24 +105,30 @@
       line-height: 1.7;
     }
 
+    /* Hyperlinks must always be strictly LTR */
+    a {
+      direction: ltr !important;
+      text-align: left !important;
+    }
+
     /* Reading Progress Bar */
     #readingProgressBar {
       position: fixed; top: 0; left: 0; height: 3px;
       background: linear-gradient(90deg, var(--primary), var(--accent));
-      width: 0%; z-index: 9999; transition: width 0.1s ease-out;
+      width: 0%; z-index: 2000; transition: width 0.1s ease-out;
     }
 
-    /* Sticky Navbar */
+    /* Permanently Fixed Navbar */
     .top-navbar {
-      position: sticky; top: 0; z-index: 1000;
+      position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 1500;
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      background: rgba(16, 23, 42, 0.88); border-bottom: 1px solid var(--border-subtle);
-      padding: 0.6rem 1.25rem; display: flex; align-items: center; justify-content: space-between;
+      background: rgba(16, 23, 42, 0.95); border-bottom: 1px solid var(--border-subtle);
+      padding: 0 1rem; display: flex; align-items: center; justify-content: space-between;
       width: 100%; max-width: 100vw; box-sizing: border-box;
     }
-    [data-theme="light"] .top-navbar { background: rgba(255, 255, 255, 0.92); }
+    [data-theme="light"] .top-navbar { background: rgba(255, 255, 255, 0.96); }
 
-    .brand-section { display: flex; align-items: center; gap: 0.6rem; min-width: 0; flex-shrink: 1; }
+    .brand-section { display: flex; align-items: center; gap: 0.6rem; min-width: 0; flex-shrink: 0; }
     .brand-logo { width: 30px; height: 30px; border-radius: 6px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .brand-title { font-weight: 700; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
     .nav-controls { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
@@ -134,6 +140,12 @@
       transition: all 0.2s; white-space: nowrap; user-select: none;
     }
     .btn-control:hover { background: var(--bg-surface-hover); border-color: var(--primary); }
+    .btn-control.active-pin-mode {
+      background: var(--primary) !important;
+      color: #000 !important;
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
 
     .version-select {
       background: var(--bg-surface-elevated); border: 1px solid var(--border-strong);
@@ -141,8 +153,8 @@
       padding: 0 0.5rem; border-radius: 8px; cursor: pointer; outline: none;
     }
 
-    /* Layout */
-    .app-layout { display: flex; min-height: calc(100vh - 52px); width: 100%; max-width: 100%; min-width: 0; overflow-x: hidden; }
+    /* Layout (without overflow-x: hidden to preserve desktop position: sticky) */
+    .app-layout { display: flex; min-height: calc(100vh - 52px); width: 100%; max-width: 100%; min-width: 0; }
     .catalog-sidebar {
       width: min(85vw, 290px); flex-shrink: 0; background: var(--sidebar-bg); border-inline-end: 1px solid var(--border-subtle);
       position: sticky; top: 52px; height: calc(100vh - 52px); overflow-y: auto; padding: 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.5rem;
@@ -167,12 +179,28 @@
     .code-lang-badge { padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; background: rgba(56, 189, 248, 0.15); color: var(--primary); }
     pre { margin: 0; padding: 1.15rem; overflow-x: auto !important; font-family: 'Fira Code', monospace; font-size: 0.88rem; line-height: 1.6; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box; }
 
-    /* Responsive Tables */
+    /* Responsive Tables with Guaranteed Horizontal Scroll on Mobile */
     .table-responsive, .table-container {
       width: 100% !important; max-width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch;
       margin: 1.25rem 0; border: 1px solid var(--border-subtle); border-radius: var(--radius); box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) var(--bg-surface-elevated);
+    }
+    .table-responsive::-webkit-scrollbar, .table-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .table-responsive::-webkit-scrollbar-track, .table-container::-webkit-scrollbar-track {
+      background: var(--bg-surface-elevated);
+      border-radius: 4px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb, .table-container::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: inherit; }
+    .table-responsive table, .table-container table {
+      min-width: 650px !important; /* Prevents column crushing on mobile viewports */
+    }
     th, td { padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
     th { background: var(--bg-surface-elevated); font-weight: 700; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
 
@@ -185,23 +213,20 @@
     .endpoint-url { font-family: 'Fira Code', monospace; font-size: 0.88rem; font-weight: 600; flex: 1; }
     .json-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
 
-    /* Coordinate Pin Drop on Section */
-    .api-comment-bar {
-      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-      background: var(--bg-surface-elevated); border: 1px dashed var(--primary); padding: 0.6rem 0.9rem;
-      border-radius: 8px; margin: 1rem 0 1.25rem; flex-wrap: wrap;
-    }
-    .api-pin-bubble {
-      display: inline-flex; align-items: center; gap: 0.4rem; background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #000; font-weight: 700; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-radius: 999px; cursor: grab; user-select: none;
-    }
+    /* Coordinate Pin Drop */
     .dropped-comment-pin {
       position: absolute; width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
       background: var(--primary); color: #000; font-weight: 800; font-size: 0.75rem;
       display: flex; align-items: center; justify-content: center;
       transform: translate(-50%, -100%) rotate(-45deg); cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.6); z-index: 50;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .dropped-comment-pin span { transform: rotate(45deg); }
+    .dropped-comment-pin:hover, .dropped-comment-pin.pin-highlight {
+      transform: translate(-50%, -100%) rotate(-45deg) scale(1.3);
+      background: #ffffff;
+      box-shadow: 0 0 20px #ffffff;
+    }
 
     /* Slide-Out Comment Drawer */
     .comment-drawer-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 2500; opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0.25s; }
@@ -209,11 +234,12 @@
     .comment-drawer {
       position: fixed; top: 0; width: min(88vw, 400px); height: 100vh; background: var(--bg-surface);
       border-inline-start: 1px solid var(--border-strong); z-index: 2510; display: flex; flex-direction: column;
-      box-shadow: -10px 0 40px rgba(0,0,0,0.6); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.6); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s, visibility 0.25s;
+      opacity: 0; visibility: hidden; pointer-events: none;
     }
     html[dir="ltr"] .comment-drawer { right: 0; transform: translateX(100%); }
     html[dir="rtl"] .comment-drawer { left: 0; border-inline-start: none; border-inline-end: 1px solid var(--border-strong); transform: translateX(-100%); }
-    .comment-drawer.open { transform: translateX(0) !important; }
+    .comment-drawer.open { transform: translateX(0) !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
     .drawer-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
     .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
     .drawer-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg-base); }
@@ -275,6 +301,11 @@
         <option value="1.0.0">v1.0</option>
       </select>
 
+      <!-- Global Pin Drop Toggle -->
+      <button id="btnPinToggle" class="btn-control" onclick="togglePinMode()" title="Pin Comment Anywhere">
+        <span>📍</span> <span class="btn-label" data-lang="en">Pin</span><span class="btn-label" data-lang="fa">پین</span>
+      </button>
+
       <!-- Review Comments Trigger -->
       <button class="btn-control" onclick="toggleCommentDrawer()" title="Review Comments">
         <span>💬</span> <span id="commentCount" style="font-size: 0.7rem;">0</span>
@@ -319,17 +350,6 @@
       <!-- Standard API Specification Section -->
       <section id="api-spec">
         <h2 class="section-title">02 · API Specification</h2>
-        
-        <!-- Drag & Drop Commenting Pin Bar -->
-        <div class="api-comment-bar">
-          <div class="api-pin-bubble" draggable="true" id="dragPinBubble" title="Drag onto section to pin comment">
-            <span>📍</span> <span>Drag to Pin Comment</span>
-          </div>
-          <button class="btn-control" id="btnPinMode" onclick="togglePinMode()">
-            <span>📌</span> <span id="pinModeText">Pin Mode: Off</span>
-          </button>
-        </div>
-        <div id="droppedPinsContainer"></div>
 
         <div class="api-endpoint-card">
           <!-- Description -->
@@ -469,53 +489,68 @@ export async function syncBatch(token) {
       document.getElementById('catalogSidebar').classList.toggle('open');
     }
 
-    // Version Navigation
+    // Version Navigation (Relative-path aware to prevent 404s)
     function switchVersion(ver) {
-      if (ver === '1.2.0') window.location.href = 'examples/v1.2.0/remote-compose.html';
-      else if (ver === '1.0.0') window.location.href = 'examples/v1.0.0/remote-compose.html';
+      const isInsideSub = window.location.pathname.includes('/examples/v');
+      const prefix = isInsideSub ? '../' : 'examples/';
+      if (ver === '2.0.0') {
+        window.location.href = isInsideSub ? '../../index.html' : 'index.html';
+      } else if (ver === '1.2.0') {
+        window.location.href = prefix + 'v1.2.0/remote-compose.html';
+      } else if (ver === '1.0.0') {
+        window.location.href = prefix + 'v1.0.0/remote-compose.html';
+      }
     }
 
-    // PDF Export via html2pdf
-    function exportDocumentToPDF() {
+    // PDF Export via html2pdf with Theme Normalization
+    async function exportDocumentToPDF() {
       const element = document.querySelector('.main-content');
+      const prevTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', 'light');
+
       const opt = {
         margin: [10, 10, 10, 10],
         filename: 'Technical-Documentation.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1.5, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 1.6, useCORS: true, logging: false, backgroundColor: '#ffffff', scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
-      if (typeof html2pdf !== 'undefined') {
-        html2pdf().set(opt).from(element).save();
-      } else {
+
+      try {
+        if (typeof html2pdf !== 'undefined') {
+          await html2pdf().set(opt).from(element).save();
+        } else {
+          window.print();
+        }
+      } catch (err) {
+        console.warn('html2pdf fallback to window.print():', err);
         window.print();
+      } finally {
+        document.documentElement.setAttribute('data-theme', prevTheme);
       }
     }
 
-    // Pin Commenting System on Section #api-spec
+    // Global Pin Commenting System (Accessible from Toolbar on Entire Document)
     let apiPins = [];
     let isPinModeActive = false;
-    let pendingPinCoord = { x: 0, y: 0 };
+    let pendingPinCoord = { secId: 'overview', x: 0, y: 0 };
 
     function initPinCommentSystem() {
-      const sec = document.getElementById('api-spec');
-      const bubble = document.getElementById('dragPinBubble');
-      if (bubble) {
-        bubble.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', 'pin');
-        });
-      }
-      if (sec) {
-        sec.addEventListener('dragover', (e) => e.preventDefault());
-        sec.addEventListener('drop', (e) => {
-          e.preventDefault();
+      const main = document.querySelector('.main-content');
+      if (main) {
+        main.addEventListener('click', (e) => {
+          if (!isPinModeActive) return;
+          if (e.target.closest('.dropped-comment-pin') || e.target.closest('.modal-overlay') || e.target.closest('.comment-drawer') || e.target.closest('.top-navbar')) return;
+
+          const sec = e.target.closest('section') || main;
           const r = sec.getBoundingClientRect();
-          openPinInputAt(Math.round(((e.clientX - r.left)/r.width)*100), Math.round(((e.clientY - r.top)/r.height)*100));
-        });
-        sec.addEventListener('click', (e) => {
-          if (!isPinModeActive || e.target.closest('.api-comment-bar') || e.target.closest('.modal-overlay')) return;
-          const r = sec.getBoundingClientRect();
-          openPinInputAt(Math.round(((e.clientX - r.left)/r.width)*100), Math.round(((e.clientY - r.top)/r.height)*100));
+          const relX = Math.max(2, Math.min(98, Math.round(((e.clientX - r.left) / r.width) * 100)));
+          const relY = Math.max(2, Math.min(98, Math.round(((e.clientY - r.top) / r.height) * 100)));
+          const secId = sec.id || 'overview';
+
+          pendingPinCoord = { secId, x: relX, y: relY, secElement: sec };
+          openPinInputAt(relX, relY);
         });
       }
       loadApiPins();
@@ -523,11 +558,13 @@ export async function syncBatch(token) {
 
     function togglePinMode() {
       isPinModeActive = !isPinModeActive;
-      document.getElementById('pinModeText').textContent = isPinModeActive ? 'Pin Mode: ACTIVE' : 'Pin Mode: Off';
+      const btn = document.getElementById('btnPinToggle');
+      const main = document.querySelector('.main-content');
+      if (btn) btn.classList.toggle('active-pin-mode', isPinModeActive);
+      if (main) main.style.cursor = isPinModeActive ? 'crosshair' : 'default';
     }
 
     function openPinInputAt(x, y) {
-      pendingPinCoord = { x, y };
       document.getElementById('pinCoordDisplay').textContent = 'Coordinate: (X: ' + x + '%, Y: ' + y + '%)';
       document.getElementById('pinTextInput').value = '';
       document.getElementById('pinInputModal').classList.add('active');
@@ -543,6 +580,7 @@ export async function syncBatch(token) {
       if (!text) return;
       apiPins.push({
         id: 'pin_' + Date.now(),
+        secId: pendingPinCoord.secId,
         x: pendingPinCoord.x,
         y: pendingPinCoord.y,
         author: author,
@@ -565,25 +603,51 @@ export async function syncBatch(token) {
     }
 
     function renderPins() {
-      const cont = document.getElementById('droppedPinsContainer');
-      if (cont) {
-        cont.innerHTML = apiPins.map((p, i) => `
-          <div class="dropped-comment-pin" style="left: ${p.x}%; top: ${p.y}%;" onclick="toggleCommentDrawer(true)">
-            <span>${i + 1}</span>
-          </div>
-        `).join('');
-      }
+      // Remove existing pins from sections
+      document.querySelectorAll('.dropped-comment-pin').forEach(el => el.remove());
+
+      apiPins.forEach((p, i) => {
+        const sec = document.getElementById(p.secId) || document.querySelector('.main-content');
+        if (!sec) return;
+        if (getComputedStyle(sec).position === 'static') sec.style.position = 'relative';
+
+        const pin = document.createElement('div');
+        pin.className = 'dropped-comment-pin';
+        pin.id = 'pin_marker_' + i;
+        pin.style.left = p.x + '%';
+        pin.style.top = p.y + '%';
+        pin.title = '#' + (i + 1) + ': ' + p.text;
+        pin.innerHTML = `<span>${i + 1}</span>`;
+        pin.onclick = (e) => {
+          e.stopPropagation();
+          toggleCommentDrawer(true);
+        };
+        sec.appendChild(pin);
+      });
+
       const count = document.getElementById('commentCount');
       if (count) count.textContent = apiPins.length;
       const list = document.getElementById('drawerCommentsList');
       if (list) {
         list.innerHTML = apiPins.map((p, i) => `
           <div class="comment-item">
-            <div style="font-weight: 700; color: var(--primary);">Pin #${i + 1} (X: ${p.x}%, Y: ${p.y}%)</div>
+            <div style="font-weight: 700; color: var(--primary);">Pin #${i + 1} (${p.secId} - X: ${p.x}%, Y: ${p.y}%)</div>
             <div style="margin: 0.25rem 0;">${p.text}</div>
-            <div style="font-size: 0.72rem; color: var(--text-dim);">${p.author}</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); display: flex; justify-content: space-between;">
+              <span>${p.author}</span>
+              <button onclick="jumpToPin(${i})" style="background:none; border:none; color:var(--primary); font-size:0.75rem; cursor:pointer;">🎯 Jump to Pin</button>
+            </div>
           </div>
         `).join('') || '<div style="color: var(--text-dim); text-align: center;">No comments yet.</div>';
+      }
+    }
+
+    function jumpToPin(index) {
+      const pin = document.getElementById('pin_marker_' + index);
+      if (pin) {
+        pin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        pin.classList.add('pin-highlight');
+        setTimeout(() => pin.classList.remove('pin-highlight'), 2500);
       }
     }
 

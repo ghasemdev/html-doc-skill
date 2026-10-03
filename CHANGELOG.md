@@ -22,15 +22,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - HTTP Status and Error Codes table (Status, Error Code, Description, Resolution).
 - **Strictly LTR Code Blocks:** All `<pre>`, `<code>`, `.code-container`, headers, and JSON previews are strictly forced to Left-to-Right (`direction: ltr !important; text-align: left !important; unicode-bidi: isolate;`), even when the document is switched to Persian RTL mode.
 - **Mobile Responsiveness Overhaul:**
-  - Fixed horizontal scroll bug on mobile viewports (scaled `#remoteComposeCanvas`, container constraints).
-  - Compact mobile top navbar with icon buttons and hidden subtitle pills.
-  - Responsive catalog sidebar drawer (`width: min(85vw, 300px)`).
-  - Safe-area insets (`env(safe-area-inset)`).
-  - Horizontal touch-scrolling for all tables (`table-responsive`).
+  - Permanently fixed top navbar (`position: fixed; top: 0; left: 0; right: 0; height: 52px;`) that never disappears on scroll.
+  - Preserved desktop sticky catalog sidebar by eliminating conflicting ancestor overflow properties.
+  - Eliminated toolbar icon overlapping on mobile screens down to 320px with compact sizing.
+  - Fixed comment drawer button leakage on mobile screens when closed (`visibility: hidden; pointer-events: none; opacity: 0;`).
+  - Guaranteed horizontal scrollbars on all tables on mobile devices with `min-width: 650px !important;`.
+  - Scaled `#remoteComposeCanvas` dynamically to prevent mobile horizontal page expansion.
+  - Enforced strictly LTR formatting for all hyperlinks and URLs.
+- **Universal Coordinate Pin Drop:** Added global `📍` Pin button to top navbar allowing reviewers to drop pins on any section of the document.
+- **PDF Theme Normalization:** Standardized `html2pdf.js` canvas capture to light theme to avoid dark-mode color inversion and split styling artifacts.
+- **Relative Version Path Routing:** Implemented dynamic path resolution in version navigation to eliminate 404 errors on GitHub Pages.
 - **Context-Aware Modularity Rule:** AI agents must not force irrelevant components (APIs, Mermaid, broken images, or toy simulators) if not appropriate for the document topic.
 
 ### Removed
-- **Split Diff Viewer:** Removed the bulky two-pane Git diff viewer in favor of clean version navigation and changelogs.
+- **Split Diff Viewer:** Removed the bulky two-pane Git diff viewer in favor of clean multi-version navigation.
+- **Changelog UI Modal:** Removed the changelog icon and modal from the document UI in favor of standalone `CHANGELOG.md`.
 
 ---
 
