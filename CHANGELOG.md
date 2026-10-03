@@ -29,12 +29,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Guaranteed horizontal scrollbars on all tables on mobile devices with `min-width: 650px !important;`.
   - Scaled `#remoteComposeCanvas` dynamically to prevent mobile horizontal page expansion.
   - Enforced strictly LTR formatting for all hyperlinks and URLs.
-- **Universal Coordinate Pin Drop:** Added global `📍` Pin button to top navbar allowing reviewers to drop pins on any section of the document.
-- **PDF Theme Normalization:** Standardized `html2pdf.js` canvas capture to light theme to avoid dark-mode color inversion and split styling artifacts.
+- **Universal Coordinate Pin Drop:** Added global `📍` Pin button to top navbar with fully bilingual modal, placeholders, and review drawer ("Review Comments" / "نظرات بازبینی").
 - **Relative Version Path Routing:** Implemented dynamic path resolution in version navigation to eliminate 404 errors on GitHub Pages.
 - **Context-Aware Modularity Rule:** AI agents must not force irrelevant components (APIs, Mermaid, broken images, or toy simulators) if not appropriate for the document topic.
 
+### Fixed
+- **Runtime Initialization & Library Guards:** Guarded `setTheme` and `updateScrollSpy` to ensure `Highlight.js`, `Mermaid`, `Chart.js`, and the interactive playground initialize without errors.
+- **Zero-Gap Desktop Sidebar Alignment:** Removed double padding on desktop by confining `padding-top: var(--nav-height)` strictly to `body`, eliminating the gap between the toolbar and catalog sidebar.
+
 ### Removed
+- **PDF Export:** Completely removed client-side PDF export and `html2pdf.js` library per design specification.
 - **Split Diff Viewer:** Removed the bulky two-pane Git diff viewer in favor of clean multi-version navigation.
 - **Changelog UI Modal:** Removed the changelog icon and modal from the document UI in favor of standalone `CHANGELOG.md`.
 

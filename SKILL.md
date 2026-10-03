@@ -27,7 +27,6 @@ metadata:
     - api-docs
     - coordinate-comments
     - review-drawer
-    - pdf-export
     - multi-versioning
     - anti-hallucination
 ---
@@ -38,16 +37,15 @@ metadata:
 
 The `doc-html` skill teaches AI agents how to generate **modern, responsive, single-file, interactive HTML documentation** for software projects, cryptographic audits, API specifications, and architectural whitepapers.
 
-### The Nine Inviolable Pillars
+### The Eight Inviolable Pillars
 1. **Self-Contained & Zero Build Step:** The output opens directly in any browser via `file://` or HTTP without needing Node.js or static site generators.
 2. **Dual-Theme Engine (Dark / Light):** Smooth CSS variable-based transitions between midnight dark and crisp light themes, persistent in `localStorage`.
 3. **Zero-Reload Bilingual & RTL/LTR Switcher:** Seamless instantaneous language switching (e.g., English LTR and Persian RTL) using pure CSS `data-lang` filtering.
-4. **Persistent Catalog Navigation & Progress:** Adobe Acrobat / ChatGPT-style sidebar catalog that collapses into a responsive off-canvas drawer on mobile (`width: min(85vw, 290px)`), with active scrollspy and a reading progress indicator.
+4. **Persistent Catalog Navigation & Progress:** Adobe Acrobat / ChatGPT-style sidebar catalog that collapses into a responsive off-canvas drawer on mobile (`width: min(85vw, 290px)`), seamlessly connected to the toolbar with 0px desktop gap.
 5. **Strictly Left-to-Right (LTR) Code Blocks:** In both RTL (Persian) and LTR (English) modes, **all code blocks, inline snippets, file paths, and syntax blocks MUST always be LTR (`direction: ltr !important; text-align: left !important; unicode-bidi: isolate;`)**.
 6. **Standardized API Documentation Tables:** Comprehensive, structured API endpoint documentation with HTTP method badges, parameters table (Name, Type, Placement/Required, Description, Example), strictly LTR JSON request/response previews, and status/error tables.
-7. **Coordinate Drag & Drop Commenting on API Specs:** Reviewers can drag a comment pin bubble onto any $(x, y)$ coordinate or click directly on API tables/code to leave a numbered pin. Clicking the toolbar `💬` icon slides out a review drawer displaying all comments, pin coordinates, "Jump to Pin" focus triggers, JSON export for AI, and embedded HTML persistence.
-8. **1-Click PDF Export via 3rd-Party Library (`html2pdf.js`):** Client-side A4 PDF export with progress toast and automated page-break avoidance (`break-inside: avoid`).
-9. **Real Multi-Version Navigation:** Live routing between documentation releases (`v2.0.0`, `v1.2.0`, `v1.0.0`) with prominent archive alert banners on older versions.
+7. **Coordinate Drag & Drop Commenting & Bilingual Review Drawer:** Reviewers can click `📍` in the toolbar to drop a numbered pin on any coordinate. Clicking `💬` opens a bilingual review drawer ("Review Comments" / "نظرات بازبینی") with "Jump to Pin", JSON export for AI, and embedded HTML persistence.
+8. **Real Multi-Version Navigation:** Live routing between documentation releases (`v2.0.0`, `v1.2.0`, `v1.0.0`) with prominent archive alert banners on older versions.
 
 ---
 
@@ -146,12 +144,17 @@ Follow this **strict hierarchical structure** when documenting endpoints:
 
 Review and feedback across the entire document use a coordinate pin drop system:
 1. **Global Pin Trigger in Navbar:** The top toolbar features a persistent `📍` Pin button toggling Pin Mode on/off. When active, clicking anywhere on the document (or inside specific sections) drops a pin at $(X\%, Y\%)$.
-2. **Pin Input Modal:** Prompts for reviewer role/name and review feedback.
-3. **Slide-Out Comment Drawer:** Clicking the top toolbar `💬` icon slides out a full-height drawer with:
+2. **Bilingual Pin Input Modal:**
+   - Header: `Add Review Comment at Coordinate` / `ثبت نظر بازبینی روی مختصات سند`.
+   - Dynamic coordinate display: `#overview · Coordinate: (X: 25%, Y: 40%)` / `بخش: #overview · مختصات: (X: 25%, Y: 40%)`.
+   - Labels and input placeholders update dynamically on language toggle (`data-placeholder-en` / `data-placeholder-fa`).
+   - Action buttons: `Cancel` / `انصراف` and `Save Pin` / `ثبت نظر`.
+3. **Slide-Out Review Drawer:** Clicking the top toolbar `💬` icon slides out a full-height drawer ("Review Comments" / "نظرات بازبینی") with:
    - List of all dropped pins with section tags and $(X\%, Y\%)$ coordinates.
-   - `🎯 Jump to Pin` button that smoothly scrolls to the exact element and pulses the pin.
-   - `📥 Export JSON (for AI)` downloading AI-ready structured review data.
-   - `💾 Save & Embed in HTML` downloading an updated HTML file with comments permanently embedded inside `<script id="docEmbeddedComments" type="application/json">`.
+   - `🎯 Jump to Pin` (`پرش به پین`) button that smoothly scrolls to the exact element and pulses the pin.
+   - `📥 Export JSON (for AI)` (`استخراج JSON (برای هوش مصنوعی)`) downloading structured review data.
+   - `💾 Save & Embed in HTML` (`ذخیره در سند و دانلود HTML`) downloading an updated HTML file with comments permanently embedded inside `<script id="docEmbeddedComments" type="application/json">`.
+   - Bilingual empty state when no comments exist.
 4. **Leakage Prevention on Mobile:** The closed drawer must be completely hidden via:
    ```css
    .comment-drawer {
@@ -170,51 +173,7 @@ Review and feedback across the entire document use a coordinate pin drop system:
 
 ---
 
-## 8. 3rd-Party PDF Export (`html2pdf.js`) with Theme Normalization
-
-Use client-side library `html2pdf.js` via CDN:
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-```
-
-> [!IMPORTANT]
-> **Theme Normalization Rule:**
-> When dark mode is active, `html2canvas` captures dark backgrounds, but print media styles or canvas rendering can cause mixed dark/light artifacts.
-> **Always temporarily switch to `light` theme before rendering the PDF canvas**, and restore the original theme in a `finally` block:
-
-```javascript
-async function exportDocumentToPDF() {
-  const element = document.querySelector('.main-content');
-  const prevTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', 'light');
-
-  const opt = {
-    margin: [10, 10, 10, 10],
-    filename: 'Technical-Documentation.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 1.6, useCORS: true, logging: false, backgroundColor: '#ffffff', scrollY: 0 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-  };
-
-  try {
-    if (typeof html2pdf !== 'undefined') {
-      await html2pdf().set(opt).from(element).save();
-    } else {
-      window.print();
-    }
-  } catch (err) {
-    console.warn('PDF export fallback:', err);
-    window.print();
-  } finally {
-    document.documentElement.setAttribute('data-theme', prevTheme);
-  }
-}
-```
-
----
-
-## 9. Real Multi-Version Navigation
+## 8. Real Multi-Version Navigation
 
 Provide real routing between versions:
 - Place versions in `examples/v2.0.0/`, `examples/v1.2.0/`, `examples/v1.0.0/`.
@@ -238,7 +197,7 @@ Provide real routing between versions:
 
 ---
 
-## 10. Mobile Responsiveness Best Practices (Zero-Overflow Guarantee)
+## 9. Mobile Responsiveness Best Practices (Zero-Overflow Guarantee)
 
 To guarantee zero horizontal scroll bugs, sticky preservation, and optimal mobile UX:
 

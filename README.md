@@ -16,9 +16,8 @@ An agentic AI skill for generating **responsive, single-file, interactive HTML t
 - 📑 **ChatGPT/Acrobat-Style Catalog Sidebar:** Persistent desktop rail and smooth mobile off-canvas drawer with reading progress indicator.
 - 🔤 **Strictly Left-to-Right (LTR) Code Blocks:** All `<pre>`, `<code>`, and JSON snippets stay LTR in both RTL (Persian) and LTR (English) modes.
 - 📡 **Standardized API Tables:** Structured endpoints with HTTP badges (`POST`, `GET`), parameter tables, JSON schemas, and error code tables.
-- 📍 **Coordinate Drag & Drop Commenting:** Drag and drop comment pins at $(x, y)$ coordinates on API specifications with slide-out review drawer.
+- 📍 **Coordinate Drag & Drop Commenting:** Drag and drop comment pins at $(x, y)$ coordinates across sections with a slide-out review drawer.
 - 📥 **Export to AI & Embedded HTML:** Download reviewer comments as structured JSON for AI iteration, or embed directly into downloadable HTML.
-- 📄 **3rd-Party PDF Export:** Direct 1-click A4 PDF export using `html2pdf.js` with print page-break management.
 - 🔀 **Real Version Navigation:** Seamless routing between documentation versions (`v2.0.0`, `v1.2.0`, `v1.0.0`) with archived banners.
 - 🌓 **Dual-Theme Engine (Dark/Light):** Fluid CSS variable transitions persistent in `localStorage`.
 - 🌐 **Zero-Reload Bilingual Engine:** Instant English/Persian switching adhering to `persian-writing` typography (Vazirmatn, ZWNJ, no Fingilish).
@@ -58,7 +57,7 @@ cp -r html-doc-skill .skills/
 ```
 
 ### Prompting Example
-> *"Generate interactive HTML documentation using the `doc-html` skill for our payment gateway API. Include standardized API tables, bilingual support, strictly LTR code blocks, coordinate review comments, and PDF export."*
+> *"Generate interactive HTML documentation using the `doc-html` skill for our payment gateway API. Include standardized API tables, bilingual support, strictly LTR code blocks, and coordinate review comments."*
 
 ---
 

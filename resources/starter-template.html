@@ -15,9 +15,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" id="hljs-theme-light" disabled>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
-  <!-- html2pdf.js for Client-Side PDF Generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <style>
     :root, [data-theme="dark"] {
       --bg-base: #0a0f1d;
@@ -311,11 +308,6 @@
         <span>💬</span> <span id="commentCount" style="font-size: 0.7rem;">0</span>
       </button>
 
-      <!-- PDF Export via html2pdf -->
-      <button class="btn-control" onclick="exportDocumentToPDF()" title="Export PDF">
-        <span>📄</span>
-      </button>
-
       <!-- Lang & Theme -->
       <button class="btn-control" onclick="toggleLanguage()" title="Language">
         <span>🌐</span>
@@ -429,7 +421,7 @@ export async function syncBatch(token) {
   <div id="commentDrawerBackdrop" class="comment-drawer-backdrop" onclick="toggleCommentDrawer()"></div>
   <aside id="commentDrawer" class="comment-drawer">
     <div class="drawer-header">
-      <div style="font-weight: 700;">💬 API Review Comments</div>
+      <div style="font-weight: 700;">💬 Review Comments</div>
       <button onclick="toggleCommentDrawer()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
     </div>
     <div class="drawer-body" id="drawerCommentsList"></div>
@@ -440,17 +432,48 @@ export async function syncBatch(token) {
   </aside>
 
   <!-- Pin Coordinate Modal -->
-  <div id="pinInputModal" class="modal-overlay">
-    <div class="modal-box">
+  <div id="pinInputModal" class="modal-overlay" onclick="closeModalOnBackdrop(event, this)">
+    <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header">
-        <div style="font-weight: 700;">📍 Add Pinned Comment</div>
-        <button onclick="closePinModal()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+        <h3>
+          📍 <span data-lang="en">Add Review Comment at Coordinate</span>
+          <span data-lang="fa">ثبت نظر بازبینی روی مختصات سند</span>
+        </h3>
+        <button class="btn-close-modal" onclick="closePinModal()">✕</button>
       </div>
       <div class="modal-body">
-        <div id="pinCoordDisplay" style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Coordinate: (X: 0%, Y: 0%)</div>
-        <input type="text" id="pinAuthorInput" placeholder="Reviewer Role (e.g. Lead Architect)" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-strong); border-radius: 6px;">
-        <textarea id="pinTextInput" rows="3" placeholder="Enter review note..." style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-strong); border-radius: 6px;"></textarea>
-        <button class="btn-control" onclick="saveDroppedPin()" style="background: var(--primary); color: #000; font-weight: 700; width: 100%; justify-content: center;">Save Pin</button>
+        <div style="font-size: 0.82rem; color: var(--text-dim); margin-bottom: 0.75rem;" id="pinCoordDisplay">Coordinate: (X: 0%, Y: 0%)</div>
+        
+        <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-dim); display: block; margin-bottom: 0.3rem;">
+          <span data-lang="en">Reviewer Role / Name</span>
+          <span data-lang="fa">نقش یا نام بازبین</span>
+        </label>
+        <input type="text" id="pinAuthorInput" 
+               placeholder="Reviewer Role (e.g. Security Auditor)" 
+               data-placeholder-en="Reviewer Role (e.g. Security Auditor)" 
+               data-placeholder-fa="نقش یا نام بازبین (مثلاً بازبین امنیت)" 
+               style="width: 100%; padding: 0.55rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-base); color: var(--text-main); font-size: 0.85rem; margin-bottom: 0.75rem; box-sizing: border-box; font-family: inherit;">
+        
+        <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-dim); display: block; margin-bottom: 0.3rem;">
+          <span data-lang="en">Comment / Feedback Note</span>
+          <span data-lang="fa">متن نظر یا اصلاحیه</span>
+        </label>
+        <textarea id="pinTextInput" rows="3" 
+                  placeholder="Enter review note or required change at this coordinate..." 
+                  data-placeholder-en="Enter review note or required change at this coordinate..." 
+                  data-placeholder-fa="متن نظر، یادداشت یا تغییر مورد نظر در این نقطه را بنویسید..." 
+                  style="width: 100%; padding: 0.55rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-base); color: var(--text-main); font-size: 0.85rem; resize: vertical; margin-bottom: 1rem; font-family: inherit; box-sizing: border-box;"></textarea>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <button class="btn-control" onclick="closePinModal()">
+            <span data-lang="en">Cancel</span>
+            <span data-lang="fa">انصراف</span>
+          </button>
+          <button class="btn-control" onclick="saveDroppedPin()" style="background: var(--primary); color: #000; font-weight: 700;">
+            <span data-lang="en">Save Pin</span>
+            <span data-lang="fa">ثبت نظر</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -502,35 +525,6 @@ export async function syncBatch(token) {
       }
     }
 
-    // PDF Export via html2pdf with Theme Normalization
-    async function exportDocumentToPDF() {
-      const element = document.querySelector('.main-content');
-      const prevTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', 'light');
-
-      const opt = {
-        margin: [10, 10, 10, 10],
-        filename: 'Technical-Documentation.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1.6, useCORS: true, logging: false, backgroundColor: '#ffffff', scrollY: 0 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-      };
-
-      try {
-        if (typeof html2pdf !== 'undefined') {
-          await html2pdf().set(opt).from(element).save();
-        } else {
-          window.print();
-        }
-      } catch (err) {
-        console.warn('html2pdf fallback to window.print():', err);
-        window.print();
-      } finally {
-        document.documentElement.setAttribute('data-theme', prevTheme);
-      }
-    }
-
     // Global Pin Commenting System (Accessible from Toolbar on Entire Document)
     let apiPins = [];
     let isPinModeActive = false;
@@ -570,6 +564,9 @@ export async function syncBatch(token) {
       document.getElementById('pinInputModal').classList.add('active');
     }
 
+    function closeModalOnBackdrop(e, overlay) {
+      if (e.target === overlay) closePinModal();
+    }
     function closePinModal() {
       document.getElementById('pinInputModal').classList.remove('active');
     }
