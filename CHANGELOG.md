@@ -36,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **Runtime Initialization & Library Guards:** Guarded `setTheme` and `updateScrollSpy` to ensure `Highlight.js`, `Mermaid`, `Chart.js`, and the interactive playground initialize without errors.
 - **Zero-Gap Desktop Sidebar Alignment:** Removed double padding on desktop by confining `padding-top: var(--nav-height)` strictly to `body`, eliminating the gap between the toolbar and catalog sidebar.
+- **Persian Catalog Sidebar RTL Numbering:** Positioned catalog indices on the far right in RTL mode (`dir="rtl"`) using flex order (`order: 1` on the right, title on the left), preventing number inversion.
+- **Strictly LTR Left-Aligned Hyperlinks & URLs:** Fixed reference URLs and links in Persian mode to remain left-aligned and strictly LTR (`direction: ltr !important; text-align: left !important; display: block !important`).
+- **Mobile Button Squashing & Drawer Overflow Fix:** Scoped toolbar icon compaction strictly to `.nav-controls .btn-control` (`width: 32px !important`), replacing generic `.btn-control` in modals and drawer footers with dedicated `.btn-modal`, `.btn-drawer`, and `.btn-jump-pin` to prevent action button text truncation and overflow outside drawer menus.
+- **Cleaned Up Extra HTML Tags:** Removed stray `</div>` tags around Section 11 and the pin modal that caused layout tree distortion.
 
 ### Removed
 - **PDF Export:** Completely removed client-side PDF export and `html2pdf.js` library per design specification.

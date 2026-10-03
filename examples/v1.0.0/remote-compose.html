@@ -322,7 +322,7 @@
     }
     .sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; }
     .sidebar-link {
-      display: flex;
+      display: flex !important;
       align-items: center;
       gap: 0.6rem;
       padding: 0.5rem 0.75rem;
@@ -333,6 +333,8 @@
       font-weight: 500;
       transition: all 0.15s ease;
       line-height: 1.4;
+      direction: inherit !important;
+      text-align: start !important;
     }
     .sidebar-link:hover { background: var(--bg-surface-elevated); color: var(--text-main); }
     .sidebar-link.active {
@@ -341,7 +343,19 @@
       font-weight: 600;
       border-inline-start: 3px solid var(--primary);
     }
-    .sidebar-num { font-family: 'Fira Code', monospace; font-size: 0.75rem; opacity: 0.7; }
+    .sidebar-num { font-family: 'Fira Code', monospace; font-size: 0.75rem; opacity: 0.7; flex-shrink: 0; }
+    html[dir="rtl"] .sidebar-link {
+      direction: rtl !important;
+      text-align: right !important;
+    }
+    html[dir="rtl"] .sidebar-link .sidebar-num {
+      order: 1;
+      margin-inline-end: 0.35rem;
+      margin-inline-start: 0;
+    }
+    html[dir="rtl"] .sidebar-link > span:not(.sidebar-num) {
+      order: 2;
+    }
 
     /* Main Content Area */
     .main-content {
@@ -383,13 +397,21 @@
     }
 
     /* STRICTLY LEFT-TO-RIGHT (LTR) HYPERLINKS & CODE */
-    a, a.doc-link, p a, li a, .ref-url, .endpoint-url {
+    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a, .ref-url, .endpoint-url, a.external-link {
       direction: ltr !important;
       text-align: left !important;
       unicode-bidi: isolate;
       display: inline-block;
     }
-    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control) {
+    .ref-url, html[dir="rtl"] .ref-url {
+      direction: ltr !important;
+      text-align: left !important;
+      unicode-bidi: isolate;
+      display: block !important;
+      width: 100%;
+      word-break: break-all;
+    }
+    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a {
       color: var(--link-color);
       text-decoration: underline;
       text-decoration-thickness: 1.5px;
@@ -397,7 +419,7 @@
       font-weight: 500;
       transition: color 0.15s ease;
     }
-    a.doc-link:hover, p a:hover { color: var(--link-hover); }
+    a.doc-link:hover, p a:hover, li a:not(.sidebar-link):not(.btn-control):hover { color: var(--link-hover); }
 
     p { margin-bottom: 1.25rem; font-size: 0.96rem; color: var(--text-main); }
 
@@ -728,12 +750,133 @@
     .drawer-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
     .drawer-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
     .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
-    .drawer-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg-base); }
-    .comment-item { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; font-size: 0.85rem; }
+    .drawer-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: var(--bg-base);
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .btn-drawer {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      width: 100% !important;
+      min-height: 40px;
+      padding: 0.55rem 0.85rem !important;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-strong);
+      transition: all 0.2s ease;
+      font-family: inherit;
+      box-sizing: border-box !important;
+      white-space: normal !important;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .btn-drawer:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .comment-item {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-size: 0.85rem;
+      box-sizing: border-box;
+      width: 100%;
+      overflow: hidden;
+    }
     .comment-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
     .comment-target-badge { font-size: 0.72rem; background: var(--badge-bg); color: var(--primary); padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 600; }
+    .btn-jump-pin {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      height: 30px !important;
+      min-height: 30px !important;
+      padding: 0 0.75rem !important;
+      border-radius: 6px;
+      font-size: 0.78rem !important;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--bg-surface-elevated);
+      color: var(--primary);
+      border: 1px solid var(--border-strong);
+      transition: all 0.15s ease;
+      font-family: inherit;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+      flex-shrink: 0;
+    }
+    .btn-jump-pin:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+    .btn-delete-pin {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 0.76rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-family: inherit;
+      font-weight: 600;
+      transition: opacity 0.15s ease;
+    }
+    .btn-delete-pin:hover {
+      text-decoration: underline;
+      opacity: 0.8;
+    }
 
-    /* Modals */
+    /* Modal Action Buttons (Independent from Toolbar) */
+    .btn-modal {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      height: 38px !important;
+      min-height: 38px !important;
+      padding: 0 1.2rem !important;
+      border-radius: 8px;
+      font-size: 0.88rem !important;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap !important;
+      transition: all 0.2s ease;
+      box-sizing: border-box !important;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+    }
+    .btn-modal-submit {
+      background: var(--primary) !important;
+      color: #000 !important;
+      border-color: var(--primary) !important;
+      font-weight: 700 !important;
+    }
+    .btn-modal-submit:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+    .btn-modal-cancel:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-strong);
+    }
+/* Modals */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -861,7 +1004,7 @@
         font-size: 0.72rem !important;
         padding: 0 0.2rem !important;
       }
-      .btn-control {
+      .nav-controls .btn-control {
         width: 32px !important;
         height: 32px !important;
         min-height: 32px !important;
@@ -885,7 +1028,7 @@
       .top-navbar { padding: 0 0.25rem !important; }
       .nav-controls { gap: 0.15rem !important; }
       .version-select { width: 50px !important; max-width: 50px !important; font-size: 0.68rem !important; }
-      .btn-control { width: 28px !important; height: 28px !important; min-height: 28px !important; font-size: 0.78rem !important; }
+      .nav-controls .btn-control { width: 28px !important; height: 28px !important; min-height: 28px !important; font-size: 0.78rem !important; }
       .brand-logo { width: 24px !important; height: 24px !important; font-size: 0.8rem !important; }
     }
 
@@ -2200,7 +2343,7 @@ public float eval(RemoteContext context) {
             <div class="ref-info">
               <span class="ref-tag">AOSP Frameworks Base</span>
               <h4 class="ref-title">AOSP RemoteCompose Core Engine (`com.android.internal.widget.remotecompose`)</h4>
-              <p class="ref-url">https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/core/java/com/android/internal/widget/remotecompose/</p>
+              <a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/core/java/com/android/internal/widget/remotecompose/" target="_blank" rel="noopener noreferrer" class="ref-url">https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/core/java/com/android/internal/widget/remotecompose/</a>
             </div>
             <button class="btn-copy-ref" onclick="copyCitation('https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/core/java/com/android/internal/widget/remotecompose/', this)">
               <span>🔗</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
@@ -2211,7 +2354,7 @@ public float eval(RemoteContext context) {
             <div class="ref-info">
               <span class="ref-tag">AndroidX Compose</span>
               <h4 class="ref-title">AndroidX Compose Remote Architecture & Wire Format (`compose/remote`)</h4>
-              <p class="ref-url">https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/remote/</p>
+              <a href="https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/remote/" target="_blank" rel="noopener noreferrer" class="ref-url">https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/remote/</a>
             </div>
             <button class="btn-copy-ref" onclick="copyCitation('https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/compose/remote/', this)">
               <span>🔗</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
@@ -2222,7 +2365,7 @@ public float eval(RemoteContext context) {
             <div class="ref-info">
               <span class="ref-tag">Wear OS Architecture</span>
               <h4 class="ref-title">Wear OS Remote Compose Engine (`wear/compose/remote`)</h4>
-              <p class="ref-url">https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/wear/compose/remote/</p>
+              <a href="https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/wear/compose/remote/" target="_blank" rel="noopener noreferrer" class="ref-url">https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/wear/compose/remote/</a>
             </div>
             <button class="btn-copy-ref" onclick="copyCitation('https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/wear/compose/remote/', this)">
               <span>🔗</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
@@ -2233,7 +2376,7 @@ public float eval(RemoteContext context) {
             <div class="ref-info">
               <span class="ref-tag">AOSP SystemUI</span>
               <h4 class="ref-title">Android SystemUI Keyguard & Lockscreen RemoteCompose Integration</h4>
-              <p class="ref-url">https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/packages/SystemUI/compose/</p>
+              <a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/packages/SystemUI/compose/" target="_blank" rel="noopener noreferrer" class="ref-url">https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/packages/SystemUI/compose/</a>
             </div>
             <button class="btn-copy-ref" onclick="copyCitation('https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/packages/SystemUI/compose/', this)">
               <span>🔗</span> <span data-lang="en">Copy Citation</span><span data-lang="fa">کپی مرجع</span>
@@ -2243,9 +2386,6 @@ public float eval(RemoteContext context) {
       </section>
 
     </main>
-  </div>
-
-  
   </div>
 
   <!-- Comment Pin Input Modal (for dropped pin) -->
@@ -2282,19 +2422,17 @@ public float eval(RemoteContext context) {
                   style="width: 100%; padding: 0.55rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-base); color: var(--text-main); font-size: 0.85rem; resize: vertical; margin-bottom: 1rem; font-family: inherit; box-sizing: border-box;"></textarea>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <button class="btn-control" onclick="closePinModal()">
+          <button class="btn-modal btn-modal-cancel" onclick="closePinModal()">
             <span data-lang="en">Cancel</span>
             <span data-lang="fa">انصراف</span>
           </button>
-          <button class="btn-control" onclick="saveDroppedPin()" style="background: var(--primary); color: #000; font-weight: 700;">
+          <button class="btn-modal btn-modal-submit" onclick="saveDroppedPin()">
             <span data-lang="en">Save Pin</span>
             <span data-lang="fa">ثبت نظر</span>
           </button>
         </div>
       </div>
     </div>
-  </div>
-  </div>
   </div>
 
   <!-- Slide-Out Comment Drawer -->
@@ -2314,10 +2452,10 @@ public float eval(RemoteContext context) {
       <!-- Dynamically filled comments -->
     </div>
     <div class="drawer-footer">
-      <button class="btn-control" onclick="exportCommentsJSON()" style="width: 100%; justify-content: center;">
+      <button class="btn-drawer" onclick="exportCommentsJSON()">
         <span>📥</span> <span data-lang="en">Export JSON (for AI)</span><span data-lang="fa">استخراج JSON (برای هوش مصنوعی)</span>
       </button>
-      <button class="btn-control" onclick="embedCommentsAndDownloadHTML()" style="width: 100%; justify-content: center;">
+      <button class="btn-drawer" onclick="embedCommentsAndDownloadHTML()">
         <span>💾</span> <span data-lang="en">Save & Embed in HTML</span><span data-lang="fa">ذخیره در سند و دانلود HTML</span>
       </button>
     </div>
@@ -2887,11 +3025,11 @@ public float eval(RemoteContext context) {
             <span style="font-size: 0.72rem; color: var(--text-dim);">${p.author} · ${new Date(p.createdAt).toLocaleDateString()}</span>
           </div>
           <div style="color: var(--text-main); margin: 0.4rem 0; font-size: 0.88rem; line-height: 1.5;">${p.text}</div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-            <button onclick="jumpToPin('${p.id}', '${p.sectionId}')" class="btn-control" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; height: 28px; min-height: 28px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;">
+            <button onclick="jumpToPin('${p.id}', '${p.sectionId}')" class="btn-jump-pin">
               <span>🎯</span> <span data-lang="en">Jump to Pin</span><span data-lang="fa">پرش به پین</span>
             </button>
-            <button onclick="deletePin('${p.id}')" style="background: none; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer;">
+            <button onclick="deletePin('${p.id}')" class="btn-delete-pin">
               <span data-lang="en">Delete</span><span data-lang="fa">حذف</span>
             </button>
           </div>

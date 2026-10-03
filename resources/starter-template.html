@@ -157,8 +157,30 @@
       position: sticky; top: 52px; height: calc(100vh - 52px); overflow-y: auto; padding: 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.5rem;
     }
     .sidebar-header { padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
-    .sidebar-link { padding: 0.5rem 0.75rem; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem; }
-    .sidebar-link.active { background: var(--badge-bg); color: var(--primary); font-weight: 600; }
+    .sidebar-link {
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      display: flex !important;
+      align-items: center;
+      gap: 0.5rem;
+      direction: inherit !important;
+      text-align: start !important;
+    }
+    .sidebar-link.active { background: var(--badge-bg); color: var(--primary); font-weight: 600; border-inline-start: 3px solid var(--primary); }
+    html[dir="rtl"] .sidebar-link {
+      direction: rtl !important;
+      text-align: right !important;
+    }
+    html[dir="rtl"] .sidebar-link .sidebar-num {
+      order: 1;
+      margin-inline-end: 0.25rem;
+    }
+    html[dir="rtl"] .sidebar-link > span:not(.sidebar-num) {
+      order: 2;
+    }
 
     .main-content {
       flex: 1; min-width: 0 !important; max-width: 100% !important; width: 100% !important;
@@ -167,9 +189,12 @@
     section { margin-bottom: 3.5rem; scroll-margin-top: 75px; position: relative; }
     .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
 
-    /* STRICTLY LEFT-TO-RIGHT (LTR) CODE BLOCKS IN ALL MODES */
-    .code-container, pre, code, .code-header, .endpoint-url, .json-preview {
+    /* STRICTLY LEFT-TO-RIGHT (LTR) HYPERLINKS & CODE IN ALL MODES */
+    a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a, .ref-url, .endpoint-url, .code-container, pre, code, .code-header, .json-preview {
       direction: ltr !important; text-align: left !important; unicode-bidi: isolate;
+    }
+    .ref-url, html[dir="rtl"] .ref-url {
+      direction: ltr !important; text-align: left !important; display: block !important; width: 100%; word-break: break-all;
     }
     .code-container { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: var(--radius); margin: 1.25rem 0; overflow: hidden; min-width: 0 !important; max-width: 100% !important; width: 100% !important; }
     .code-header { background: var(--bg-surface-elevated); padding: 0.5rem 0.9rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); }
@@ -239,8 +264,34 @@
     .comment-drawer.open { transform: translateX(0) !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
     .drawer-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
     .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
-    .drawer-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg-base); }
-    .comment-item { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.75rem; font-size: 0.85rem; }
+    .drawer-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg-base); flex-shrink: 0; box-sizing: border-box; }
+    .btn-drawer {
+      display: flex !important; align-items: center; justify-content: center; gap: 0.45rem;
+      width: 100% !important; min-height: 40px; padding: 0.55rem 0.85rem !important; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer; background: var(--bg-surface-elevated);
+      color: var(--text-main); border: 1px solid var(--border-strong); transition: all 0.2s ease;
+      font-family: inherit; box-sizing: border-box !important; white-space: normal !important; text-align: center; line-height: 1.3;
+    }
+    .btn-drawer:hover { background: var(--bg-surface-hover); border-color: var(--primary); color: var(--primary); }
+    .comment-item { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; font-size: 0.85rem; box-sizing: border-box; width: 100%; overflow: hidden; }
+    .btn-jump-pin {
+      display: inline-flex !important; align-items: center; justify-content: center; gap: 0.35rem;
+      height: 30px !important; min-height: 30px !important; padding: 0 0.75rem !important; border-radius: 6px;
+      font-size: 0.78rem !important; font-weight: 600; cursor: pointer; background: var(--bg-surface-elevated);
+      color: var(--primary); border: 1px solid var(--border-strong); transition: all 0.15s ease;
+      font-family: inherit; white-space: nowrap !important; box-sizing: border-box !important; flex-shrink: 0;
+    }
+    .btn-jump-pin:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+    .btn-modal {
+      display: inline-flex !important; align-items: center; justify-content: center; gap: 0.35rem;
+      height: 38px !important; min-height: 38px !important; padding: 0 1.2rem !important; border-radius: 8px;
+      font-size: 0.88rem !important; font-weight: 600; cursor: pointer; font-family: inherit;
+      white-space: nowrap !important; transition: all 0.2s ease; box-sizing: border-box !important;
+      border: 1px solid var(--border-subtle); background: var(--bg-surface-elevated); color: var(--text-main);
+    }
+    .btn-modal-submit { background: var(--primary) !important; color: #000 !important; border-color: var(--primary) !important; font-weight: 700 !important; }
+    .btn-modal-submit:hover { filter: brightness(1.1); box-shadow: 0 0 12px var(--primary-glow); }
+    .btn-modal-cancel:hover { background: var(--bg-surface-hover); border-color: var(--border-strong); }
 
     /* Modals */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); z-index: 3000; justify-content: center; align-items: center; padding: 1rem; }
@@ -265,7 +316,7 @@
       .brand-title, .progress-pill { display: none !important; }
       .nav-controls { gap: 0.2rem !important; }
       .version-select { width: 62px !important; max-width: 62px !important; height: 32px !important; font-size: 0.72rem !important; }
-      .btn-control { width: 32px !important; height: 32px !important; min-height: 32px !important; padding: 0 !important; font-size: 0.85rem !important; }
+      .nav-controls .btn-control { width: 32px !important; height: 32px !important; min-height: 32px !important; padding: 0 !important; font-size: 0.85rem !important; }
       .btn-control .btn-label { display: none !important; }
     }
 
@@ -326,9 +377,9 @@
         <button onclick="toggleSidebar()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
       </div>
       <nav style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem;">
-        <a href="#overview" class="sidebar-link active">01 · Overview</a>
-        <a href="#api-spec" class="sidebar-link">02 · API Specification</a>
-        <a href="#code" class="sidebar-link">03 · Code Implementation</a>
+        <a href="#overview" class="sidebar-link active"><span class="sidebar-num">01</span> <span>Overview</span></a>
+        <a href="#api-spec" class="sidebar-link"><span class="sidebar-num">02</span> <span>API Specification</span></a>
+        <a href="#code" class="sidebar-link"><span class="sidebar-num">03</span> <span>Code Implementation</span></a>
       </nav>
     </aside>
 
@@ -426,8 +477,8 @@ export async function syncBatch(token) {
     </div>
     <div class="drawer-body" id="drawerCommentsList"></div>
     <div class="drawer-footer">
-      <button class="btn-control" onclick="exportCommentsJSON()">📥 Export JSON (for AI)</button>
-      <button class="btn-control" onclick="embedCommentsAndDownloadHTML()">💾 Save & Embed in HTML</button>
+      <button class="btn-drawer" onclick="exportCommentsJSON()"><span>📥</span> <span data-lang="en">Export JSON (for AI)</span><span data-lang="fa">استخراج JSON (برای هوش مصنوعی)</span></button>
+      <button class="btn-drawer" onclick="embedCommentsAndDownloadHTML()"><span>💾</span> <span data-lang="en">Save & Embed in HTML</span><span data-lang="fa">ذخیره در سند و دانلود HTML</span></button>
     </div>
   </aside>
 
@@ -465,11 +516,11 @@ export async function syncBatch(token) {
                   style="width: 100%; padding: 0.55rem 0.75rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-base); color: var(--text-main); font-size: 0.85rem; resize: vertical; margin-bottom: 1rem; font-family: inherit; box-sizing: border-box;"></textarea>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <button class="btn-control" onclick="closePinModal()">
+          <button class="btn-modal btn-modal-cancel" onclick="closePinModal()">
             <span data-lang="en">Cancel</span>
             <span data-lang="fa">انصراف</span>
           </button>
-          <button class="btn-control" onclick="saveDroppedPin()" style="background: var(--primary); color: #000; font-weight: 700;">
+          <button class="btn-modal btn-modal-submit" onclick="saveDroppedPin()">
             <span data-lang="en">Save Pin</span>
             <span data-lang="fa">ثبت نظر</span>
           </button>
@@ -632,7 +683,7 @@ export async function syncBatch(token) {
             <div style="margin: 0.25rem 0;">${p.text}</div>
             <div style="font-size: 0.72rem; color: var(--text-dim); display: flex; justify-content: space-between;">
               <span>${p.author}</span>
-              <button onclick="jumpToPin(${i})" style="background:none; border:none; color:var(--primary); font-size:0.75rem; cursor:pointer;">🎯 Jump to Pin</button>
+              <button onclick="jumpToPin(${i})" class="btn-jump-pin"><span>🎯</span> <span>Jump to Pin</span></button>
             </div>
           </div>
         `).join('') || '<div style="color: var(--text-dim); text-align: center;">No comments yet.</div>';

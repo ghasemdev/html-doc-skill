@@ -255,20 +255,54 @@ To guarantee zero horizontal scroll bugs, sticky preservation, and optimal mobil
    }
    ```
 
-4. **Strictly LTR Links and Code:**
-   In all language modes, URLs, file paths, code, and links must be strictly LTR:
+4. **Strictly LTR Links and Code (Left-Aligned in RTL):**
+   In all language modes, URLs, reference cards, endpoints, code, and links must be strictly LTR and left-aligned:
    ```css
-   a, .endpoint-url, pre, code {
+   a.doc-link, p a, li a:not(.sidebar-link):not(.btn-control), td a, .ref-url, .endpoint-url, a.external-link {
      direction: ltr !important;
      text-align: left !important;
      unicode-bidi: isolate;
+     display: inline-block;
+   }
+   .ref-url, html[dir="rtl"] .ref-url {
+     direction: ltr !important;
+     text-align: left !important;
+     unicode-bidi: isolate;
+     display: block !important;
+     width: 100%;
+     word-break: break-all;
    }
    ```
 
-5. **Top Navbar Mobile Compaction:**
-   On screens $\le 768\text{px}$:
-   - Hide brand subtitles and reading progress text (`.brand-pill`, `.progress-pill`).
-   - Hide text labels on control buttons (`.btn-label { display: none; }`).
-   - Compact button sizes ($32\times32\text{px}$ or $34\times34\text{px}$) with icon-only presentation.
-   - Limit version select width to $62\text{px}$.
+5. **RTL Catalog Sidebar Number Placement:**
+   In RTL mode (`dir="rtl"`), catalog sidebar indices must be on the right side of the item:
+   ```css
+   .sidebar-link {
+     display: flex !important;
+     align-items: center;
+     gap: 0.6rem;
+     direction: inherit !important;
+     text-align: start !important;
+   }
+   html[dir="rtl"] .sidebar-link {
+     direction: rtl !important;
+     text-align: right !important;
+   }
+   html[dir="rtl"] .sidebar-link .sidebar-num {
+     order: 1; /* On the right in RTL */
+     margin-inline-end: 0.35rem;
+   }
+   html[dir="rtl"] .sidebar-link > span:not(.sidebar-num) {
+     order: 2; /* To the left of the number */
+   }
+   ```
+
+6. **Button Class Isolation & Mobile Compaction:**
+   On mobile screens ($\le 768\text{px}$), toolbar icon compaction must be strictly scoped to `.nav-controls .btn-control` (`width: 32px !important`).
+   > [!CAUTION]
+   > Never apply generic mobile square sizing to buttons inside modals, drawer footers, or comment cards.
+   - Use `.btn-modal`, `.btn-modal-submit`, `.btn-modal-cancel` for modal actions (proper height, font, and padding).
+   - Use `.btn-drawer` for full-width drawer footer actions (`width: 100% !important; white-space: normal;`).
+   - Use `.btn-jump-pin` and `.btn-delete-pin` for comment item actions to guarantee zero overflow past card borders.
+   - Limit version select width to $58\text{px}$.
    - Guarantee zero icon overlap on viewports down to $320\text{px}$.
